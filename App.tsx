@@ -17,8 +17,21 @@ export type HomeTabParamList = {
   Settings: undefined;
 };
 
+
+function AuthenticatedStack() {
+
+}
+
+function Navigation() {
+
+}
+
+
 export default function App() {
   return (
+    <>
+    
+    <Navigation />
     <NavigationContainer>
       <Tab.Navigator>
         <Tab.Screen
@@ -50,6 +63,7 @@ export default function App() {
         />
       </Tab.Navigator>
     </NavigationContainer>
+    </>
   );
 }
 
