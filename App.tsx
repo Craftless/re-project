@@ -8,6 +8,8 @@ import ProgressScreen from "./screens/ProgressScreen";
 import SettingsScreen from "./screens/SettingsScreen";
 
 import { Ionicons } from "@expo/vector-icons";
+import { useContext } from "react";
+import { AuthContext } from "./store/auth-context";
 
 const Tab = createBottomTabNavigator<HomeTabParamList>();
 
@@ -17,52 +19,59 @@ export type HomeTabParamList = {
   Settings: undefined;
 };
 
+function AuthStack() {
+  return <Text>Auth Stack</Text>;
+}
 
 function AuthenticatedStack() {
-
+  return (
+    <Tab.Navigator>
+      <Tab.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{
+          tabBarIcon: ({ color, size }: { color: string; size: number }) => {
+            return <Ionicons name="home" color={color} size={size} />;
+          },
+        }}
+      />
+      <Tab.Screen
+        name="Progress"
+        component={ProgressScreen}
+        options={{
+          tabBarIcon: ({ color, size }: { color: string; size: number }) => {
+            return <Ionicons name="person" color={color} size={size} />;
+          },
+        }}
+      />
+      <Tab.Screen
+        name="Settings"
+        component={SettingsScreen}
+        options={{
+          tabBarIcon: ({ color, size }: { color: string; size: number }) => {
+            return <Ionicons name="settings" color={color} size={size} />;
+          },
+        }}
+      />
+    </Tab.Navigator>
+  );
 }
 
 function Navigation() {
-
+  const authCtx = useContext(AuthContext);
+  return (
+    <NavigationContainer>
+      {!authCtx.isLoggedIn && <AuthStack />}
+      {authCtx.isLoggedIn && <AuthenticatedStack />}
+    </NavigationContainer>
+  );
 }
-
 
 export default function App() {
   return (
     <>
-    
-    <Navigation />
-    <NavigationContainer>
-      <Tab.Navigator>
-        <Tab.Screen
-          name="Home"
-          component={HomeScreen}
-          options={{
-            tabBarIcon: ({ color, size }: { color: string; size: number }) => {
-              return <Ionicons name="home" color={color} size={size} />;
-            },
-          }}
-        />
-        <Tab.Screen
-          name="Progress"
-          component={ProgressScreen}
-          options={{
-            tabBarIcon: ({ color, size }: { color: string; size: number }) => {
-              return <Ionicons name="person" color={color} size={size} />;
-            },
-          }}
-        />
-        <Tab.Screen
-          name="Settings"
-          component={SettingsScreen}
-          options={{
-            tabBarIcon: ({ color, size }: { color: string; size: number }) => {
-              return <Ionicons name="settings" color={color} size={size} />;
-            },
-          }}
-        />
-      </Tab.Navigator>
-    </NavigationContainer>
+      <StatusBar style="auto" />
+      <Navigation />
     </>
   );
 }
