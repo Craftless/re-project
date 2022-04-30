@@ -3,6 +3,7 @@ import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeScreen from "./screens/HomeScreen";
 import ProgressScreen from "./screens/ProgressScreen";
 import SettingsScreen from "./screens/SettingsScreen";
@@ -12,8 +13,8 @@ import { auth } from "./firebase";
 
 import { Ionicons } from "@expo/vector-icons";
 import { useContext, useEffect } from "react";
-import { AuthContext } from "./store/auth-context";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { AuthContext, AuthContextProvider } from "./store/auth-context";
+
 import LoginScreen from "./screens/LoginScreen";
 import SignupScreen from "./screens/SignupScreen";
 
@@ -24,19 +25,32 @@ export type RootTabParamList = {
   Home: undefined;
   Progress: undefined;
   Settings: undefined;
-};
-
-export type RootStackParamList = {
   Login: undefined;
   Signup: undefined;
 };
 
+export type RootStackParamList = {};
+
 function AuthStack() {
   return (
-    <Stack.Navigator>
-      <Stack.Screen name="Login" component={LoginScreen} />
-      <Stack.Screen name="Signup" component={SignupScreen} />
-    </Stack.Navigator>
+    <>
+      <Tab.Navigator>
+        <Tab.Screen
+          name="Login"
+          component={LoginScreen}
+          options={{
+            title: "Log in",
+          }}
+        />
+        <Tab.Screen
+          name="Signup"
+          component={SignupScreen}
+          options={{
+            title: "Sign up",
+          }}
+        />
+      </Tab.Navigator>
+    </>
   );
 }
 
@@ -102,9 +116,9 @@ export default function App() {
   return (
     <>
       <StatusBar style="auto" />
-      <SafeAreaView>
+      <AuthContextProvider>
         <Navigation />
-      </SafeAreaView>
+      </AuthContextProvider>
     </>
   );
 }

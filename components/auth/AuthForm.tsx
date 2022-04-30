@@ -1,8 +1,8 @@
-import { TextInput, View } from "react-native";
+import { Button, Text, TextInput, TouchableOpacity, View } from "react-native";
 import useInput from "../../hooks/use-input";
 import Input from "../ui/Input";
 
-function AuthForm() {
+function AuthForm({ isLogin = false }: { isLogin?: boolean }) {
   const {
     value: enteredEmail,
     hasError: emailHasError,
@@ -21,6 +21,10 @@ function AuthForm() {
     valueChangeHandler: passwordValueChangeHandler,
   } = useInput((val) => val.trim().length > 6);
 
+  const formIsValid = emailIsValid && passwordIsValid;
+
+  function formSubmitHandler() {}
+
   return (
     <View>
       <Input
@@ -37,6 +41,7 @@ function AuthForm() {
         onInputBlur={passwordInputBlurHandler}
         onValueChange={passwordValueChangeHandler}
       />
+      <Button title={isLogin ? "Log in" : "Sign up"} onPress={formSubmitHandler} disabled={!formIsValid} />
     </View>
   );
 }

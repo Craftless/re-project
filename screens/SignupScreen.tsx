@@ -1,8 +1,8 @@
-import { Text } from "react-native"
+import { Text } from "react-native";
 import AuthContent from "../components/auth/AuthContent";
 
 function SignupScreen() {
-  return <AuthContent />
+  return <AuthContent />;
 }
 
 export default SignupScreen;

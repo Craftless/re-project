@@ -35,6 +35,7 @@ function Input({
         autoCapitalize="none"
         onChangeText={onValueChange}
         onBlur={onInputBlur}
+        autoCorrect={false}
       />
     </View>
   );
