@@ -1,0 +1,65 @@
+import React from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  KeyboardTypeOptions,
+  NativeSyntheticEvent,
+  TextInputFocusEventData,
+} from "react-native";
+import Colours from "../../constants/Colours";
+
+function Input({
+  label,
+  keyboardType,
+  secure = false,
+  hasError,
+  onValueChange,
+  onInputBlur,
+}: {
+  label: string;
+  keyboardType: KeyboardTypeOptions;
+  secure?: boolean;
+  hasError: boolean;
+  onValueChange: (text: string) => void;
+  onInputBlur: (e: NativeSyntheticEvent<TextInputFocusEventData>) => void;
+}) {
+  return (
+    <View>
+      <Text>{label}</Text>
+      <TextInput
+        style={[styles.inputField, hasError && styles.inputFieldInvalid]}
+        keyboardType={keyboardType}
+        secureTextEntry={secure}
+        autoCapitalize="none"
+        onChangeText={onValueChange}
+        onBlur={onInputBlur}
+      />
+    </View>
+  );
+}
+
+export default Input;
+
+const styles = StyleSheet.create({
+  outerContainer: {},
+  textLabel: {
+    color: Colours.primary500,
+    fontSize: 18,
+    marginBottom: 4,
+  },
+  textLabelInvalid: {
+    color: Colours.error600,
+  },
+  inputField: {
+    paddingVertical: 8,
+    paddingHorizontal: 6,
+    backgroundColor: Colours.primary100,
+    borderRadius: 6,
+    fontSize: 18,
+  },
+  inputFieldInvalid: {
+    backgroundColor: Colours.error300,
+  },
+});

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { NativeSyntheticEvent, TextInputFocusEventData } from "react-native";
 
 function useInput(validationFunc: (value: string) => boolean) {
   const [enteredValue, setEnteredValue] = useState("");
@@ -7,11 +8,11 @@ function useInput(validationFunc: (value: string) => boolean) {
   const valueIsValid = validationFunc(enteredValue);
   const hasError = !valueIsValid && isTouched;
 
-  function valueChangeHandler(event: React.ChangeEvent<HTMLInputElement>) {
-    setEnteredValue(event.target.value);
+  function valueChangeHandler(text: string) {
+    setEnteredValue(text);
   }
 
-  function inputBlurHandler(event: React.FocusEvent<HTMLInputElement>) {
+  function inputBlurHandler(event: NativeSyntheticEvent<TextInputFocusEventData>) {
     setIsTouched(true);
   }
 
