@@ -7,8 +7,11 @@ import HomeScreen from "./screens/HomeScreen";
 import ProgressScreen from "./screens/ProgressScreen";
 import SettingsScreen from "./screens/SettingsScreen";
 
+import { onAuthStateChanged } from "firebase/auth";
+ import { auth } from "./firebase";
+
 import { Ionicons } from "@expo/vector-icons";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { AuthContext } from "./store/auth-context";
 
 const Tab = createBottomTabNavigator<HomeTabParamList>();
@@ -68,6 +71,21 @@ function Navigation() {
 }
 
 export default function App() {
+  const authCtx = useContext(AuthContext);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        const token = await user.getIdToken();
+        authCtx.authenticate(token);
+      }
+      else {
+        authCtx.logout();
+      }
+    });
+
+    return unsubscribe;
+  }, []);
   return (
     <>
       <StatusBar style="auto" />
