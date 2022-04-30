@@ -1,4 +1,4 @@
-import axios from "axios";
+// import axios from "axios";
 
 import {
   createUserWithEmailAndPassword,
@@ -7,7 +7,7 @@ import {
 import { Alert } from "react-native";
 import { auth } from "../firebase";
 
-const API_KEY = "AIzaSyB9gIkbRc-zbcp75JhIrarBw_8hAz1pqME";
+// const API_KEY = "AIzaSyB9gIkbRc-zbcp75JhIrarBw_8hAz1pqME";
 
 // async function authenticate(
 //   mode: "signUp" | "logIn",

@@ -1,5 +1,7 @@
+import AuthForm from "../components/auth/AuthForm";
+
 function LoginScreen() {
-  return <></>;
+  return <><AuthForm /></>;
 }
 
 export default LoginScreen;

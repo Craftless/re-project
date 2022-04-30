@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -8,7 +8,7 @@ import ProgressScreen from "./screens/ProgressScreen";
 import SettingsScreen from "./screens/SettingsScreen";
 
 import { onAuthStateChanged } from "firebase/auth";
- import { auth } from "./firebase";
+import { auth } from "./firebase";
 
 import { Ionicons } from "@expo/vector-icons";
 import { useContext, useEffect } from "react";
@@ -78,8 +78,7 @@ export default function App() {
       if (user) {
         const token = await user.getIdToken();
         authCtx.authenticate(token);
-      }
-      else {
+      } else {
         authCtx.logout();
       }
     });
@@ -89,7 +88,9 @@ export default function App() {
   return (
     <>
       <StatusBar style="auto" />
-      <Navigation />
+      <SafeAreaView>
+        <Navigation />
+      </SafeAreaView>
     </>
   );
 }
