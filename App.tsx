@@ -13,20 +13,34 @@ import { auth } from "./firebase";
 import { Ionicons } from "@expo/vector-icons";
 import { useContext, useEffect } from "react";
 import { AuthContext } from "./store/auth-context";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import LoginScreen from "./screens/LoginScreen";
+import SignupScreen from "./screens/SignupScreen";
 
-const Tab = createBottomTabNavigator<HomeTabParamList>();
+const Tab = createBottomTabNavigator<RootTabParamList>();
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
-export type HomeTabParamList = {
+export type RootTabParamList = {
   Home: undefined;
   Progress: undefined;
   Settings: undefined;
 };
 
+export type RootStackParamList = {
+  Login: undefined;
+  Signup: undefined;
+};
+
 function AuthStack() {
-  return <Text>Auth Stack</Text>;
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="Login" component={LoginScreen} />
+      <Stack.Screen name="Signup" component={SignupScreen} />
+    </Stack.Navigator>
+  );
 }
 
-function AuthenticatedStack() {
+function AuthenticatedTab() {
   return (
     <Tab.Navigator>
       <Tab.Screen
@@ -65,7 +79,7 @@ function Navigation() {
   return (
     <NavigationContainer>
       {!authCtx.isLoggedIn && <AuthStack />}
-      {authCtx.isLoggedIn && <AuthenticatedStack />}
+      {authCtx.isLoggedIn && <AuthenticatedTab />}
     </NavigationContainer>
   );
 }
