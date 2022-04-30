@@ -1,6 +1,7 @@
 import { Button, Text, TextInput, TouchableOpacity, View } from "react-native";
 import useInput from "../../hooks/use-input";
 import Input from "../ui/Input";
+import RegularButton from "../ui/RegularButton";
 
 function AuthForm({ isLogin = false }: { isLogin?: boolean }) {
   const {
@@ -41,7 +42,9 @@ function AuthForm({ isLogin = false }: { isLogin?: boolean }) {
         onInputBlur={passwordInputBlurHandler}
         onValueChange={passwordValueChangeHandler}
       />
-      <Button title={isLogin ? "Log in" : "Sign up"} onPress={formSubmitHandler} disabled={!formIsValid} />
+      <RegularButton onPress={formSubmitHandler} disabled={!formIsValid}>
+        {isLogin ? "Log in" : "Sign up"}
+      </RegularButton>
     </View>
   );
 }

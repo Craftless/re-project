@@ -26,8 +26,8 @@ function Input({
   onInputBlur: (e: NativeSyntheticEvent<TextInputFocusEventData>) => void;
 }) {
   return (
-    <View>
-      <Text>{label}</Text>
+    <View style={styles.outerContainer}>
+      <Text style={[styles.textLabel, hasError && styles.textLabelInvalid]}>{label}</Text>
       <TextInput
         style={[styles.inputField, hasError && styles.inputFieldInvalid]}
         keyboardType={keyboardType}
@@ -44,11 +44,12 @@ function Input({
 export default Input;
 
 const styles = StyleSheet.create({
-  outerContainer: {},
+  outerContainer: {
+    marginBottom: 8,
+  },
   textLabel: {
     color: Colours.primary500,
     fontSize: 18,
-    marginBottom: 4,
   },
   textLabelInvalid: {
     color: Colours.error600,
