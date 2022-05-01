@@ -25,9 +25,11 @@ let app;
 if (firebase.apps.length <= 0) app = firebase.initializeApp(firebaseConfig);
 else app = firebase.app();
 
-initializeAuth(app, {
-  persistence: getReactNativePersistence(AsyncStorageLib)
-})
+if (firebase.auth.length <= 0) {
+  initializeAuth(app, {
+    persistence: getReactNativePersistence(AsyncStorageLib),
+  });
+}
 
 const auth = firebase.auth();
 
