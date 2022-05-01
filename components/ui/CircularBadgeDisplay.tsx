@@ -1,28 +1,33 @@
 import { View, Image, StyleSheet } from "react-native";
-import Ionicons from "@expo/vector-icons/Ionicons";
 
 function CircularBadgeDisplay({
   backgroundColor,
   size,
+  badgeIcon,
 }: {
   backgroundColor: string;
   size: number;
+  badgeIcon: ({ size }: { size: number }) => React.ReactNode;
 }) {
   return (
     <View style={styles(backgroundColor, size).outerContainer}>
-      <Ionicons name="hourglass" color="#008C38" />
+      {badgeIcon({ size })}
     </View>
   );
 }
 
 export default CircularBadgeDisplay;
 
-const styles = (backgroundColor: string, badgeSize: number) => StyleSheet.create({
-  outerContainer: {
-    backgroundColor: backgroundColor,
-    width: badgeSize,
-    height: badgeSize,
-    borderRadius: badgeSize / 2,
-    overflow: "hidden",
-  },
-});
+const styles = (backgroundColor: string, badgeSize: number) =>
+  StyleSheet.create({
+    outerContainer: {
+      backgroundColor: backgroundColor,
+      width: badgeSize,
+      height: badgeSize,
+      borderRadius: badgeSize / 2,
+      overflow: "hidden",
+      justifyContent: "center",
+      alignItems: "center",
+      margin: 4,
+    },
+  });

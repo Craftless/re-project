@@ -5,7 +5,7 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { Alert } from "react-native";
-import { auth } from "../firebase";
+import { auth } from "../firebase/config";
 
 // const API_KEY = "AIzaSyB9gIkbRc-zbcp75JhIrarBw_8hAz1pqME";
 

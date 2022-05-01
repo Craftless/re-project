@@ -1,6 +1,6 @@
 import { Text, View } from "react-native";
 import RegularButton from "../components/ui/RegularButton";
-import { auth } from "../firebase";
+import { auth } from "../firebase/config";
 
 function SettingsScreen() {
   return (

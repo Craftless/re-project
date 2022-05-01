@@ -2,6 +2,7 @@ import { StyleSheet, Text, View } from "react-native";
 import * as Progress from "react-native-progress";
 import Card from "../components/ui/Card";
 import CircularBadgeDisplay from "../components/ui/CircularBadgeDisplay";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 function HomeScreen() {
   return (
@@ -24,7 +25,34 @@ function HomeScreen() {
       <Card style={styles.progressContainer}>
         <Text style={styles.progressText}>Current Badges</Text>
         <View style={styles.badgesContainer}>
-          <CircularBadgeDisplay backgroundColor="#7B017F" size={50} />
+          <CircularBadgeDisplay
+            backgroundColor="#7B017F"
+            size={50}
+            badgeIcon={({ size }) => (
+              <Ionicons name="hourglass" color="#008C38" size={size / 2} />
+            )}
+          />
+          <CircularBadgeDisplay
+            backgroundColor="#4767B8"
+            size={50}
+            badgeIcon={({ size }) => (
+              <Ionicons name="airplane" color="#B58D54" size={size / 2} />
+            )}
+          />
+          <CircularBadgeDisplay
+            backgroundColor="#BD8C8C"
+            size={50}
+            badgeIcon={({ size }) => (
+              <Ionicons name="alarm-sharp" color="#58009F" size={size / 2} />
+            )}
+          />
+          <CircularBadgeDisplay
+            backgroundColor="#008609"
+            size={50}
+            badgeIcon={({ size }) => (
+              <Ionicons name="hourglass" color="#0700C5" size={size / 2} />
+            )}
+          />
         </View>
       </Card>
     </View>
@@ -61,6 +89,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   badgesContainer: {
-
-  }
+    flexDirection: "row",
+    padding: 8,
+  },
 });

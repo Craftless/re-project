@@ -14,7 +14,7 @@ import HomeScreen from "./screens/HomeScreen";
 import ProgressScreen from "./screens/ProgressScreen";
 import SettingsScreen from "./screens/SettingsScreen";
 
-import { auth } from "./firebase";
+import { auth } from "./firebase/config";
 
 import { Ionicons } from "@expo/vector-icons";
 import { useContext, useEffect, useState } from "react";
