@@ -1,13 +1,23 @@
-import { useContext } from "react";
-import { Alert, Button, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { useContext, useState } from "react";
+import {
+  ActivityIndicator,
+  Alert,
+  Button,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import useInput from "../../hooks/use-input";
 import { AuthContext } from "../../store/auth-context";
 import { createUser, logIn } from "../../util/auth";
 import Input from "../ui/Input";
+import LoadingOverlay from "../ui/LoadingOverlay";
 import RegularButton from "../ui/RegularButton";
 
 function AuthForm({ isLogin = false }: { isLogin?: boolean }) {
   const authCtx = useContext(AuthContext);
+  const [waitingForResponse, setWaitingForResponse] = useState(false);
 
   const {
     value: enteredEmail,
@@ -54,25 +64,23 @@ function AuthForm({ isLogin = false }: { isLogin?: boolean }) {
     resetEmail();
     resetPassword();
     let user;
-    try {
-      if (isLogin) {
-        user = await logIn(email.trim(), password.trim(), (error) => {
-          Alert.alert(`${error.code}: ${error.message}`);
-        });
-      } else {
-        user = await createUser(email.trim(), password.trim(), (error) => {
-          Alert.alert(`${error.code}: ${error.message}`);
-        });
-      }
-      console.log("LLLL");
-    } catch (e: any) { // TODO find out what type Error is
-      Alert.alert(e.message);
-      return;
+    setWaitingForResponse(true);
+    if (isLogin) {
+      user = await logIn(email.trim(), password.trim(), (error) => {
+        Alert.alert(`Error: ${error.code}: ${error.message}`);
+        setWaitingForResponse(false);
+      });
+    } else {
+      user = await createUser(email.trim(), password.trim(), (error) => {
+        Alert.alert(`Error: ${error.code}: ${error.message}`);
+        setWaitingForResponse(false);
+      });
     }
-    
   }
 
-  return (
+  return waitingForResponse ? (
+    <LoadingOverlay message="Loading" />
+  ) : (
     <View>
       <Input
         keyboardType="email-address"
@@ -80,7 +88,7 @@ function AuthForm({ isLogin = false }: { isLogin?: boolean }) {
         label="Email Address"
         onInputBlur={emailInputTouchedHandler}
         onValueChange={emailValueChangeHandler}
-        valueObj={{value: enteredEmail}}
+        valueObj={{ value: enteredEmail }}
       />
       {!isLogin && (
         <Input
@@ -89,7 +97,7 @@ function AuthForm({ isLogin = false }: { isLogin?: boolean }) {
           label="Confirm Email Address"
           onInputBlur={confirmEmailTouchedHandler}
           onValueChange={confirmEmailChangeHandler}
-          valueObj={{value: enteredConfirmEmail}}
+          valueObj={{ value: enteredConfirmEmail }}
         />
       )}
       <Input
@@ -98,7 +106,8 @@ function AuthForm({ isLogin = false }: { isLogin?: boolean }) {
         label="Password"
         onInputBlur={passwordInputTouchedHandler}
         onValueChange={passwordValueChangeHandler}
-        valueObj={{value: enteredPassword}}
+        valueObj={{ value: enteredPassword }}
+        secure
       />
       {!isLogin && (
         <Input
@@ -107,7 +116,8 @@ function AuthForm({ isLogin = false }: { isLogin?: boolean }) {
           label="Confirm Password"
           onInputBlur={confirmPasswordTouchedHandler}
           onValueChange={confirmPasswordChangeHandler}
-          valueObj={{value: enteredConfirmPassword}}
+          valueObj={{ value: enteredConfirmPassword }}
+          secure
         />
       )}
       <RegularButton

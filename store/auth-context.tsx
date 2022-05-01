@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { createContext, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import { RootTabParamList } from "../App";
 
 interface IAuthContext {
@@ -9,21 +9,19 @@ interface IAuthContext {
   logout: () => void;
 }
 
-const initialState: IAuthContext = {
+export const AuthContext = createContext({
   token: "",
   isLoggedIn: false,
-  authenticate: () => {},
+  authenticate: (token: string) => {},
   logout: () => {},
-};
+});
 
-export const AuthContext = createContext(initialState);
-
-export function AuthContextProvider({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+function AuthContextProvider({ children }: { children: React.ReactNode }) {
   const [token, setToken] = useState("");
+
+  useEffect(() => {
+    console.log(token);
+  }, [token]);
 
   function authenticate(token: string) {
     setToken(token);
@@ -36,12 +34,18 @@ export function AuthContextProvider({
   }
   console.log(token);
 
-  const value = {
-    token,
-    isLoggedIn: !!token,
-    authenticate,
-    logout,
-  };
-
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider
+      value={{
+        token,
+        isLoggedIn: !!token,
+        authenticate: authenticate,
+        logout: logout,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
 }
+
+export default AuthContextProvider;

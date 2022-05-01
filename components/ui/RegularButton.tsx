@@ -21,7 +21,7 @@ function RegularButton({
 }: {
   children: React.ReactNode;
   onPress: (event: GestureResponderEvent) => void;
-  disabled: boolean;
+  disabled?: boolean;
 }) {
   return (
     <View style={styles.rootContainer}>
