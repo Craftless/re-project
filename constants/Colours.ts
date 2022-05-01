@@ -4,6 +4,7 @@ const Colours = {
   primary300: "#363636",
   primary200: "#595959",
   primary100: "#8f8f8f",
+  primary50: "#dfdfdf",
   error800: "#7d0000",
   error700: "#ac0000",
   error600: "#d10000",

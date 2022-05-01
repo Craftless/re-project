@@ -1,10 +1,14 @@
-import { View, Text, StyleSheet, ActivityIndicator } from "react-native";
+import { View, Text, StyleSheet, ActivityIndicator, Modal } from "react-native";
 
-function LoadingOverlay({message}: {message: string}) {
-  return <View style={styles.outerContainer}>
-    <Text style={styles.messageText}></Text>
-    <ActivityIndicator size="large" />
-  </View>
+function LoadingOverlay({ message }: { message: string }) {
+  return (
+    <Modal>
+      <View style={styles.outerContainer}>
+        <Text style={styles.messageText}></Text>
+        <ActivityIndicator size="large" />
+      </View>
+    </Modal>
+  );
 }
 
 export default LoadingOverlay;
@@ -18,5 +22,5 @@ const styles = StyleSheet.create({
   messageText: {
     fontSize: 24,
     fontWeight: "bold",
-  }
-})
+  },
+});
