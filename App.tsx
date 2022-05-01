@@ -116,8 +116,7 @@ function Root() {
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
-        user.getIdToken().then((token) => {
-          authCtx.authenticate(token);
+        authCtx.authenticate(user).then((token) => {
           setWaitingForEvent(false);
         });
       } else {
