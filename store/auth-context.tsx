@@ -6,6 +6,7 @@ import { projectStorage } from "../firebase/config";
 
 interface IAuthContext {
   token: string;
+  user: firebase.User |  undefined,
   isLoggedIn: boolean;
   updatePfp: (uri: string) => Promise<void>;
   getCurrentPfp: () => string | null;
@@ -15,6 +16,7 @@ interface IAuthContext {
 
 export const AuthContext = createContext({
   token: "",
+  user: undefined,
   isLoggedIn: false,
   updatePfp: async (uri: string) => {},
   getCurrentPfp: () => {},
@@ -25,6 +27,7 @@ export const AuthContext = createContext({
 function AuthContextProvider({ children }: { children: React.ReactNode }) {
   const [token, setToken] = useState("");
   const [user, setUser] = useState<firebase.User>();
+  const [pfp, setPfp] = useState(); // to save download bandwidth
 
   useEffect(() => {
     console.log(token);
@@ -54,9 +57,7 @@ function AuthContextProvider({ children }: { children: React.ReactNode }) {
     const response = await fetch(uri);
     const blob = await response.blob();
 
-    const uploadPath = `pfp/${user.uid}/${Date.now()
-      .toFixed(4)
-      .replace(".", "")}`;
+    const uploadPath = `users/${user.uid}/pfp`;
 
     const image = await projectStorage.ref(uploadPath).put(blob);
     return image;
@@ -72,6 +73,7 @@ function AuthContextProvider({ children }: { children: React.ReactNode }) {
     <AuthContext.Provider
       value={{
         token,
+        user,
         isLoggedIn: !!token,
         updatePfp: updateUserProfilePicture,
         getCurrentPfp: getCurrentUserProfilePicture,

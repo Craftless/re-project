@@ -93,6 +93,7 @@ function AuthenticatedTab() {
           tabBarIcon: ({ color, size }: { color: string; size: number }) => {
             return <Ionicons name="settings" color={color} size={size} />;
           },
+          headerShown: false,
         }}
       />
     </Tab.Navigator>

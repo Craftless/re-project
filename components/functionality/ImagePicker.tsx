@@ -11,6 +11,12 @@ import {
 } from "expo-image-picker";
 import { useEffect, useState } from "react";
 import Colours from "../../constants/Colours";
+import { getInfoAsync } from "expo-file-system";
+import { manipulateAsync } from "expo-image-manipulator";
+
+function isLessThanMB(fileSize: number, smallerThan: number) {
+  return fileSize / 1024 / 1024 < smallerThan;
+}
 
 function ImagePicker({
   onImageChosen,
@@ -22,11 +28,12 @@ function ImagePicker({
   const [mediaLibPermissionsInformation, requestMediaLibPermissions] =
     useMediaLibraryPermissions();
 
-  const [pickedImageURI, setPickedImageURI] = useState(""); // Somehow the ImagePickerResult type doesn't work here
+  const [pickedImageURI, setPickedImageURI] = useState(""); 
+  const [previewImageURI, setPreviewImageURI] = useState(""); 
 
-  useEffect(() => {
-    onImageChosen(pickedImageURI);
-  }, [pickedImageURI]);
+  // useEffect(() => {
+  //   onImageChosen(pickedImageURI);
+  // }, [pickedImageURI]);
 
   async function verifyCameraPermissions() {
     if (
@@ -76,10 +83,33 @@ function ImagePicker({
     const result = await launchCameraAsync({
       allowsEditing: true,
       aspect: [4, 4],
-      quality: 0.5,
+      quality: 0.7,
       mediaTypes: MediaTypeOptions.Images,
     });
-    if (!result.cancelled) setPickedImageURI(result.uri);
+    if (result.cancelled) return;
+
+    const manipResult = await manipulateAsync(
+      result.uri,
+      [{ resize: { width: 100, height: 100 } }],
+      { compress: 0.5 }
+    );
+
+    const origFileInfo = await getInfoAsync(result.uri);
+
+    const manipFileInfo = await getInfoAsync(manipResult.uri);
+    if (!manipFileInfo?.size) {
+      Alert.alert("The size of this image is unkown!.");
+      return;
+    }
+
+    if (origFileInfo.size) {
+      console.log(`Original: ${origFileInfo.size / 1024 / 1024}`);
+      console.log(`Manipulated: ${manipFileInfo.size / 1024 / 1024}`);
+    }
+
+    if (isLessThanMB(manipFileInfo.size, 3)) {
+      setPickedImageURI(manipResult.uri);
+    }
   }
 
   async function selectImageHandler() {
@@ -89,19 +119,46 @@ function ImagePicker({
     const result = await launchImageLibraryAsync({
       allowsEditing: true,
       aspect: [4, 4],
-      quality: 0.5,
+      quality: 0.7,
       mediaTypes: MediaTypeOptions.Images,
     });
 
-    if (!result.cancelled) setPickedImageURI(result.uri);
+    if (result.cancelled) return;
+
+    const manipResult = await manipulateAsync(
+      result.uri,
+      [{ resize: { width: 100, height: 100 } }],
+      { compress: 0.5 }
+    );
+
+    const origFileInfo = await getInfoAsync(result.uri);
+
+    const manipFileInfo = await getInfoAsync(manipResult.uri);
+    if (!manipFileInfo?.size) {
+      Alert.alert("The size of this image is unkown!.");
+      return;
+    }
+
+    if (origFileInfo.size) {
+      console.log(`Original: ${origFileInfo.size / 1024 / 1024}`);
+      console.log(`Manipulated: ${manipFileInfo.size / 1024 / 1024}`);
+    }
+
+    if (isLessThanMB(manipFileInfo.size, 3)) {
+      setPickedImageURI(manipResult.uri);
+    }
+  }
+
+  function confirmImageHandler() {
+    onImageChosen(pickedImageURI);
   }
 
   let imagePreview = <Text>No image selected.</Text>;
-  if (pickedImageURI)
+  if (pickedImageURI && previewImageURI)
     imagePreview = (
       <Image
         style={styles.image}
-        source={{ uri: pickedImageURI }}
+        source={{ uri: previewImageURI }}
         resizeMode="contain"
       />
     );
@@ -111,6 +168,7 @@ function ImagePicker({
       <View style={styles.imagePreviewContainer}>{imagePreview}</View>
       <RegularButton onPress={takeImageHandler}>Take image</RegularButton>
       <RegularButton onPress={selectImageHandler}>Select image</RegularButton>
+      <RegularButton onPress={confirmImageHandler}>Confirm</RegularButton>
     </View>
   );
 }
@@ -119,13 +177,14 @@ export default ImagePicker;
 
 const styles = StyleSheet.create({
   imagePreviewContainer: {
-    width: 200,
-    height: 200,
+    width: 250,
+    height: 250,
     marginVertical: 8,
     justifyContent: "center",
     alignItems: "center",
     alignSelf: "center",
-    borderRadius: 4,
+    borderRadius: 125,
+    overflow: "hidden",
     backgroundColor: Colours.primary200,
   },
   image: {

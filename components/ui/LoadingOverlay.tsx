@@ -4,7 +4,7 @@ function LoadingOverlay({ message }: { message: string }) {
   return (
     <Modal>
       <View style={styles.outerContainer}>
-        <Text style={styles.messageText}></Text>
+        <Text style={styles.messageText}>{message}</Text>
         <ActivityIndicator size="large" />
       </View>
     </Modal>
