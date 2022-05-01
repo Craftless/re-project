@@ -29,26 +29,26 @@ import { auth } from "../firebase";
 //   );
 // }
 
-export function createUser(email: string, password: string) {
+export async function createUser(email: string, password: string, onError: (error: any) => void) {
   createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       const user = userCredential.user;
-      console.log(user);
+      return user;
     })
     .catch((error) => {
-      Alert.alert(`${error.code}: ${error.message}`);
+      onError(error);
     });
   // authenticate("signUp", email, password);
 }
 
-export function logIn(email: string, password: string) {
+export async function logIn(email: string, password: string, onError: (error: any) => void) {
   signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       const user = userCredential.user;
-      console.log(user);
+      return user;
     })
     .catch((error) => {
-      Alert.alert(`${error.code}: ${error.message}`);
+      onError(error);
     });
   // authenticate('logIn', email, password);
 }

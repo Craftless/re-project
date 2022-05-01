@@ -25,31 +25,34 @@ export type RootTabParamList = {
   Home: undefined;
   Progress: undefined;
   Settings: undefined;
+};
+
+export type RootStackParamList = {
   Login: undefined;
   Signup: undefined;
 };
 
-export type RootStackParamList = {};
-
 function AuthStack() {
   return (
     <>
-      <Tab.Navigator>
-        <Tab.Screen
+      <Stack.Navigator screenOptions={{
+        animation: "fade",
+      }}>
+        <Stack.Screen
           name="Login"
           component={LoginScreen}
           options={{
             title: "Log in",
           }}
         />
-        <Tab.Screen
+        <Stack.Screen
           name="Signup"
           component={SignupScreen}
           options={{
             title: "Sign up",
           }}
         />
-      </Tab.Navigator>
+      </Stack.Navigator>
     </>
   );
 }
@@ -102,6 +105,7 @@ export default function App() {
   const authCtx = useContext(AuthContext);
 
   useEffect(() => {
+    console.log("Auth state changed");
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         const token = await user.getIdToken();
@@ -110,6 +114,7 @@ export default function App() {
         authCtx.logout();
       }
     });
+    console.log(authCtx.isLoggedIn);
 
     return unsubscribe;
   }, []);

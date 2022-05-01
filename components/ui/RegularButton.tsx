@@ -28,11 +28,12 @@ function RegularButton({
       <Pressable
         style={({ pressed }) => {
           let btnStyles: StyleProp<ViewStyle>[] = [styles.button];
-          if (pressed && platform !== "android")
+          if (pressed && platform !== "android" && !disabled)
             btnStyles.push(styles.buttonPressed);
           if (disabled) btnStyles.push(styles.buttonDisabled);
           return btnStyles;
         }}
+        onPress={onPress}
         android_ripple={{ color: "#330080" }}
       >
         <View>
@@ -50,7 +51,7 @@ const styles = StyleSheet.create({
     margin: 4,
   },
   button: {
-    backgroundColor: Colours.primary300,
+    backgroundColor: Colours.error800,
     elevation: 4,
     shadowColor: "#000000",
     shadowOffset: { width: 1, height: 1 },

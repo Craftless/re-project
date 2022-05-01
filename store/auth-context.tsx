@@ -1,4 +1,6 @@
+import { useNavigation } from "@react-navigation/native";
 import React, { createContext, useState } from "react";
+import { RootTabParamList } from "../App";
 
 interface IAuthContext {
   token: string;
@@ -25,11 +27,14 @@ export function AuthContextProvider({
 
   function authenticate(token: string) {
     setToken(token);
+    console.log("Authenticated");
   }
 
   function logout() {
     setToken("");
+    console.log("Logging out");
   }
+  console.log(token);
 
   const value = {
     token,

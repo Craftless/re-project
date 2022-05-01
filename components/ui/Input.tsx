@@ -17,6 +17,7 @@ function Input({
   hasError,
   onValueChange,
   onInputBlur,
+  valueObj
 }: {
   label: string;
   keyboardType: KeyboardTypeOptions;
@@ -24,11 +25,13 @@ function Input({
   hasError: boolean;
   onValueChange: (text: string) => void;
   onInputBlur: (e: NativeSyntheticEvent<TextInputFocusEventData>) => void;
+  valueObj: {value: string};
 }) {
   return (
     <View style={styles.outerContainer}>
       <Text style={[styles.textLabel, hasError && styles.textLabelInvalid]}>{label}</Text>
       <TextInput
+        value={valueObj.value}
         style={[styles.inputField, hasError && styles.inputFieldInvalid]}
         keyboardType={keyboardType}
         secureTextEntry={secure}
