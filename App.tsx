@@ -14,6 +14,8 @@ import HomeScreen from "./screens/HomeScreen";
 import ProgressScreen from "./screens/ProgressScreen";
 import SettingsScreen from "./screens/SettingsScreen";
 
+import { Pedometer } from "expo-sensors";
+
 import { auth } from "./firebase/config";
 
 import { Ionicons } from "@expo/vector-icons";
@@ -126,8 +128,16 @@ function Root() {
       }
     });
 
+    const unsubscribe2 = Pedometer.watchStepCount(result => {
+      
+    })
+
+
     return unsubscribe;
   }, []);
+
+
+
   return waitingForEvent ? <AppLoading /> : <Navigation />;
 }
 
