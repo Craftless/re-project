@@ -44,7 +44,7 @@ function DefaultSettingsScreen({
         <View style={styles.pfpContainer}>{pfpImage}</View>
         <View style={styles.displayInformationContainer}>
           <Text style={styles.profileDisplayNameText}>
-            {authCtx.user ? authCtx.user.displayName : "Error"}
+            {authCtx.user ? authCtx.user.displayName || "No display name set" : "Error"}
           </Text>
           <Text style={styles.profileEmailAddressText}>
             {authCtx.user ? authCtx.user.email : "Error"}

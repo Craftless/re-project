@@ -1,5 +1,6 @@
+import { useIsFocused } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { useContext } from "react";
+import { useContext, useEffect, useReducer } from "react";
 import { StyleSheet, View, Text, Image, ScrollView } from "react-native";
 import EditInput from "../components/ui/EditInput";
 import BorderBottomInput from "../components/ui/EditInput";
@@ -18,6 +19,12 @@ function EditProfileScreen({
   navigation: NativeStackNavigationProp<SettingsStackParamList, "Default">;
 }) {
   const authCtx = useContext(AuthContext);
+  const [, refreshScreen] = useReducer((x) => x, 0);
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    refreshScreen();
+  }, [isFocused]);
 
   const profilePicture = authCtx.getCurrentPfp();
 

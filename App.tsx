@@ -145,9 +145,7 @@ function Root() {
       }
     });
 
-    return () => {
-      unsubscribe;
-    };
+    return unsubscribe;
   }, []);
 
   return waitingForEvent ? <AppLoading /> : <Navigation />;

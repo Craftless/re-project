@@ -4,11 +4,11 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import { Alert, Image } from "react-native";
+import { ActivityIndicator, Alert, Image, View } from "react-native";
 import { auth } from "../firebase/config";
 
 import CachedImage from "expo-cached-image";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { AuthContext } from "../store/auth-context";
 // import CachedFastImage from "../components/functionality/CachedFastImage";
 
@@ -77,13 +77,31 @@ export async function logIn(
 //   );
 // }
 
-
 export function ProfilePicture(props: any) {
+  const { style } = props;
   const authCtx = useContext(AuthContext);
+  const [isLoading, setIsLoading] = useState(false);
   return (
-    <Image
-      {...props}
-      source={{ uri: authCtx.getCurrentPfp() }}
-    />
+    <>
+      <Image
+        {...props}
+        source={{ uri: authCtx.getCurrentPfp() }}
+        onLoadStart={() => {
+          setIsLoading(true);
+          console.log("Started");
+        }}
+        onLoadEnd={() => {
+          setIsLoading(false);
+          console.log("DONE");
+        }}
+        style={[style, isLoading && { opacity: 0 }]}
+      />
+      {isLoading && (
+        <ActivityIndicator
+          size="small"
+          style={{ position: "absolute", alignSelf: "center" }}
+        />
+      )}
+    </>
   );
 }
