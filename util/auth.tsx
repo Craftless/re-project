@@ -4,8 +4,13 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import { Alert } from "react-native";
+import { Alert, Image } from "react-native";
 import { auth } from "../firebase/config";
+
+import CachedImage from "expo-cached-image";
+import { useContext } from "react";
+import { AuthContext } from "../store/auth-context";
+// import CachedFastImage from "../components/functionality/CachedFastImage";
 
 // const API_KEY = "AIzaSyB9gIkbRc-zbcp75JhIrarBw_8hAz1pqME";
 
@@ -29,7 +34,11 @@ import { auth } from "../firebase/config";
 //   );
 // }
 
-export async function createUser(email: string, password: string, onError: (error: any) => void) {
+export async function createUser(
+  email: string,
+  password: string,
+  onError: (error: any) => void
+) {
   createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       const user = userCredential.user;
@@ -41,7 +50,11 @@ export async function createUser(email: string, password: string, onError: (erro
   // authenticate("signUp", email, password);
 }
 
-export async function logIn(email: string, password: string, onError: (error: any) => void) {
+export async function logIn(
+  email: string,
+  password: string,
+  onError: (error: any) => void
+) {
   signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       const user = userCredential.user;
@@ -51,4 +64,26 @@ export async function logIn(email: string, password: string, onError: (error: an
       onError(error);
     });
   // authenticate('logIn', email, password);
+}
+
+// export function CachedProfilePicture(props: any) {
+//   const authCtx = useContext(AuthContext);
+//   return (
+//     <CachedFastImage
+//       {...props}
+//       source={{ uri: authCtx.getCurrentPfp() }}
+//       // cacheKey={`${authCtx.user?.uid}-pfp`}
+//     />
+//   );
+// }
+
+
+export function ProfilePicture(props: any) {
+  const authCtx = useContext(AuthContext);
+  return (
+    <Image
+      {...props}
+      source={{ uri: authCtx.getCurrentPfp() }}
+    />
+  );
 }

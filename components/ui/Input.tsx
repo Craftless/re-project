@@ -12,7 +12,7 @@ import Colours from "../../constants/Colours";
 
 function Input({
   label,
-  keyboardType,
+  keyboardType = "default",
   secure = false,
   hasError,
   onValueChange,
@@ -20,7 +20,7 @@ function Input({
   valueObj
 }: {
   label: string;
-  keyboardType: KeyboardTypeOptions;
+  keyboardType?: KeyboardTypeOptions;
   secure?: boolean;
   hasError: boolean;
   onValueChange: (text: string) => void;

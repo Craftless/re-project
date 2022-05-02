@@ -12,7 +12,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeScreen from "./screens/HomeScreen";
 import ProgressScreen from "./screens/ProgressScreen";
-import SettingsScreen from "./screens/SettingsScreen";
+import SettingsScreen from "./screens/SettingsStack";
 
 import { Pedometer } from "expo-sensors";
 

@@ -5,7 +5,7 @@ import { AuthContext } from "../store/auth-context";
 import { useContext, useEffect, useState } from "react";
 import RegularButton from "../components/ui/RegularButton";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { SettingsStackParamList } from "./SettingsScreen";
+import { SettingsStackParamList } from "./SettingsStack";
 import LoadingOverlay from "../components/ui/LoadingOverlay";
 
 function ChangeProfilePictureScreen({

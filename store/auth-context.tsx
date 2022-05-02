@@ -6,10 +6,13 @@ import { projectStorage } from "../firebase/config";
 
 interface IAuthContext {
   token: string;
-  user: firebase.User |  undefined,
+  user: firebase.User | undefined;
   isLoggedIn: boolean;
+  change: string;
   updatePfp: (uri: string) => Promise<void>;
+  updateUserDisplayName: (newName: string) => Promise<void>;
   getCurrentPfp: () => string | null;
+  getCurrentDisplayName: () => string | null;
   authenticate: (user: firebase.User) => Promise<void>;
   logout: () => void;
 }
@@ -18,8 +21,10 @@ export const AuthContext = createContext({
   token: "",
   user: undefined,
   isLoggedIn: false,
+  change: "",
   updatePfp: async (uri: string) => {},
   getCurrentPfp: () => {},
+  getCurrentDisplayName: () => {},
   authenticate: async (user: firebase.User) => {},
   logout: () => {},
 } as IAuthContext);
@@ -27,11 +32,12 @@ export const AuthContext = createContext({
 function AuthContextProvider({ children }: { children: React.ReactNode }) {
   const [token, setToken] = useState("");
   const [user, setUser] = useState<firebase.User>();
+  const [change, setChange] = useState("");
   const [pfp, setPfp] = useState(); // to save download bandwidth
 
-  useEffect(() => {
-    console.log(token);
-  }, [token]);
+  // useEffect(() => {
+  //   console.log(token);
+  // }, [token]);
 
   async function authenticate(user: firebase.User) {
     const token = await user.getIdToken();
@@ -41,7 +47,17 @@ function AuthContextProvider({ children }: { children: React.ReactNode }) {
   }
 
   function getCurrentUserProfilePicture() {
-    if (user) return user.photoURL;
+    if (user) {
+      return user.photoURL;
+    }
+
+    return null;
+  }
+
+  function getCurrentUserDisplayName() {
+    if (user) {
+      return user.displayName;
+    }
     return null;
   }
 
@@ -49,7 +65,14 @@ function AuthContextProvider({ children }: { children: React.ReactNode }) {
     if (user) {
       const image = await uploadImageToCloud(uri, user);
       const downloadUrl = await image.ref.getDownloadURL();
+
       await user.updateProfile({ photoURL: downloadUrl });
+    }
+  }
+
+  async function updateUserDisplayName(newName: string) {
+    if (user) {
+      await user.updateProfile({ displayName: newName });
     }
   }
 
@@ -67,16 +90,18 @@ function AuthContextProvider({ children }: { children: React.ReactNode }) {
     setToken("");
     console.log("Logging out");
   }
-  console.log(token);
 
   return (
     <AuthContext.Provider
       value={{
         token,
         user,
+        change,
         isLoggedIn: !!token,
         updatePfp: updateUserProfilePicture,
+        updateUserDisplayName,
         getCurrentPfp: getCurrentUserProfilePicture,
+        getCurrentDisplayName: getCurrentUserDisplayName,
         authenticate: authenticate,
         logout: logout,
       }}
