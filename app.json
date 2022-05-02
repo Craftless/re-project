@@ -13,7 +13,7 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*", "assets/badges/images/*"],
+    "assetBundlePatterns": ["**/*", "assets/badges/images/*", "assets/badges/svg/*"],
     "ios": {
       "supportsTablet": true
     },

@@ -4,6 +4,9 @@ import Card from "../components/ui/Card";
 import CircularBadgeDisplay from "../components/ui/CircularBadgeDisplay";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import CardWithTitleAndContent from "../components/ui/CardWithTitleAndContent";
+// import Badge from "../util/Badges";
+import SvgTest from "../svgs/SvgTest";
+import SvgComponent from "../svgs/SvgTest";
 
 function HomeScreen() {
   return (
@@ -49,11 +52,13 @@ function HomeScreen() {
             backgroundColor="#008609"
             size={50}
             badgeIcon={({ size }) => (
-              <Ionicons name="hourglass" color="#0700C5" size={size / 2} />
+              <Ionicons name="alarm-sharp" color="#58009F" size={size / 2} />
+              // <Badge badgeId="star_athlete" width={50} height={50} />
             )}
           />
         </View>
       </CardWithTitleAndContent>
+      <SvgComponent width={500} height={500} />
     </View>
   );
 }

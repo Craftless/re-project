@@ -29,6 +29,7 @@ import { Provider, useSelector } from "react-redux";
 import { store } from "./store/redux/store";
 import { useAppDispatch, useAppSelector } from "./hooks/redux-hooks";
 import { addSteps } from "./store/redux/steps";
+import BlankScreen from "./screens/BlankScreen";
 
 const Tab = createBottomTabNavigator<RootTabParamList>();
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -37,6 +38,7 @@ export type RootTabParamList = {
   Home: undefined;
   Progress: undefined;
   Settings: undefined;
+  Blank: undefined;
 };
 
 export type RootStackParamList = {
@@ -115,6 +117,7 @@ function AuthenticatedTab() {
           headerShown: false,
         }}
       />
+      <Tab.Screen name="Blank" component={BlankScreen} />
     </Tab.Navigator>
   );
 }

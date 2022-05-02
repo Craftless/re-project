@@ -80,7 +80,7 @@ export async function logIn(
 export function ProfilePicture(props: any) {
   const { style } = props;
   const authCtx = useContext(AuthContext);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   return (
     <>
       <Image
@@ -88,11 +88,9 @@ export function ProfilePicture(props: any) {
         source={{ uri: authCtx.getCurrentPfp() }}
         onLoadStart={() => {
           setIsLoading(true);
-          console.log("Started");
         }}
         onLoadEnd={() => {
           setIsLoading(false);
-          console.log("DONE");
         }}
         style={[style, isLoading && { opacity: 0 }]}
       />
