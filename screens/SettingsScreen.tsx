@@ -22,12 +22,11 @@ import ChangeProfilePictureScreen from "./ChangeProfilePictureScreen";
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { RootTabParamList } from "../App";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
-import Card from "../components/ui/Card";
-import FlatCard from "../components/ui/FlatCard";
-import { withSafeAreaInsets } from "react-native-safe-area-context";
+import HeavyCard from "../components/ui/HeavyCard";
 
 export type SettingsStackParamList = {
   Default: undefined;
+  EditProfile: undefined;
   ChangePfp: undefined;
 };
 
@@ -56,7 +55,7 @@ function DefaultScreen({
 
   return (
     <ScrollView contentContainerStyle={styles.outerContainer}>
-      <FlatCard style={styles.profileContainer}>
+      <HeavyCard style={styles.profileContainer} onPress={() => {}}>
         <View style={styles.pfpContainer}>{pfpImage}</View>
         <View style={styles.displayInformationContainer}>
           <Text style={styles.profileDisplayNameText}>
@@ -66,7 +65,7 @@ function DefaultScreen({
             {authCtx.user ? authCtx.user.email : "Error"}
           </Text>
         </View>
-      </FlatCard>
+      </HeavyCard>
       <RegularButton onPress={() => navigation.navigate("ChangePfp")}>
         Replace current profile picture
       </RegularButton>
