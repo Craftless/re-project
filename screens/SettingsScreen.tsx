@@ -24,6 +24,7 @@ import { RootTabParamList } from "../App";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
 import Card from "../components/ui/Card";
 import FlatCard from "../components/ui/FlatCard";
+import { withSafeAreaInsets } from "react-native-safe-area-context";
 
 export type SettingsStackParamList = {
   Default: undefined;
@@ -46,7 +47,7 @@ function DefaultScreen({
   }, [isFocused]);
 
   const authCtx = useContext(AuthContext);
-  const noPfp = <Text>No Profile Picture Set</Text>;
+  const noPfp = <Text style={styles.noPfpText}>No Pfp Set</Text>;
   let pfpImage = noPfp;
   const pfpUrl = authCtx.getCurrentPfp();
   if (pfpUrl) {
@@ -130,6 +131,11 @@ const styles = StyleSheet.create({
   pfp: {
     width: "100%",
     height: "100%",
+  },
+  noPfpText: {
+    textAlign: "center",
+    color: Colours.error500,
+    fontWeight: "bold",
   },
   displayInformationContainer: {
     flexDirection: "column",

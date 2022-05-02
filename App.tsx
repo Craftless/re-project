@@ -25,6 +25,10 @@ import AuthContextProvider, { AuthContext } from "./store/auth-context";
 import LoginScreen from "./screens/LoginScreen";
 import SignupScreen from "./screens/SignupScreen";
 import AppLoading from "expo-app-loading";
+import { Provider, useSelector } from "react-redux";
+import { store } from "./store/redux/store";
+import { useAppDispatch, useAppSelector } from "./hooks/redux-hooks";
+import { addSteps } from "./store/redux/steps";
 
 const Tab = createBottomTabNavigator<RootTabParamList>();
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -116,6 +120,9 @@ function Root() {
   const authCtx = useContext(AuthContext);
   const [waitingForEvent, setWaitingForEvent] = useState(true);
 
+  const stepCount = useAppSelector((state) => state.stepCount.steps);
+  const dispatch = useAppDispatch();
+
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
@@ -124,19 +131,19 @@ function Root() {
         });
       } else {
         authCtx.logout();
-        setWaitingForEvent(false);
+        setWaitingForEvent(false);  
       }
     });
 
-    const unsubscribe2 = Pedometer.watchStepCount(result => {
-      
-    })
+    const unsubscribe2 = Pedometer.watchStepCount((result) => {
+      dispatch(addSteps(result.steps));
+    });
 
-
-    return unsubscribe;
+    return () => {
+      unsubscribe;
+      unsubscribe2;
+    };
   }, []);
-
-
 
   return waitingForEvent ? <AppLoading /> : <Navigation />;
 }
@@ -145,9 +152,11 @@ export default function App() {
   return (
     <>
       <StatusBar style="auto" />
-      <AuthContextProvider>
-        <Root />
-      </AuthContextProvider>
+      <Provider store={store}>
+        <AuthContextProvider>
+          <Root />
+        </AuthContextProvider>
+      </Provider>
     </>
   );
 }

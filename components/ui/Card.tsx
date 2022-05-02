@@ -17,6 +17,7 @@ export default Card;
 const styles = StyleSheet.create({
   cardContainer: {
     margin: 16,
+    padding: 16,
     borderRadius: 8,
     elevation: 4,
     backgroundColor: Colours.primary50,

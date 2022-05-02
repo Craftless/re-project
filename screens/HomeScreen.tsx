@@ -3,12 +3,12 @@ import * as Progress from "react-native-progress";
 import Card from "../components/ui/Card";
 import CircularBadgeDisplay from "../components/ui/CircularBadgeDisplay";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import CardWithTitleAndContent from "../components/ui/CardWithTitleAndContent";
 
 function HomeScreen() {
   return (
     <View>
-      <Card style={styles.progressContainer}>
-        <Text style={styles.progressText}>My progress this week</Text>
+      <CardWithTitleAndContent title="My progress this week">
         <Progress.Bar
           progress={0.3}
           width={null}
@@ -21,10 +21,9 @@ function HomeScreen() {
             y - x km to next badge
           </Text>
         </View>
-      </Card>
-      <Card style={styles.progressContainer}>
-        <Text style={styles.progressText}>Current Badges</Text>
-        <View style={styles.badgesContainer}>
+      </CardWithTitleAndContent>
+      <CardWithTitleAndContent title="Current Badges">
+        <View style={styles.badgesDisplayContainer}>
           <CircularBadgeDisplay
             backgroundColor="#7B017F"
             size={50}
@@ -54,7 +53,7 @@ function HomeScreen() {
             )}
           />
         </View>
-      </Card>
+      </CardWithTitleAndContent>
     </View>
   );
 }
@@ -66,12 +65,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
   },
-  progressContainer: {
-    // backgroundColor: "orange",
-    marginVertical: 16,
-    marginHorizontal: 16,
-    padding: 16,
-  },
   progressBar: {
     marginVertical: 8,
   },
@@ -79,17 +72,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
   },
-  progressText: {
-    fontSize: 24,
-  },
   progressDataText: {
     fontSize: 16,
   },
   progressDataBadgeText: {
     fontSize: 16,
   },
-  badgesContainer: {
+  badgesDisplayContainer: {
     flexDirection: "row",
-    padding: 8,
+    // padding: 8,
   },
 });

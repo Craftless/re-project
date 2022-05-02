@@ -108,7 +108,8 @@ function ImagePicker({
     }
 
     if (isLessThanMB(manipFileInfo.size, 3)) {
-      setPickedImageURI(manipResult.uri);
+      setPickedImageURI(manipResult.uri); // The actual uri we will save
+      setPreviewImageURI(result.uri); // The much higher quality image used for preview
     }
   }
 
@@ -145,7 +146,8 @@ function ImagePicker({
     }
 
     if (isLessThanMB(manipFileInfo.size, 3)) {
-      setPickedImageURI(manipResult.uri);
+      setPickedImageURI(manipResult.uri); // The actual uri we will save
+      setPreviewImageURI(result.uri); // The much higher quality image used for preview
     }
   }
 
@@ -159,7 +161,6 @@ function ImagePicker({
       <Image
         style={styles.image}
         source={{ uri: previewImageURI }}
-        resizeMode="contain"
       />
     );
 
