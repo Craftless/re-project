@@ -72,6 +72,19 @@ function AuthStack() {
 }
 
 function AuthenticatedTab() {
+  const stepCount = useAppSelector((state) => state.stepCount.steps);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    const unsubscribe2 = Pedometer.watchStepCount((result) => {
+      dispatch(addSteps(result.steps));
+    });
+
+    return () => {
+      unsubscribe2;
+    };
+  }, []);
+
   return (
     <Tab.Navigator>
       <Tab.Screen
@@ -120,9 +133,6 @@ function Root() {
   const authCtx = useContext(AuthContext);
   const [waitingForEvent, setWaitingForEvent] = useState(true);
 
-  const stepCount = useAppSelector((state) => state.stepCount.steps);
-  const dispatch = useAppDispatch();
-
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
@@ -131,17 +141,12 @@ function Root() {
         });
       } else {
         authCtx.logout();
-        setWaitingForEvent(false);  
+        setWaitingForEvent(false);
       }
-    });
-
-    const unsubscribe2 = Pedometer.watchStepCount((result) => {
-      dispatch(addSteps(result.steps));
     });
 
     return () => {
       unsubscribe;
-      unsubscribe2;
     };
   }, []);
 
