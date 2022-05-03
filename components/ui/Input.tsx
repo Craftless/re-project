@@ -9,6 +9,7 @@ import {
   TextInputFocusEventData,
 } from "react-native";
 import Colours from "../../constants/Colours";
+import AppText from "./AppText";
 
 function Input({
   label,
@@ -29,7 +30,7 @@ function Input({
 }) {
   return (
     <View style={styles.outerContainer}>
-      <Text style={[styles.textLabel, hasError && styles.textLabelInvalid]}>{label}</Text>
+      <AppText style={[styles.textLabel, hasError && styles.textLabelInvalid]}>{label}</AppText>
       <TextInput
         value={valueObj.value}
         style={[styles.inputField, hasError && styles.inputFieldInvalid]}

@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from "../hooks/redux-hooks";
 import { AuthContext } from "../store/auth-context";
 import { addSteps } from "../store/redux/steps";
 import HomeScreen from "./HomeScreen";
-import ProgressScreen from "./ProgressScreen";
+import ProgressScreen from "./DefaultProgressScreen";
 import { Ionicons } from "@expo/vector-icons";
 import SettingsScreen from "./SettingsStack";
 

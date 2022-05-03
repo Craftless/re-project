@@ -7,6 +7,8 @@ import CardWithTitleAndContent from "../components/ui/CardWithTitleAndContent";
 import Badge from "../util/Badges";
 import SvgTest from "../svgs/SvgTest";
 import SvgComponent from "../svgs/SvgTest";
+import AppText from "../components/ui/AppText";
+import BadgeContainer from "../components/ui/BadgeContainer";
 
 function HomeScreen() {
   return (
@@ -19,14 +21,14 @@ function HomeScreen() {
           style={styles.progressBar}
         />
         <View style={styles.progressDataContainer}>
-          <Text style={styles.progressDataText}>x/y km walked</Text>
-          <Text style={styles.progressDataBadgeText}>
+          <AppText style={styles.progressDataText}>x/y km walked</AppText>
+          <AppText style={styles.progressDataBadgeText}>
             y - x km to next badge
-          </Text>
+          </AppText>
         </View>
       </CardWithTitleAndContent>
       <CardWithTitleAndContent title="Current Badges">
-        <View style={styles.badgesDisplayContainer}>
+        <BadgeContainer>
           <CircularBadgeDisplay
             backgroundColor="#7B017F"
             size={60}
@@ -56,7 +58,7 @@ function HomeScreen() {
               <Badge badgeId="fire" width={50} height={50} />
             )}
           />
-        </View>
+        </BadgeContainer>
       </CardWithTitleAndContent>
       {/* <SvgComponent width={500} height={500} /> */}
     </View>
@@ -85,6 +87,5 @@ const styles = StyleSheet.create({
   },
   badgesDisplayContainer: {
     flexDirection: "row",
-    // padding: 8,
   },
 });

@@ -5,7 +5,6 @@ import {
   useCameraPermissions,
   useMediaLibraryPermissions,
   PermissionStatus,
-  ImagePickerResult,
   launchImageLibraryAsync,
   MediaTypeOptions,
 } from "expo-image-picker";
@@ -13,6 +12,7 @@ import { useEffect, useState } from "react";
 import Colours from "../../constants/Colours";
 import { getInfoAsync } from "expo-file-system";
 import { manipulateAsync } from "expo-image-manipulator";
+import AppText from "../ui/AppText";
 
 function isLessThanMB(fileSize: number, smallerThan: number) {
   return fileSize / 1024 / 1024 < smallerThan;
@@ -155,7 +155,7 @@ function ImagePicker({
     onImageChosen(pickedImageURI);
   }
 
-  let imagePreview = <Text>No image selected.</Text>;
+  let imagePreview = <AppText>No image selected.</AppText>;
   if (pickedImageURI && previewImageURI)
     imagePreview = (
       <Image

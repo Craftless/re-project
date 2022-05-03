@@ -2,24 +2,26 @@ import { StatusBar } from "expo-status-bar";
 
 import { NavigationContainer } from "@react-navigation/native";
 
-import { auth } from "./firebase/config";
-
 import { useContext, useEffect, useState } from "react";
 import AuthContextProvider, { AuthContext } from "./store/auth-context";
 
-import AppLoading from "expo-app-loading";
 import { Provider } from "react-redux";
 import { store } from "./store/redux/store";
 import AuthenticatedTab from "./screens/AuthenticatedTab";
 import AuthStack from "./screens/AuthStack";
+import AppLoading from "expo-app-loading";
+import { auth } from "./firebase/config";
 
-function Navigation() {
-  const authCtx = useContext(AuthContext);
+export default function App() {
   return (
-    <NavigationContainer>
-      {!authCtx.isLoggedIn && <AuthStack />}
-      {authCtx.isLoggedIn && <AuthenticatedTab />}
-    </NavigationContainer>
+    <>
+      <StatusBar style="auto" />
+      <Provider store={store}>
+        <AuthContextProvider>
+          <Root />
+        </AuthContextProvider>
+      </Provider>
+    </>
   );
 }
 
@@ -45,15 +47,12 @@ function Root() {
   return waitingForEvent ? <AppLoading /> : <Navigation />;
 }
 
-export default function App() {
+export function Navigation() {
+  const authCtx = useContext(AuthContext);
   return (
-    <>
-      <StatusBar style="auto" />
-      <Provider store={store}>
-        <AuthContextProvider>
-          <Root />
-        </AuthContextProvider>
-      </Provider>
-    </>
+    <NavigationContainer>
+      {!authCtx.isLoggedIn && <AuthStack />}
+      {authCtx.isLoggedIn && <AuthenticatedTab />}
+    </NavigationContainer>
   );
 }

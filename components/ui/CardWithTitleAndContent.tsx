@@ -1,5 +1,6 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
+import AppText from "./AppText";
 import Card from "./Card";
 
 function CardWithTitleAndContent({
@@ -11,7 +12,7 @@ function CardWithTitleAndContent({
 }) {
   return (
     <Card style={styles.progressContainer}>
-      <Text style={styles.cardTitle}>{title}</Text>
+      <AppText style={styles.cardTitle}>{title}</AppText>
       <View style={{ padding: 8 }}>{children}</View>
     </Card>
   );

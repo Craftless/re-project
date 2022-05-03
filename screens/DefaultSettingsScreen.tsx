@@ -2,6 +2,7 @@ import { useIsFocused } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useContext, useEffect, useReducer } from "react";
 import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
+import AppText from "../components/ui/AppText";
 import HeavyCard from "../components/ui/HeavyCard";
 import RegularButton from "../components/ui/RegularButton";
 import Colours from "../constants/Colours";
@@ -26,7 +27,7 @@ function DefaultSettingsScreen({
   }, [isFocused]);
 
   const authCtx = useContext(AuthContext);
-  const noPfp = <Text style={styles.noPfpText}>No Pfp Set</Text>;
+  const noPfp = <AppText style={styles.noPfpText}>No Pfp Set</AppText>;
   let pfpImage = noPfp;
   const pfpUrl = authCtx.getCurrentPfp();
   if (pfpUrl) {
@@ -43,12 +44,12 @@ function DefaultSettingsScreen({
       >
         <View style={styles.pfpContainer}>{pfpImage}</View>
         <View style={styles.displayInformationContainer}>
-          <Text style={styles.profileDisplayNameText}>
+          <AppText style={styles.profileDisplayNameText}>
             {authCtx.user ? authCtx.user.displayName || "No display name set" : "Error"}
-          </Text>
-          <Text style={styles.profileEmailAddressText}>
+          </AppText>
+          <AppText style={styles.profileEmailAddressText}>
             {authCtx.user ? authCtx.user.email : "Error"}
-          </Text>
+          </AppText>
         </View>
       </HeavyCard>
 

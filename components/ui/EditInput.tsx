@@ -16,6 +16,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import TransparentBgButton from "./TransparentBgButton";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { AuthContext } from "../../store/auth-context";
+import AppText from "./AppText";
 
 function EditInput({
   label,
@@ -59,9 +60,9 @@ function EditInput({
   if (isUpdating) icon = <ActivityIndicator size="small" />;
   return (
     <View style={styles.outerContainer}>
-      <Text style={[styles.textLabel, hasError && styles.textLabelInvalid]}>
+      <AppText style={[styles.textLabel, hasError && styles.textLabelInvalid]}>
         {label}
-      </Text>
+      </AppText>
       <KeyboardAvoidingView
         style={{ flexDirection: "row", alignItems: "center" }}
       >

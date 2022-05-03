@@ -2,15 +2,14 @@ import React from "react";
 import {
   Pressable,
   View,
-  Text,
   StyleSheet,
-  Button,
   GestureResponderEvent,
   Platform,
   StyleProp,
   ViewStyle,
 } from "react-native";
 import Colours from "../../constants/Colours";
+import AppText from "./AppText";
 
 const platform = Platform.OS;
 
@@ -41,7 +40,7 @@ function RegularButton({
         android_ripple={{ color: "#330080" }}
       >
         <View>
-          <Text style={styles.buttonText}>{children}</Text>
+          <AppText style={styles.buttonText}>{children}</AppText>
         </View>
       </Pressable>
     </View>

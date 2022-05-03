@@ -1,10 +1,11 @@
-import { View, Text, StyleSheet, ActivityIndicator, Modal } from "react-native";
+import { View, StyleSheet, ActivityIndicator, Modal } from "react-native";
+import AppText from "./AppText";
 
 function LoadingOverlay({ message }: { message: string }) {
   return (
     <Modal>
       <View style={styles.outerContainer}>
-        <Text style={styles.messageText}>{message}</Text>
+        <AppText style={styles.messageText}>{message}</AppText>
         <ActivityIndicator size="large" />
       </View>
     </Modal>
