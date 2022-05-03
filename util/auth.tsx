@@ -7,9 +7,11 @@ import {
 import { ActivityIndicator, Alert, Image, View } from "react-native";
 import { auth } from "../firebase/config";
 
-import CachedImage from "expo-cached-image";
 import { useContext, useState } from "react";
 import { AuthContext } from "../store/auth-context";
+// import ExpoFastImage from "expo-fast-image";
+// import CachedImage from "expo-cached-image";
+
 // import CachedFastImage from "../components/functionality/CachedFastImage";
 
 // const API_KEY = "AIzaSyB9gIkbRc-zbcp75JhIrarBw_8hAz1pqME";

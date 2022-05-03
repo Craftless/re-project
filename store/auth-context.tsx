@@ -9,9 +9,10 @@ interface IAuthContext {
   user: firebase.User | undefined;
   isLoggedIn: boolean;
   change: string;
+  pfpCacheKey: string;
   updatePfp: (uri: string) => Promise<void>;
   updateUserDisplayName: (newName: string) => Promise<void>;
-  getCurrentPfp: () => string | null;
+  getCurrentPfp: () => string | undefined;
   getCurrentDisplayName: () => string | null;
   authenticate: (user: firebase.User) => Promise<void>;
   logout: () => void;
@@ -19,11 +20,9 @@ interface IAuthContext {
 
 export const AuthContext = createContext({
   token: "",
-  user: undefined,
   isLoggedIn: false,
   change: "",
   updatePfp: async (uri: string) => {},
-  getCurrentPfp: () => {},
   getCurrentDisplayName: () => {},
   authenticate: async (user: firebase.User) => {},
   logout: () => {},
@@ -33,11 +32,11 @@ function AuthContextProvider({ children }: { children: React.ReactNode }) {
   const [token, setToken] = useState("");
   const [user, setUser] = useState<firebase.User>();
   const [change, setChange] = useState("");
-  const [pfp, setPfp] = useState(); // to save download bandwidth
+  const [pfpCacheKey, setPfpCacheKey] = useState("");
 
-  // useEffect(() => {
-  //   console.log(token);
-  // }, [token]);
+  useEffect(() => {
+    console.log(`KEY: ${pfpCacheKey}`);
+  }, [pfpCacheKey]);
 
   async function authenticate(user: firebase.User) {
     const token = await user.getIdToken();
@@ -47,11 +46,11 @@ function AuthContextProvider({ children }: { children: React.ReactNode }) {
   }
 
   function getCurrentUserProfilePicture() {
-    if (user) {
+    if (user?.photoURL) {
       return user.photoURL;
     }
 
-    return null;
+    return undefined;
   }
 
   function getCurrentUserDisplayName() {
@@ -67,6 +66,7 @@ function AuthContextProvider({ children }: { children: React.ReactNode }) {
       const downloadUrl = await image.ref.getDownloadURL();
 
       await user.updateProfile({ photoURL: downloadUrl });
+      setPfpCacheKey(Math.random().toFixed(6).toString().replace(".", ""));
     }
   }
 
@@ -98,6 +98,7 @@ function AuthContextProvider({ children }: { children: React.ReactNode }) {
         user,
         change,
         isLoggedIn: !!token,
+        pfpCacheKey,
         updatePfp: updateUserProfilePicture,
         updateUserDisplayName,
         getCurrentPfp: getCurrentUserProfilePicture,

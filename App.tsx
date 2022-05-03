@@ -16,7 +16,7 @@ import SettingsScreen from "./screens/SettingsStack";
 
 import { Pedometer } from "expo-sensors";
 
-import { auth } from "./firebase/config";
+import { auth, projectFirestore } from "./firebase/config";
 
 import { Ionicons } from "@expo/vector-icons";
 import { useContext, useEffect, useState } from "react";
@@ -74,6 +74,8 @@ function AuthStack() {
 }
 
 function AuthenticatedTab() {
+  const authCtx = useContext(AuthContext);
+
   const stepCount = useAppSelector((state) => state.stepCount.steps);
   const dispatch = useAppDispatch();
 
@@ -81,9 +83,16 @@ function AuthenticatedTab() {
     const unsubscribe2 = Pedometer.watchStepCount((result) => {
       dispatch(addSteps(result.steps));
     });
+    let unsub: any = () => {};
+    if (authCtx.user)
+      unsub = projectFirestore
+        .collection("users")
+        .doc(authCtx.user.uid)
+        .onSnapshot((snapshot) => {});
 
     return () => {
       unsubscribe2;
+      unsub();
     };
   }, []);
 
@@ -148,7 +157,7 @@ function Root() {
       }
     });
 
-    return unsubscribe;
+    return () => unsubscribe();
   }, []);
 
   return waitingForEvent ? <AppLoading /> : <Navigation />;
