@@ -10,6 +10,7 @@ import { auth } from "../firebase/config";
 import { AuthContext } from "../store/auth-context";
 import { ProfilePicture } from "../util/auth";
 import { SettingsStackParamList } from "./SettingsStack";
+import { Button } from "react-native-paper";
 // import CachedImage from "expo-cached-image";
 // import { CachedProfilePicture } from "../util/auth";
 
@@ -45,21 +46,26 @@ function DefaultSettingsScreen({
         <View style={styles.pfpContainer}>{pfpImage}</View>
         <View style={styles.displayInformationContainer}>
           <AppText style={styles.profileDisplayNameText}>
-            {authCtx.user ? authCtx.user.displayName || "No display name set" : "Error"}
+            {authCtx.user
+              ? authCtx.user.displayName || "No display name set"
+              : "Error"}
           </AppText>
           <AppText style={styles.profileEmailAddressText}>
             {authCtx.user ? authCtx.user.email : "Error"}
           </AppText>
         </View>
       </HeavyCard>
-
-      <RegularButton
-        onPress={() => {
-          auth.signOut();
-        }}
-      >
-        Logout
-      </RegularButton>
+      <View style={{alignItems: "center"}}>
+        <Button
+          mode="outlined"
+          icon="logout"
+          onPress={() => {
+            auth.signOut();
+          }}
+        >
+          Logout
+        </Button>
+      </View>
     </ScrollView>
   );
 }

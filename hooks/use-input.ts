@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { NativeSyntheticEvent, TextInputFocusEventData } from "react-native";
 
-function useInput(validationFunc: (value: string) => boolean) {
+function useInput(validationFunc: (value: string) => boolean, invalidMessage: string) {
   const [enteredValue, setEnteredValue] = useState("");
   const [isTouched, setIsTouched] = useState(false);
 

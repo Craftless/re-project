@@ -2,7 +2,6 @@ import { useContext, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
-  Button,
   Text,
   TextInput,
   TouchableOpacity,
@@ -14,6 +13,7 @@ import { createUser, logIn } from "../../util/auth";
 import Input from "../ui/Input";
 import LoadingOverlay from "../ui/LoadingOverlay";
 import RegularButton from "../ui/RegularButton";
+import { Snackbar } from "react-native-paper";
 
 function AuthForm({ isLogin = false }: { isLogin?: boolean }) {
   const authCtx = useContext(AuthContext);
@@ -79,7 +79,7 @@ function AuthForm({ isLogin = false }: { isLogin?: boolean }) {
   }
 
   return waitingForResponse ? (
-    <LoadingOverlay message="Loading" />
+    <LoadingOverlay message={isLogin ? "Logging in..." : "Creating a new user..."} />
   ) : (
     <View>
       <Input
@@ -132,6 +132,7 @@ function AuthForm({ isLogin = false }: { isLogin?: boolean }) {
       >
         {isLogin ? "Log in" : "Sign up"}
       </RegularButton>
+      <Snackbar>{}</Snackbar>
     </View>
   );
 }

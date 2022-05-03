@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { StyleSheet, View, Button } from "react-native";
-import { RootStackParamList } from "../../App";
+import { RootStackParamList } from "../../screens/AuthStack";
 import Colours from "../../constants/Colours";
 import AuthForm from "./AuthForm";
 

@@ -12,13 +12,17 @@ import AuthStack from "./screens/AuthStack";
 import AppLoading from "expo-app-loading";
 import { auth } from "./firebase/config";
 
+import { Provider as PaperProvider } from "react-native-paper";
+
 export default function App() {
   return (
     <>
       <StatusBar style="auto" />
       <Provider store={store}>
         <AuthContextProvider>
-          <Root />
+          <PaperProvider>
+            <Root />
+          </PaperProvider>
         </AuthContextProvider>
       </Provider>
     </>
