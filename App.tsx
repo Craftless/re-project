@@ -1,135 +1,17 @@
 import { StatusBar } from "expo-status-bar";
-import {
-  ActivityIndicator,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
 
 import { NavigationContainer } from "@react-navigation/native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import HomeScreen from "./screens/HomeScreen";
-import ProgressScreen from "./screens/ProgressScreen";
-import SettingsScreen from "./screens/SettingsStack";
 
-import { Pedometer } from "expo-sensors";
+import { auth } from "./firebase/config";
 
-import { auth, projectFirestore } from "./firebase/config";
-
-import { Ionicons } from "@expo/vector-icons";
 import { useContext, useEffect, useState } from "react";
 import AuthContextProvider, { AuthContext } from "./store/auth-context";
 
-import LoginScreen from "./screens/LoginScreen";
-import SignupScreen from "./screens/SignupScreen";
 import AppLoading from "expo-app-loading";
-import { Provider, useSelector } from "react-redux";
+import { Provider } from "react-redux";
 import { store } from "./store/redux/store";
-import { useAppDispatch, useAppSelector } from "./hooks/redux-hooks";
-import { addSteps } from "./store/redux/steps";
-import BlankScreen from "./screens/BlankScreen";
-
-const Tab = createBottomTabNavigator<RootTabParamList>();
-const Stack = createNativeStackNavigator<RootStackParamList>();
-
-export type RootTabParamList = {
-  Home: undefined;
-  Progress: undefined;
-  Settings: undefined;
-  Blank: undefined;
-};
-
-export type RootStackParamList = {
-  Login: undefined;
-  Signup: undefined;
-};
-
-function AuthStack() {
-  return (
-    <>
-      <Stack.Navigator
-        screenOptions={{
-          animation: "fade",
-        }}
-      >
-        <Stack.Screen
-          name="Login"
-          component={LoginScreen}
-          options={{
-            title: "Log in",
-          }}
-        />
-        <Stack.Screen
-          name="Signup"
-          component={SignupScreen}
-          options={{
-            title: "Sign up",
-          }}
-        />
-      </Stack.Navigator>
-    </>
-  );
-}
-
-function AuthenticatedTab() {
-  const authCtx = useContext(AuthContext);
-
-  const stepCount = useAppSelector((state) => state.stepCount.steps);
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    const unsubscribe2 = Pedometer.watchStepCount((result) => {
-      dispatch(addSteps(result.steps));
-    });
-    let unsub: any = () => {};
-    if (authCtx.user)
-      unsub = projectFirestore
-        .collection("users")
-        .doc(authCtx.user.uid)
-        .onSnapshot((snapshot) => {});
-
-    return () => {
-      unsubscribe2;
-      unsub();
-    };
-  }, []);
-
-  return (
-    <Tab.Navigator>
-      <Tab.Screen
-        name="Home"
-        component={HomeScreen}
-        options={{
-          tabBarIcon: ({ color, size }: { color: string; size: number }) => {
-            return <Ionicons name="home" color={color} size={size} />;
-          },
-        }}
-      />
-      <Tab.Screen
-        name="Progress"
-        component={ProgressScreen}
-        options={{
-          tabBarIcon: ({ color, size }: { color: string; size: number }) => {
-            return <Ionicons name="person" color={color} size={size} />;
-          },
-        }}
-      />
-      <Tab.Screen
-        name="Settings"
-        component={SettingsScreen}
-        options={{
-          tabBarIcon: ({ color, size }: { color: string; size: number }) => {
-            return <Ionicons name="settings" color={color} size={size} />;
-          },
-          headerShown: false,
-        }}
-      />
-      <Tab.Screen name="Blank" component={BlankScreen} />
-    </Tab.Navigator>
-  );
-}
+import AuthenticatedTab from "./screens/AuthenticatedTab";
+import AuthStack from "./screens/AuthStack";
 
 function Navigation() {
   const authCtx = useContext(AuthContext);

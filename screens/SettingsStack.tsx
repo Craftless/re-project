@@ -1,7 +1,7 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import ChangeProfilePictureScreen from "./ChangeProfilePictureScreen";
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
-import { RootTabParamList } from "../App";
+import { RootTabParamList } from "../screens/AuthenticatedTab";
 import DefaultSettingsScreen from "./DefaultSettingsScreen";
 import EditProfileScreen from "./EditProfileScreen";
 
