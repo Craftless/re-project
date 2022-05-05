@@ -1,10 +1,9 @@
 import { useIsFocused } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useContext, useEffect, useReducer } from "react";
-import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 import AppText from "../components/ui/AppText";
 import HeavyCard from "../components/ui/HeavyCard";
-import RegularButton from "../components/ui/RegularButton";
 import Colours from "../constants/Colours";
 import { auth } from "../firebase/config";
 import { AuthContext } from "../store/auth-context";

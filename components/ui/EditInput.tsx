@@ -1,7 +1,6 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import {
   View,
-  Text,
   TextInput,
   StyleSheet,
   KeyboardTypeOptions,
@@ -17,6 +16,7 @@ import TransparentBgButton from "./TransparentBgButton";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { AuthContext } from "../../store/auth-context";
 import AppText from "./AppText";
+
 
 function EditInput({
   label,

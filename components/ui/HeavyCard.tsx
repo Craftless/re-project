@@ -3,7 +3,6 @@ import {
   View,
   ViewStyle,
   StyleSheet,
-  Pressable,
   Platform,
   TouchableOpacity,
   GestureResponderEvent,

@@ -1,19 +1,11 @@
 import { useContext, useState } from "react";
-import {
-  ActivityIndicator,
-  Alert,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Alert, View } from "react-native";
 import useInput from "../../hooks/use-input";
 import { AuthContext } from "../../store/auth-context";
 import { createUser, logIn } from "../../util/auth";
 import Input from "../ui/Input";
 import LoadingOverlay from "../ui/LoadingOverlay";
 import RegularButton from "../ui/RegularButton";
-import { Snackbar } from "react-native-paper";
 
 function AuthForm({ isLogin = false }: { isLogin?: boolean }) {
   const authCtx = useContext(AuthContext);
@@ -31,7 +23,10 @@ function AuthForm({ isLogin = false }: { isLogin?: boolean }) {
     confirmFieldHasError: confirmEmailHasError,
     confirmValueChangeHandler: confirmEmailChangeHandler,
     confirmInputTouchedHandler: confirmEmailTouchedHandler,
-  } = useInput((val) => val.includes("@"));
+  } = useInput(
+    (val) => val.includes("@"),
+    "Please provide a valid email address."
+  );
 
   const {
     value: enteredPassword,
@@ -45,7 +40,10 @@ function AuthForm({ isLogin = false }: { isLogin?: boolean }) {
     confirmFieldHasError: confirmPasswordHasError,
     confirmValueChangeHandler: confirmPasswordChangeHandler,
     confirmInputTouchedHandler: confirmPasswordTouchedHandler,
-  } = useInput((val) => val.trim().length > 6);
+  } = useInput(
+    (val) => val.trim().length > 6,
+    "Please provide a password longer than 6 characters."
+  );
 
   const formIsValid =
     emailIsValid &&
@@ -79,7 +77,9 @@ function AuthForm({ isLogin = false }: { isLogin?: boolean }) {
   }
 
   return waitingForResponse ? (
-    <LoadingOverlay message={isLogin ? "Logging in..." : "Creating a new user..."} />
+    <LoadingOverlay
+      message={isLogin ? "Logging in..." : "Creating a new user..."}
+    />
   ) : (
     <View>
       <Input
@@ -132,7 +132,7 @@ function AuthForm({ isLogin = false }: { isLogin?: boolean }) {
       >
         {isLogin ? "Log in" : "Sign up"}
       </RegularButton>
-      <Snackbar>{}</Snackbar>
+      {/* <Snackbar>{}</Snackbar> */}
     </View>
   );
 }

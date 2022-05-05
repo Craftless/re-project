@@ -1,7 +1,6 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Pedometer } from "expo-sensors";
 import { useContext, useEffect } from "react";
-import { projectFirestore } from "../firebase/config";
 import { useAppDispatch, useAppSelector } from "../hooks/redux-hooks";
 import { AuthContext } from "../store/auth-context";
 import { addSteps } from "../store/redux/steps";
@@ -29,16 +28,16 @@ function AuthenticatedTab() {
     const unsubscribe2 = Pedometer.watchStepCount((result) => {
       dispatch(addSteps(result.steps));
     });
-    let unsub: any = () => {};
-    if (authCtx.user)
-      unsub = projectFirestore
-        .collection("users")
-        .doc(authCtx.user.uid)
-        .onSnapshot((snapshot) => {});
+    // let unsub: any = () => {};
+    // if (authCtx.user)
+    //   unsub = projectFirestore
+    //     .collection("users")
+    //     .doc(authCtx.user.uid)
+    //     .onSnapshot((snapshot) => {});
 
     return () => {
       unsubscribe2;
-      unsub();
+      // unsub();
     };
   }, []);
 
@@ -72,7 +71,6 @@ function AuthenticatedTab() {
           headerShown: false,
         }}
       />
-      {/* <Tab.Screen name="Blank" component={BlankScreen} /> */}
     </Tab.Navigator>
   );
 }

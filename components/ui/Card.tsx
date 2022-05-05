@@ -2,6 +2,8 @@ import React from "react";
 import { View, StyleSheet, StyleProp, ViewStyle, Platform } from "react-native";
 import Colours from "../../constants/Colours";
 
+// Probably useless now, with react-native-paper
+
 function Card({
   children,
   style,

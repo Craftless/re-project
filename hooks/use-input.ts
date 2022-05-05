@@ -1,7 +1,10 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { NativeSyntheticEvent, TextInputFocusEventData } from "react-native";
 
-function useInput(validationFunc: (value: string) => boolean, invalidMessage: string) {
+function useInput(
+  validationFunc: (value: string) => boolean,
+  invalidMessage: string
+) {
   const [enteredValue, setEnteredValue] = useState("");
   const [isTouched, setIsTouched] = useState(false);
 
@@ -11,14 +14,17 @@ function useInput(validationFunc: (value: string) => boolean, invalidMessage: st
   const valueIsValid = validationFunc(enteredValue);
   const hasError = !valueIsValid && isTouched;
 
-  const confirmFieldIsValid = enteredValue === enteredConfirmValue && valueIsValid;
+  const confirmFieldIsValid =
+    enteredValue === enteredConfirmValue && valueIsValid;
   const confirmFieldHasError = !confirmFieldIsValid && confirmIsTouched;
 
   function valueChangeHandler(text: string) {
     setEnteredValue(text);
   }
 
-  function inputTouchedHandler(event?: NativeSyntheticEvent<TextInputFocusEventData>) {
+  function inputTouchedHandler(
+    event?: NativeSyntheticEvent<TextInputFocusEventData>
+  ) {
     setIsTouched(true);
   }
 
@@ -26,7 +32,9 @@ function useInput(validationFunc: (value: string) => boolean, invalidMessage: st
     setEnteredConfirmValue(text);
   }
 
-  function confirmInputTouchedHandler(event?: NativeSyntheticEvent<TextInputFocusEventData>) {
+  function confirmInputTouchedHandler(
+    event?: NativeSyntheticEvent<TextInputFocusEventData>
+  ) {
     setConfirmIsTouched(true);
   }
 

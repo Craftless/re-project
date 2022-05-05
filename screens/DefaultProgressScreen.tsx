@@ -1,8 +1,7 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import AppText from "../components/ui/AppText";
 import CardWithTitleAndContent from "../components/ui/CardWithTitleAndContent";
 import { useAppSelector } from "../hooks/redux-hooks";
-// import Badge from "../util/Badges";
 
 function DefaultProgressScreen() {
   const steps = useAppSelector((state) => state.stepCount.stepsToday);

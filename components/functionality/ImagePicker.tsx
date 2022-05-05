@@ -1,4 +1,4 @@
-import { View, Alert, Image, Text, StyleSheet } from "react-native";
+import { View, Alert, Image, StyleSheet } from "react-native";
 import RegularButton from "../ui/RegularButton";
 import {
   launchCameraAsync,
@@ -8,7 +8,7 @@ import {
   launchImageLibraryAsync,
   MediaTypeOptions,
 } from "expo-image-picker";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Colours from "../../constants/Colours";
 import { getInfoAsync } from "expo-file-system";
 import { manipulateAsync } from "expo-image-manipulator";
@@ -28,12 +28,11 @@ function ImagePicker({
   const [mediaLibPermissionsInformation, requestMediaLibPermissions] =
     useMediaLibraryPermissions();
 
-  const [pickedImageURI, setPickedImageURI] = useState(""); 
-  const [previewImageURI, setPreviewImageURI] = useState(""); 
+  const [pickedImageURI, setPickedImageURI] = useState("");
+  const [previewImageURI, setPreviewImageURI] = useState("");
 
-  // useEffect(() => {
-  //   onImageChosen(pickedImageURI);
-  // }, [pickedImageURI]);
+
+  // TODO: Code duplication
 
   async function verifyCameraPermissions() {
     if (
@@ -75,6 +74,8 @@ function ImagePicker({
     }
     return true;
   }
+
+  // TODO: Code duplication
 
   async function takeImageHandler() {
     const hasCameraPermissions = await verifyCameraPermissions();
@@ -158,10 +159,7 @@ function ImagePicker({
   let imagePreview = <AppText>No image selected.</AppText>;
   if (pickedImageURI && previewImageURI)
     imagePreview = (
-      <Image
-        style={styles.image}
-        source={{ uri: previewImageURI }}
-      />
+      <Image style={styles.image} source={{ uri: previewImageURI }} />
     );
 
   return (

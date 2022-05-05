@@ -1,9 +1,7 @@
-import { Modal, View, StyleSheet, Alert } from "react-native";
-import Entypo from "@expo/vector-icons/Entypo";
+import { View, StyleSheet } from "react-native";
 import ImagePicker from "../components/functionality/ImagePicker";
 import { AuthContext } from "../store/auth-context";
-import { useContext, useEffect, useState } from "react";
-import RegularButton from "../components/ui/RegularButton";
+import { useContext, useState } from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { SettingsStackParamList } from "./SettingsStack";
 import LoadingOverlay from "../components/ui/LoadingOverlay";
@@ -31,16 +29,6 @@ function ChangeProfilePictureScreen({
   return (
     <View style={styles.pfpModal}>
       <ImagePicker onImageChosen={profilePictureChosenHandler} />
-      {/* <RegularButton
-        onPress={() => {
-          if (navigation.canGoBack()) navigation.goBack();
-          else navigation.replace("Default");
-        }}
-        containerStyle={{ backgroundColor: "rgba(0, 0, 0, 0)" }}
-        rootContainerStyle={{ position: "absolute", top: 0, right: 0 }}
-      >
-        <Entypo name="cross" size={24} color="black" />
-      </RegularButton> */}
     </View>
   );
 }

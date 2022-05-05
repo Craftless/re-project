@@ -1,12 +1,9 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import * as Progress from "react-native-progress";
-import Card from "../components/ui/Card";
 import CircularBadgeDisplay from "../components/ui/CircularBadgeDisplay";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import CardWithTitleAndContent from "../components/ui/CardWithTitleAndContent";
 import Badge from "../util/Badges";
-import SvgTest from "../svgs/SvgTest";
-import SvgComponent from "../svgs/SvgTest";
 import AppText from "../components/ui/AppText";
 import BadgeContainer from "../components/ui/BadgeContainer";
 

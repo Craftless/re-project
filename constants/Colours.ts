@@ -1,3 +1,5 @@
+// Also useless now, due to Themes in react-native-paper
+
 const Colours = {
   primary500: "black",
   primary400: "#202020",

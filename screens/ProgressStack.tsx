@@ -1,5 +1,5 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import BadgeDetailsScreen from "./BadgeDetails";
+import BadgeDetailsScreen from "./BadgeDetailsScreen";
 import DefaultProgressScreen from "./DefaultProgressScreen";
 
 export type ProgressStackParamList = {

@@ -1,17 +1,13 @@
 import { useIsFocused } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useContext, useEffect, useReducer } from "react";
-import { StyleSheet, View, Text, Image, ScrollView } from "react-native";
+import { StyleSheet, View, ScrollView } from "react-native";
 import EditInput from "../components/ui/EditInput";
-import BorderBottomInput from "../components/ui/EditInput";
-import Input from "../components/ui/Input";
 import RegularButton from "../components/ui/RegularButton";
 import useInput from "../hooks/use-input";
 import { AuthContext } from "../store/auth-context";
 import { ProfilePicture } from "../util/auth";
 import { SettingsStackParamList } from "./SettingsStack";
-// import CachedImage from "expo-cached-image";
-// import { CachedProfilePicture } from "../util/auth";
 
 function EditProfileScreen({
   navigation,
@@ -29,7 +25,7 @@ function EditProfileScreen({
   const profilePicture = authCtx.getCurrentPfp();
 
   const { value, valueChangeHandler, inputTouchedHandler, hasError, isValid } =
-    useInput(() => true);
+    useInput(() => true, "Please provide a valid name.");
 
   return (
     <ScrollView style={styles.outerContainer}>

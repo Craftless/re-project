@@ -2,16 +2,15 @@ import {
   GestureResponderEvent,
   Pressable,
   StyleProp,
-  Text,
-  TouchableOpacity,
   View,
   ViewStyle,
   StyleSheet,
   Platform,
 } from "react-native";
-import Colours from "../../constants/Colours";
 
 const platform = Platform.OS;
+
+// Useless now, due to react-native-paper and its mode="text" button
 
 function TransparentBgButton({
   children,
@@ -38,9 +37,7 @@ function TransparentBgButton({
         onPress={onPress}
         android_ripple={{ color: "#330080" }}
       >
-        <View>
-          {children}
-        </View>
+        <View>{children}</View>
       </Pressable>
     </View>
   );
@@ -54,8 +51,6 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: "rgba(0, 0, 0, 0)",
-    // paddingHorizontal: 16,
-    // paddingVertical: 14,
     alignItems: "center",
   },
   buttonPressed: {

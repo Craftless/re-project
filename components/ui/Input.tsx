@@ -1,7 +1,5 @@
-import React from "react";
 import {
   View,
-  Text,
   TextInput,
   StyleSheet,
   KeyboardTypeOptions,
@@ -10,6 +8,8 @@ import {
 } from "react-native";
 import Colours from "../../constants/Colours";
 import AppText from "./AppText";
+
+// Useless due to textinput from react-native-paper
 
 function Input({
   label,
