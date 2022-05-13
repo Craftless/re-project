@@ -3,6 +3,7 @@ import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
 import "firebase/compat/storage";
 import "firebase/compat/firestore";
+import "firebase/compat/database";
 
 import { getReactNativePersistence } from "firebase/auth/react-native";
 import AsyncStorageLib from "@react-native-async-storage/async-storage";
@@ -37,5 +38,6 @@ if (firebase.auth.length <= 0) {
 const auth = firebase.auth();
 const projectStorage = firebase.storage();
 const projectFirestore = firebase.firestore();
+const projectDatabase = firebase.database();
 
-export { auth, projectStorage, projectFirestore };
+export { auth, projectStorage, projectFirestore, projectDatabase };

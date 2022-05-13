@@ -1,6 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { createContext, useEffect, useRef, useState } from "react";
-import { RootTabParamList } from "../App";
 import firebase from "firebase/compat/app";
 import { projectStorage } from "../firebase/config";
 

@@ -46,7 +46,7 @@ function DefaultSettingsScreen({
         <View style={styles.displayInformationContainer}>
           <AppText style={styles.profileDisplayNameText}>
             {authCtx.user
-              ? authCtx.user.displayName || "No display name set"
+              ? authCtx.user.displayName || "No name set"
               : "Error"}
           </AppText>
           <AppText style={styles.profileEmailAddressText}>

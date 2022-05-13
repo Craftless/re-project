@@ -1,7 +1,7 @@
 import { useIsFocused } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useContext, useEffect, useReducer } from "react";
-import { StyleSheet, View, ScrollView } from "react-native";
+import { StyleSheet, View, ScrollView, TouchableOpacity } from "react-native";
 import EditInput from "../components/ui/EditInput";
 import RegularButton from "../components/ui/RegularButton";
 import useInput from "../hooks/use-input";
@@ -30,9 +30,11 @@ function EditProfileScreen({
   return (
     <ScrollView style={styles.outerContainer}>
       <View style={styles.profilePictureSectionContainer}>
-        <ProfilePicture style={styles.pfp} />
+        <TouchableOpacity>
+          <ProfilePicture style={styles.pfp} />
+        </TouchableOpacity>
         <RegularButton onPress={() => navigation.navigate("ChangePfp")}>
-          Replace current profile picture
+          Replace profile picture
         </RegularButton>
       </View>
       <View>

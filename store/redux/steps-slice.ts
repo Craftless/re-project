@@ -1,4 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { projectDatabase } from "../../firebase/config";
+import { writeStepsData } from "../../util/leaderboard";
 
 const stepsSlice = createSlice({
   name: "steps",
@@ -16,10 +18,21 @@ const stepsSlice = createSlice({
     addStepsToday: (state, action) => {
       state.stepsToday += action.payload.steps;
     },
+    setStepsToday: (state, action) => {
+      state.stepsToday = action.payload.steps;
+    },
   },
-});
+}); 
+
+export const sendStepsData = (steps: number) => {
+  return async (dispatch: any) => {
+    dispatch(setStepsToday({ steps }));
+    await writeStepsData(steps);
+  };
+};
 
 export const addSteps = stepsSlice.actions.addSteps;
 export const removeSteps = stepsSlice.actions.removeSteps;
 export const addStepsToday = stepsSlice.actions.addStepsToday;
+export const setStepsToday = stepsSlice.actions.setStepsToday;
 export default stepsSlice.reducer;
