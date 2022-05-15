@@ -11,6 +11,7 @@ import { useAppDispatch, useAppSelector } from "../hooks/redux-hooks";
 import { setLeaderboardData } from "../store/redux/leaderboard-slice";
 import { LeaderboardItem, UserSteps } from "../types/leaderboard";
 import { ProfilePicture } from "../util/auth";
+import LeaderboardItemComponent from "../components/functionality/LeaderboardItem";
 
 function LeaderboardScreen() {
   const [isLeaderboardLoading, setIsLeaderboardLoading] = useState(false);
@@ -46,12 +47,13 @@ function LeaderboardScreen() {
       let items: LeaderboardItem[] = [];
 
       await Promise.all(
-        userStepsArr.map(async (item) => {
+        userStepsArr.map(async (item, index) => {
           const userDetails = await fetchDisplayNameAndPhotoURLFromUid(
             item.uid
           );
           console.log(`user details`, userDetails);
-          if (userDetails) items.push({ ...userDetails, steps: item.steps });
+          if (userDetails)
+            items.push({ rank: index + 1, ...userDetails, steps: item.steps });
         })
       );
       dispatch(setLeaderboardData({ leaderboard: items }));
@@ -77,14 +79,14 @@ function LeaderboardScreen() {
     <View>
       {leaderboardData.map((item) => {
         return (
-          <Card key={item.steps} style={styles.cardContainer}>
-            <AppText>Name: {item.displayName}</AppText>
-            <AppText>Steps: {item.steps}</AppText>
-            <ProfilePicture style={styles.images} />
-          </Card>
+          // <Card key={item.steps} style={styles.cardContainer}>
+          //   <AppText>Name: {item.displayName}</AppText>
+          //   <AppText>Steps: {item.steps}</AppText>
+          //   <ProfilePicture style={styles.images} />
+          // </Card>
+          <LeaderboardItemComponent key={item.displayName} item={item} />
         );
       })}
-
     </View>
   );
 }
@@ -99,5 +101,5 @@ const styles = StyleSheet.create({
   images: {
     width: 75,
     height: 75,
-  }
+  },
 });
