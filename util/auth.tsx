@@ -16,26 +16,6 @@ import { AuthContext } from "../store/auth-context";
 
 // const API_KEY = "AIzaSyB9gIkbRc-zbcp75JhIrarBw_8hAz1pqME";
 
-// async function authenticate(
-//   mode: "signUp" | "logIn",
-//   email: string,
-//   password: string
-// ) {
-//   let urlCont;
-//   switch (mode) {
-//     case "signUp":
-//       urlCont = "signUp";
-//       break;
-//     case "logIn":
-//       urlCont = "signInWithPassword";
-//       break;
-//   }
-//   const response = await axios.post(
-//     `https://identitytoolkit.googleapis.com/v1/accounts:${urlCont}?key=${API_KEY}`,
-//     { email: email, password: password, returnSecureToken: true }
-//   );
-// }
-
 export async function createUser(
   email: string,
   password: string,
@@ -49,7 +29,6 @@ export async function createUser(
     .catch((error) => {
       onError(error);
     });
-  // authenticate("signUp", email, password);
 }
 
 export async function logIn(
@@ -65,7 +44,6 @@ export async function logIn(
     .catch((error) => {
       onError(error);
     });
-  // authenticate('logIn', email, password);
 }
 
 // export function CachedProfilePicture(props: any) {
@@ -83,13 +61,14 @@ export function ProfilePicture(props: any) {
   const { style } = props;
   const authCtx = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(true);
-  const uri = props.uri || authCtx.getCurrentPfp();
+  const uri = props.self ? authCtx.getCurrentPfp() : props.uri;
+  const uriValid = !!uri && uri !== "None";
   const imgStyle = style || { width: 100, height: 100 };
   return (
     <>
       <Image
         {...props}
-        source={{ uri: uri }}
+        source={uriValid ? { uri: uri } : require("../assets/blankpfp.png")}
         onLoadStart={() => {
           setIsLoading(true);
         }}

@@ -1,5 +1,5 @@
-import { ActivityIndicator, Card } from "react-native-paper";
-import { StyleSheet, View } from "react-native";
+import { ActivityIndicator, Button, Card } from "react-native-paper";
+import { FlatList, RefreshControl, StyleSheet, View } from "react-native";
 import AppText from "../components/ui/AppText";
 import { useEffect, useState } from "react";
 import {
@@ -12,55 +12,47 @@ import { setLeaderboardData } from "../store/redux/leaderboard-slice";
 import { LeaderboardItem, UserSteps } from "../types/leaderboard";
 import { ProfilePicture } from "../util/auth";
 import LeaderboardItemComponent from "../components/functionality/LeaderboardItem";
+import { Ionicons } from "@expo/vector-icons";
 
 function LeaderboardScreen() {
   const [isLeaderboardLoading, setIsLeaderboardLoading] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   const dispatch = useAppDispatch();
   const leaderboardData = useAppSelector(
     (state) => state.leaderboard.leaderboard
   );
 
-  useEffect(() => {
-    // async function thing() {
-    //   const ref = projectDatabase.ref("test").orderByKey().equalTo("abc");
-    //   const value = await (await ref.get()).val();
-    //   console.log(`It is`, value);
-    // }
-    // thing();
-    async function hello() {
-      setIsLeaderboardLoading(true);
-      const stepsRef = projectDatabase
-        .ref("leaderboard")
-        .orderByChild("steps")
-        .limitToLast(5);
+  async function reloadLeaderboard() {
+    setIsLeaderboardLoading(true);
+    const stepsRef = projectDatabase
+      .ref("leaderboard")
+      .orderByChild("steps")
+      .limitToLast(5);
 
-      const val = await (await stepsRef.get()).val();
-      let userStepsArr: UserSteps[] = [];
-      for (const key in val) {
-        userStepsArr.push({
-          uid: key,
-          steps: val[key].steps,
-        });
-      }
-      userStepsArr.reverse();
-      console.log(`array: `, userStepsArr);
-      let items: LeaderboardItem[] = [];
-
-      await Promise.all(
-        userStepsArr.map(async (item, index) => {
-          const userDetails = await fetchDisplayNameAndPhotoURLFromUid(
-            item.uid
-          );
-          console.log(`user details`, userDetails);
-          if (userDetails)
-            items.push({ rank: index + 1, ...userDetails, steps: item.steps });
-        })
-      );
-      dispatch(setLeaderboardData({ leaderboard: items }));
-      setIsLeaderboardLoading(false);
+    const val = await (await stepsRef.get()).val();
+    let userStepsArr: UserSteps[] = [];
+    for (const key in val) {
+      userStepsArr.push({
+        uid: key,
+        steps: val[key].steps,
+      });
     }
+    userStepsArr.reverse();
+    let items: LeaderboardItem[] = [];
 
-    hello();
+    await Promise.all(
+      userStepsArr.map(async (item, index) => {
+        const userDetails = await fetchDisplayNameAndPhotoURLFromUid(item.uid);
+        if (userDetails)
+          items.push({ rank: index + 1, ...userDetails, steps: item.steps });
+      })
+    );
+    dispatch(setLeaderboardData({ leaderboard: items }));
+    setIsLeaderboardLoading(false);
+  }
+
+  useEffect(() => {
+    reloadLeaderboard();
     // }
 
     // stepsRef.on("value", (snapshot) => {
@@ -77,16 +69,26 @@ function LeaderboardScreen() {
     </View>
   ) : (
     <View>
-      {leaderboardData.map((item) => {
-        return (
-          // <Card key={item.steps} style={styles.cardContainer}>
-          //   <AppText>Name: {item.displayName}</AppText>
-          //   <AppText>Steps: {item.steps}</AppText>
-          //   <ProfilePicture style={styles.images} />
-          // </Card>
-          <LeaderboardItemComponent key={item.displayName} item={item} />
-        );
-      })}
+      <Button
+        onPress={() => {
+          reloadLeaderboard();
+        }}
+        mode="text"
+      >
+        <Ionicons name="refresh" size={24} color="gray" />
+      </Button>
+      <FlatList
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => {
+          reloadLeaderboard();
+        }} />}
+        renderItem={(itemData) => {
+          return <LeaderboardItemComponent item={itemData.item} />;
+        }}
+        data={leaderboardData}
+        keyExtractor={(item) => {
+          return item.rank.toString();
+        }}
+      />
     </View>
   );
 }

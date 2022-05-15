@@ -27,12 +27,7 @@ function DefaultSettingsScreen({
   }, [isFocused]);
 
   const authCtx = useContext(AuthContext);
-  const noPfp = <AppText style={styles.noPfpText}>No Pfp Set</AppText>;
-  let pfpImage = noPfp;
-  const pfpUrl = authCtx.getCurrentPfp();
-  if (pfpUrl) {
-    pfpImage = <ProfilePicture style={styles.pfp} />;
-  }
+  const pfpImage = <ProfilePicture style={styles.pfp} self />;
 
   return (
     <ScrollView contentContainerStyle={styles.outerContainer}>
@@ -45,16 +40,14 @@ function DefaultSettingsScreen({
         <View style={styles.pfpContainer}>{pfpImage}</View>
         <View style={styles.displayInformationContainer}>
           <AppText style={styles.profileDisplayNameText}>
-            {authCtx.user
-              ? authCtx.user.displayName || "No name set"
-              : "Error"}
+            {authCtx.user ? authCtx.user.displayName || "No name set" : "Error"}
           </AppText>
           <AppText style={styles.profileEmailAddressText}>
             {authCtx.user ? authCtx.user.email : "Error"}
           </AppText>
         </View>
       </HeavyCard>
-      <View style={{alignItems: "center"}}>
+      <View style={{ alignItems: "center" }}>
         <Button
           mode="outlined"
           icon="logout"

@@ -2,6 +2,8 @@ import { useNavigation } from "@react-navigation/native";
 import React, { createContext, useEffect, useRef, useState } from "react";
 import firebase from "firebase/compat/app";
 import { projectStorage } from "../firebase/config";
+import { writeUserData } from "../util/leaderboard";
+import { User } from "firebase/auth";
 
 interface IAuthContext {
   token: string;
@@ -59,19 +61,43 @@ function AuthContextProvider({ children }: { children: React.ReactNode }) {
     return null;
   }
 
+  function getCurrentUserDisplayNameOrEmailNonNull(user: firebase.User) {
+    return getCurrentUserDisplayName() || user.email || "None";
+  }
+  
+  function getCurrentUserProfilePictureNonNull(user: firebase.User) {
+    return getCurrentUserProfilePicture() || "None";
+  }
+
   async function updateUserProfilePicture(uri: string) {
     if (user) {
       const image = await uploadImageToCloud(uri, user);
       const downloadUrl = await image.ref.getDownloadURL();
 
-      await user.updateProfile({ photoURL: downloadUrl });
+      await updateUserProfile({ photoURL: downloadUrl });
       setPfpCacheKey(Math.random().toFixed(6).toString().replace(".", ""));
     }
   }
 
   async function updateUserDisplayName(newName: string) {
     if (user) {
-      await user.updateProfile({ displayName: newName });
+      await updateUserProfile({ displayName: newName });
+    }
+  }
+
+  async function updateUserProfile(object: {
+    displayName?: string;
+    photoURL?: string;
+  }) {
+    if (user) {
+      await user.updateProfile({
+        displayName: object.displayName || undefined,
+        photoURL: object.photoURL || undefined,
+      });
+      await writeUserData({
+        displayName: getCurrentUserDisplayNameOrEmailNonNull(user),
+        pfpUrl: getCurrentUserProfilePictureNonNull(user),
+      });
     }
   }
 

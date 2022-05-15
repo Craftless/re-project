@@ -11,14 +11,21 @@ function LeaderboardItem({ item }: { item: LeaderboardItemType }) {
     <Card style={styles.card}>
       <View style={styles.innerContainer}>
         <View style={styles.rankingContainer}>
-          <AppText style={{ fontSize: item.rank <= 3? 32 : 28 }}>{item.rank}</AppText>
+          <AppText style={{ fontSize: item.rank <= 3 ? 32 : 28 }}>
+          {/* <AppText adjustsFontSizeToFit={true} numberOfLines={1} > */}
+            {item.rank}
+          </AppText>
         </View>
         <View style={styles.detailsContainer}>
           <View style={styles.nameContainer}>
             <ProfilePicture style={styles.images} uri={item.pfpUrl} />
-            <AppText>{item.displayName}</AppText>
+            <AppText style={styles.nameText}>{item.displayName}</AppText>
           </View>
-          <AppText>{item.steps}</AppText>
+          <View
+            style={styles.itemContainer}
+          >
+            <AppText>{item.steps}</AppText>
+          </View>
         </View>
       </View>
     </Card>
@@ -35,19 +42,32 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexDirection: "row",
     padding: 8,
+    // backgroundColor: "#9800BE"
   },
   rankingContainer: {
-    paddingHorizontal: 30,
+    flex: 1,
+    height: "100%",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    // backgroundColor: "#1B00EA"
   },
   detailsContainer: {
-    flex: 1,
+    height: "100%",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
+    flex: 5,
   },
   nameContainer: {
+    marginHorizontal: 20,
     flexDirection: "row",
     alignItems: "center",
+    // backgroundColor: "#00DF6C",
+    flex: 5,
+  },
+  nameText: {
+    fontSize: 20,
   },
   images: {
     width: 50,
@@ -56,4 +76,12 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     marginRight: 10,
   },
+  itemContainer: {
+    flexDirection: "row",
+    // backgroundColor: "#C30000",
+    height: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+    flex: 1,
+  }
 });

@@ -1,28 +1,18 @@
-import { useRef } from "react";
 import { auth, projectDatabase } from "../firebase/config";
-import { LeaderboardItem } from "../types/leaderboard";
 import { Alert } from "react-native";
 
-export function writeStepsData(steps: number) {
+export async function writeStepsData(steps: number) {
   if (!auth.currentUser) return;
 
-  projectDatabase.ref("leaderboard/" + auth.currentUser.uid).set({
+  await projectDatabase.ref("leaderboard/" + auth.currentUser.uid).set({
     steps,
   });
+  console.log(steps);
 }
 
-export function writeUserData({
-  displayName,
-  pfpUrl,
-}: {
-  displayName: string;
-  pfpUrl: string;
-}) {
+export function writeUserData(data: { displayName: string; pfpUrl: string }) {
   if (!auth.currentUser) return;
-  projectDatabase.ref("userInfo/" + auth.currentUser.uid).set({
-    displayName,
-    pfpUrl,
-  });
+  projectDatabase.ref("userInfo/" + auth.currentUser.uid).set(data);
 }
 
 export async function getCurrentLeaderboardData() {
@@ -38,7 +28,6 @@ export async function getCurrentLeaderboardData() {
 export async function fetchDisplayNameAndPhotoURLFromUid(uid: string) {
   const userRef = projectDatabase.ref("userInfo").orderByKey().equalTo(uid);
   const val = await (await userRef.get()).val();
-  console.log(`The value is`, val);
   if (Object.keys(val).length > 1) {
     Alert.alert("Something went wrong! lb fetchDisplayNameAndPhotoURLFromUid");
     return null;

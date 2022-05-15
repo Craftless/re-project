@@ -31,7 +31,7 @@ function EditProfileScreen({
     <ScrollView style={styles.outerContainer}>
       <View style={styles.profilePictureSectionContainer}>
         <TouchableOpacity>
-          <ProfilePicture style={styles.pfp} />
+          <ProfilePicture style={styles.pfp} self />
         </TouchableOpacity>
         <RegularButton onPress={() => navigation.navigate("ChangePfp")}>
           Replace profile picture
