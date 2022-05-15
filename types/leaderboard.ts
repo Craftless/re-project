@@ -3,3 +3,8 @@ export type LeaderboardItem = {
   pfpUrl: string | null,
   steps: number,
 }
+
+export type UserSteps = {
+  uid: string,
+  steps: number,
+}

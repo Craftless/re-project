@@ -7,7 +7,7 @@ import {
 import { ActivityIndicator, Alert, Image, View } from "react-native";
 import { auth } from "../firebase/config";
 
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../store/auth-context";
 // import ExpoFastImage from "expo-fast-image";
 // import CachedImage from "expo-cached-image";
@@ -83,18 +83,20 @@ export function ProfilePicture(props: any) {
   const { style } = props;
   const authCtx = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(true);
+  const uri = props.uri || authCtx.getCurrentPfp();
+  const imgStyle = style || { width: 100, height: 100 };
   return (
     <>
       <Image
         {...props}
-        source={{ uri: authCtx.getCurrentPfp() }}
+        source={{ uri: uri }}
         onLoadStart={() => {
           setIsLoading(true);
         }}
         onLoadEnd={() => {
           setIsLoading(false);
         }}
-        style={[style, isLoading && { opacity: 0 }]}
+        style={[imgStyle, isLoading && { opacity: 0 }]}
       />
       {isLoading && (
         <ActivityIndicator
