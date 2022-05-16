@@ -1,15 +1,16 @@
 import {
   View,
-  TextInput,
   StyleSheet,
   KeyboardTypeOptions,
   NativeSyntheticEvent,
   TextInputFocusEventData,
 } from "react-native";
+import { TextInput } from "react-native-paper";
 import Colours from "../../constants/Colours";
 import AppText from "./AppText";
 
-// Useless due to textinput from react-native-paper
+// Used to have a ton of styling that got deleted due to react-native-paper
+// Useless component
 
 function Input({
   label,
@@ -18,7 +19,7 @@ function Input({
   hasError,
   onValueChange,
   onInputBlur,
-  valueObj
+  valueObj,
 }: {
   label: string;
   keyboardType?: KeyboardTypeOptions;
@@ -26,20 +27,22 @@ function Input({
   hasError: boolean;
   onValueChange: (text: string) => void;
   onInputBlur: (e: NativeSyntheticEvent<TextInputFocusEventData>) => void;
-  valueObj: {value: string};
+  valueObj: { value: string };
 }) {
   return (
     <View style={styles.outerContainer}>
-      <AppText style={[styles.textLabel, hasError && styles.textLabelInvalid]}>{label}</AppText>
       <TextInput
+        mode="flat"
+        label={label}
         value={valueObj.value}
-        style={[styles.inputField, hasError && styles.inputFieldInvalid]}
         keyboardType={keyboardType}
         secureTextEntry={secure}
         autoCapitalize="none"
         onChangeText={onValueChange}
         onBlur={onInputBlur}
         autoCorrect={false}
+        autoComplete={false}
+        error={hasError}
       />
     </View>
   );
@@ -50,22 +53,5 @@ export default Input;
 const styles = StyleSheet.create({
   outerContainer: {
     marginBottom: 8,
-  },
-  textLabel: {
-    color: Colours.primary500,
-    fontSize: 18,
-  },
-  textLabelInvalid: {
-    color: Colours.error600,
-  },
-  inputField: {
-    paddingVertical: 8,
-    paddingHorizontal: 6,
-    backgroundColor: Colours.primary100,
-    borderRadius: 6,
-    fontSize: 18,
-  },
-  inputFieldInvalid: {
-    backgroundColor: Colours.error300,
   },
 });

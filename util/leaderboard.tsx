@@ -1,7 +1,6 @@
 import { auth, projectDatabase } from "../firebase/config";
 import { Alert } from "react-native";
-import { useContext } from "react";
-import { AuthContext, IAuthContext } from "../store/auth-context";
+import { getCurrentUserDisplayNameOrEmailNonNullFromUser, getCurrentUserProfilePictureNonNullFromUser, updateUserProfile } from "./auth";
 
 export async function writeStepsData(steps: number) {
   if (!auth.currentUser) return;
@@ -10,11 +9,6 @@ export async function writeStepsData(steps: number) {
     steps,
   });
   console.log(steps);
-}
-
-export function writeUserData(data: { displayName: string; pfpUrl: string }) {
-  if (!auth.currentUser) return;
-  projectDatabase.ref("userInfo/" + auth.currentUser.uid).set(data);
 }
 
 export async function getCurrentLeaderboardData() {
@@ -29,16 +23,15 @@ export async function getCurrentLeaderboardData() {
 
 export async function fetchDisplayNameAndPhotoURLFromUid(
   uid: string,
-  authCtx?: IAuthContext
 ) {
   const userRef = projectDatabase.ref("userInfo").orderByKey().equalTo(uid);
   const val = await (await userRef.get()).val();
   if (!val || Object.keys(val).length > 1) {
     Alert.alert("Something went wrong! lb fetchDisplayNameAndPhotoURLFromUid");
-    if (auth.currentUser && authCtx)
-      writeUserData({
-        displayName: authCtx.getCurrentDisplayNameNN(auth.currentUser),
-        pfpUrl: authCtx.getCurrentPfpNN(auth.currentUser),
+    if (auth.currentUser)
+      updateUserProfile(auth.currentUser, { // Doing this because the user might have recently signed up and their details were not sent to database due to a bug
+        displayName: getCurrentUserDisplayNameOrEmailNonNullFromUser(auth.currentUser),
+        photoURL: getCurrentUserProfilePictureNonNullFromUser(auth.currentUser),
       });
     return null;
   }

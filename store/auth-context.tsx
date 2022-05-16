@@ -1,9 +1,8 @@
-import { useNavigation } from "@react-navigation/native";
-import React, { createContext, useEffect, useRef, useState } from "react";
+import { Alert } from "react-native";
+import React, { createContext, useEffect, useState } from "react";
 import firebase from "firebase/compat/app";
 import { projectStorage } from "../firebase/config";
-import { writeUserData } from "../util/leaderboard";
-import { User } from "firebase/auth";
+import { getCurrentUserDisplayNameFromUser, getCurrentUserProfilePictureFromUser, updateUserProfile } from "../util/auth";
 
 export interface IAuthContext {
   token: string;
@@ -15,8 +14,6 @@ export interface IAuthContext {
   updateUserDisplayName: (newName: string) => Promise<void>;
   getCurrentPfp: () => string | undefined;
   getCurrentDisplayName: () => string | null;
-  getCurrentPfpNN: (user: firebase.User) => string;
-  getCurrentDisplayNameNN: (user: firebase.User) => string;
   authenticate: (user: firebase.User) => Promise<void>;
   logout: () => void;
 }
@@ -49,26 +46,19 @@ function AuthContextProvider({ children }: { children: React.ReactNode }) {
   }
 
   function getCurrentUserProfilePicture() {
-    if (user?.photoURL) {
-      return user.photoURL;
+    if (user) {
+      getCurrentUserProfilePictureFromUser(user);
     }
-
+    Alert.alert("Cannot get profile picture of a user that does not exist!");
     return undefined;
   }
 
   function getCurrentUserDisplayName() {
     if (user) {
-      return user.displayName;
+      return getCurrentUserDisplayNameFromUser(user);
     }
+    Alert.alert("Cannot get display name of a user that does not exist!");
     return null;
-  }
-
-  function getCurrentUserDisplayNameOrEmailNonNull(user: firebase.User) {
-    return getCurrentUserDisplayName() || user.email || "None";
-  }
-  
-  function getCurrentUserProfilePictureNonNull(user: firebase.User) {
-    return getCurrentUserProfilePicture() || "None";
   }
 
   async function updateUserProfilePicture(uri: string) {
@@ -76,30 +66,14 @@ function AuthContextProvider({ children }: { children: React.ReactNode }) {
       const image = await uploadImageToCloud(uri, user);
       const downloadUrl = await image.ref.getDownloadURL();
 
-      await updateUserProfile({ photoURL: downloadUrl });
+      await updateUserProfile(user, { photoURL: downloadUrl });
       setPfpCacheKey(Math.random().toFixed(6).toString().replace(".", ""));
     }
   }
 
   async function updateUserDisplayName(newName: string) {
     if (user) {
-      await updateUserProfile({ displayName: newName });
-    }
-  }
-
-  async function updateUserProfile(object: {
-    displayName?: string;
-    photoURL?: string;
-  }) {
-    if (user) {
-      await user.updateProfile({
-        displayName: object.displayName || undefined,
-        photoURL: object.photoURL || undefined,
-      });
-      await writeUserData({
-        displayName: getCurrentUserDisplayNameOrEmailNonNull(user),
-        pfpUrl: getCurrentUserProfilePictureNonNull(user),
-      });
+      await updateUserProfile(user, { displayName: newName });
     }
   }
 
@@ -130,8 +104,6 @@ function AuthContextProvider({ children }: { children: React.ReactNode }) {
         updateUserDisplayName,
         getCurrentPfp: getCurrentUserProfilePicture,
         getCurrentDisplayName: getCurrentUserDisplayName,
-        getCurrentPfpNN: getCurrentUserProfilePictureNonNull,
-        getCurrentDisplayNameNN: getCurrentUserDisplayNameOrEmailNonNull,
         authenticate: authenticate,
         logout: logout,
       }}

@@ -37,15 +37,12 @@ function LeaderboardScreen() {
 
     get.forEach((item) => {
       const val = item.val();
-      for (const key in val) {
-        const uid = item.key;
-        console.log(val[key]);
-        if (uid) {
-          userStepsArr.push({
-            uid,
-            steps: val[key],
-          });
-        }
+      const uid = item.key;
+      if (uid) {
+        userStepsArr.push({
+          uid,
+          steps: val.steps,
+        });
       }
     });
 

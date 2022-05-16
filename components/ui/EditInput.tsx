@@ -70,7 +70,9 @@ function EditInput({
           label={label}
           mode="flat"
           autoComplete={false}
-          value={isUpdating ? "Updating..." : valueObj.value}
+          value={
+            isUpdating ? "Updating..." : editable ? valueObj.value : valueObj.value || undefined
+          }
           style={[styles.inputField, hasError && styles.inputFieldInvalid]}
           keyboardType={keyboardType}
           secureTextEntry={secure}
@@ -94,6 +96,7 @@ function EditInput({
             if (textInput.current) {
               if (!editable) {
                 setEditable(true);
+                onValueChange(displayName); // Workaround, i'll get back to this later
                 setTimeout(() => {
                   if (textInput.current) {
                     textInput.current.focus();
