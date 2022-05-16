@@ -1,22 +1,21 @@
 import { useContext, useRef, useState } from "react";
 import {
   View,
-  TextInput,
   StyleSheet,
   KeyboardTypeOptions,
   NativeSyntheticEvent,
   TextInputFocusEventData,
-  TextInputProps,
   KeyboardAvoidingView,
   ActivityIndicator,
+  TextInput as RNTextInput,
 } from "react-native";
+import { Button, TextInput, useTheme } from "react-native-paper";
 import Colours from "../../constants/Colours";
 import { MaterialIcons } from "@expo/vector-icons";
 import TransparentBgButton from "./TransparentBgButton";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { AuthContext } from "../../store/auth-context";
 import AppText from "./AppText";
-
 
 function EditInput({
   label,
@@ -35,24 +34,28 @@ function EditInput({
   onValueChange: (text: string) => void;
   onInputBlur: (e: NativeSyntheticEvent<TextInputFocusEventData>) => void;
   valueObj: { value: string };
-  inputProps?: TextInputProps;
+  inputProps?: any; // can't find TextInputProps equivalent for react-native-paper
 }) {
   const [editable, setEditable] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
 
   const authCtx = useContext(AuthContext);
 
-  const textInput = useRef<TextInput | null>(null);
+  const textInput = useRef<RNTextInput | null>(null);
 
   async function saveDisplayName() {
     setIsUpdating(true);
+    console.log(valueObj.value);
     await authCtx.updateUserDisplayName(valueObj.value);
     setIsUpdating(false);
   }
 
   const displayName = authCtx.getCurrentDisplayName() || "No display name set";
+  const theme = useTheme();
 
-  let icon = <MaterialIcons name="mode-edit" size={30} color="black" />;
+  let icon = (
+    <MaterialIcons name="mode-edit" size={30} color={theme.colors.text} />
+  );
   if (editable)
     icon = (
       <Ionicons name="checkmark" size={30} color={hasError ? "red" : "green"} />
@@ -60,16 +63,14 @@ function EditInput({
   if (isUpdating) icon = <ActivityIndicator size="small" />;
   return (
     <View style={styles.outerContainer}>
-      <AppText style={[styles.textLabel, hasError && styles.textLabelInvalid]}>
-        {label}
-      </AppText>
       <KeyboardAvoidingView
         style={{ flexDirection: "row", alignItems: "center" }}
       >
         <TextInput
-          value={
-            isUpdating ? "Updating..." : editable ? valueObj.value : undefined
-          }
+          label={label}
+          mode="flat"
+          autoComplete={false}
+          value={isUpdating ? "Updating..." : valueObj.value}
           style={[styles.inputField, hasError && styles.inputFieldInvalid]}
           keyboardType={keyboardType}
           secureTextEntry={secure}
@@ -87,7 +88,8 @@ function EditInput({
           defaultValue={displayName}
           {...inputProps}
         />
-        <TransparentBgButton
+        <Button
+          mode="text"
           onPress={() => {
             if (textInput.current) {
               if (!editable) {
@@ -106,7 +108,7 @@ function EditInput({
           }}
         >
           {icon}
-        </TransparentBgButton>
+        </Button>
       </KeyboardAvoidingView>
     </View>
   );
@@ -128,10 +130,10 @@ const styles = StyleSheet.create({
     color: Colours.error600,
   },
   inputField: {
-    borderBottomWidth: 2,
-    paddingVertical: 8,
-    paddingHorizontal: 6,
-    borderBottomColor: Colours.primary100,
+    // borderBottomWidth: 2,
+    // paddingVertical: 8,
+    // paddingHorizontal: 6,
+    // borderBottomColor: Colours.primary100,
     fontSize: 18,
     flex: 1,
   },

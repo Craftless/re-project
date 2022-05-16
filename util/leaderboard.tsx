@@ -1,5 +1,7 @@
 import { auth, projectDatabase } from "../firebase/config";
 import { Alert } from "react-native";
+import { useContext } from "react";
+import { AuthContext, IAuthContext } from "../store/auth-context";
 
 export async function writeStepsData(steps: number) {
   if (!auth.currentUser) return;
@@ -20,16 +22,24 @@ export async function getCurrentLeaderboardData() {
     .ref("leaderboard")
     .orderByChild("steps")
     .limitToFirst(5);
-  const gotten = await stepsRef.ref.get();
+  const gotten = await stepsRef.get();
   console.log(`.get() of reordered ref: ${gotten}`);
   return gotten;
 }
 
-export async function fetchDisplayNameAndPhotoURLFromUid(uid: string) {
+export async function fetchDisplayNameAndPhotoURLFromUid(
+  uid: string,
+  authCtx?: IAuthContext
+) {
   const userRef = projectDatabase.ref("userInfo").orderByKey().equalTo(uid);
   const val = await (await userRef.get()).val();
-  if (Object.keys(val).length > 1) {
+  if (!val || Object.keys(val).length > 1) {
     Alert.alert("Something went wrong! lb fetchDisplayNameAndPhotoURLFromUid");
+    if (auth.currentUser && authCtx)
+      writeUserData({
+        displayName: authCtx.getCurrentDisplayNameNN(auth.currentUser),
+        pfpUrl: authCtx.getCurrentPfpNN(auth.currentUser),
+      });
     return null;
   }
   let displayName, pfpUrl;

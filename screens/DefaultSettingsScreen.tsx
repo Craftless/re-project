@@ -74,7 +74,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     // justifyContent: "",
-    backgroundColor: "#C9C9C9ff",
     padding: 4,
   },
   pfpContainer: {

@@ -5,7 +5,7 @@ import { projectStorage } from "../firebase/config";
 import { writeUserData } from "../util/leaderboard";
 import { User } from "firebase/auth";
 
-interface IAuthContext {
+export interface IAuthContext {
   token: string;
   user: firebase.User | undefined;
   isLoggedIn: boolean;
@@ -15,6 +15,8 @@ interface IAuthContext {
   updateUserDisplayName: (newName: string) => Promise<void>;
   getCurrentPfp: () => string | undefined;
   getCurrentDisplayName: () => string | null;
+  getCurrentPfpNN: (user: firebase.User) => string;
+  getCurrentDisplayNameNN: (user: firebase.User) => string;
   authenticate: (user: firebase.User) => Promise<void>;
   logout: () => void;
 }
@@ -128,6 +130,8 @@ function AuthContextProvider({ children }: { children: React.ReactNode }) {
         updateUserDisplayName,
         getCurrentPfp: getCurrentUserProfilePicture,
         getCurrentDisplayName: getCurrentUserDisplayName,
+        getCurrentPfpNN: getCurrentUserProfilePictureNonNull,
+        getCurrentDisplayNameNN: getCurrentUserDisplayNameOrEmailNonNull,
         authenticate: authenticate,
         logout: logout,
       }}

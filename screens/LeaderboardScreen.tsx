@@ -1,7 +1,7 @@
 import { ActivityIndicator, Button, Card } from "react-native-paper";
 import { FlatList, RefreshControl, StyleSheet, View } from "react-native";
 import AppText from "../components/ui/AppText";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   fetchDisplayNameAndPhotoURLFromUid,
   getCurrentLeaderboardData,
@@ -13,10 +13,12 @@ import { LeaderboardItem, UserSteps } from "../types/leaderboard";
 import { ProfilePicture } from "../util/auth";
 import LeaderboardItemComponent from "../components/functionality/LeaderboardItem";
 import { Ionicons } from "@expo/vector-icons";
+import { AuthContext } from "../store/auth-context";
 
 function LeaderboardScreen() {
   const [isLeaderboardLoading, setIsLeaderboardLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
+  const authCtxx = useContext(AuthContext);
   const dispatch = useAppDispatch();
   const leaderboardData = useAppSelector(
     (state) => state.leaderboard.leaderboard
@@ -27,22 +29,35 @@ function LeaderboardScreen() {
     const stepsRef = projectDatabase
       .ref("leaderboard")
       .orderByChild("steps")
-      .limitToLast(5);
+      .limitToFirst(5);
 
-    const val = await (await stepsRef.get()).val();
+    const get = await stepsRef.get();
+
     let userStepsArr: UserSteps[] = [];
-    for (const key in val) {
-      userStepsArr.push({
-        uid: key,
-        steps: val[key].steps,
-      });
-    }
+
+    get.forEach((item) => {
+      const val = item.val();
+      for (const key in val) {
+        const uid = item.key;
+        console.log(val[key]);
+        if (uid) {
+          userStepsArr.push({
+            uid,
+            steps: val[key],
+          });
+        }
+      }
+    });
+
     userStepsArr.reverse();
     let items: LeaderboardItem[] = [];
 
     await Promise.all(
       userStepsArr.map(async (item, index) => {
-        const userDetails = await fetchDisplayNameAndPhotoURLFromUid(item.uid);
+        const userDetails = await fetchDisplayNameAndPhotoURLFromUid(
+          item.uid,
+          authCtxx
+        );
         if (userDetails)
           items.push({ rank: index + 1, ...userDetails, steps: item.steps });
       })
@@ -78,9 +93,14 @@ function LeaderboardScreen() {
         <Ionicons name="refresh" size={24} color="gray" />
       </Button>
       <FlatList
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => {
-          reloadLeaderboard();
-        }} />}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={() => {
+              reloadLeaderboard();
+            }}
+          />
+        }
         renderItem={(itemData) => {
           return <LeaderboardItemComponent item={itemData.item} />;
         }}

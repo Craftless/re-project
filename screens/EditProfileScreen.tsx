@@ -22,8 +22,6 @@ function EditProfileScreen({
     refreshScreen();
   }, [isFocused]);
 
-  const profilePicture = authCtx.getCurrentPfp();
-
   const { value, valueChangeHandler, inputTouchedHandler, hasError, isValid } =
     useInput(() => true, "Please provide a valid name.");
 

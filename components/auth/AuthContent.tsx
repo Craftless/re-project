@@ -4,6 +4,7 @@ import { StyleSheet, View, Button } from "react-native";
 import { RootStackParamList } from "../../screens/AuthStack";
 import Colours from "../../constants/Colours";
 import AuthForm from "./AuthForm";
+import { Card } from "react-native-paper";
 
 function AuthContent({ isLogin = false }: { isLogin?: boolean }) {
   const navigation = isLogin
@@ -16,7 +17,7 @@ function AuthContent({ isLogin = false }: { isLogin?: boolean }) {
   }
 
   return (
-    <View style={styles.rootContainer}>
+    <Card style={styles.rootContainer}>
       <AuthForm isLogin={isLogin} />
       <View>
         <Button
@@ -24,7 +25,7 @@ function AuthContent({ isLogin = false }: { isLogin?: boolean }) {
           onPress={switchAuthModeHandler}
         />
       </View>
-    </View>
+    </Card>
   );
 }
 
@@ -34,7 +35,6 @@ const styles = StyleSheet.create({
   rootContainer: {
     marginTop: 64,
     marginHorizontal: 32,
-    backgroundColor: Colours.error200,
     padding: 16,
     borderRadius: 16,
   },

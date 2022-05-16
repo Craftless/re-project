@@ -7,3 +7,4 @@ declare module "*.svg" {
 
 declare module "expo-cached-image";
 declare module "expo-fast-image"
+declare module 'tinycolor2';

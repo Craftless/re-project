@@ -7,19 +7,25 @@ import {
   TouchableOpacity,
   GestureResponderEvent,
 } from "react-native";
+import { withTheme } from "react-native-paper";
+import { Theme } from "react-native-paper/lib/typescript/types";
 
 function HeavyCard({
   style,
   children,
   onPress,
-  backgroundColour = "#C5C5C5",
+  backgroundColour,
+  theme,
 }: {
   style: StyleProp<ViewStyle>;
   children: React.ReactNode;
   onPress: (event: GestureResponderEvent) => void;
   backgroundColour?: string;
+  theme: Theme;
 }) {
-  const cardStyles = styles(backgroundColour);
+
+  const color = theme.colors.surface;
+  const cardStyles = styles(backgroundColour || adjust(color, 20));
 
   return (
     <View style={[cardStyles.cardContainer]}>
@@ -34,7 +40,12 @@ function HeavyCard({
   );
 }
 
-export default HeavyCard;
+function adjust(color: string, amount: number) {
+  return '#' + color.replace(/^#/, '').replace(/../g, color => ('0'+Math.min(255, Math.max(0, parseInt(color, 16) + amount)).toString(16)).substr(-2));
+}
+
+
+export default withTheme(HeavyCard);
 
 const styles = (backgroundColour: string) =>
   StyleSheet.create({
