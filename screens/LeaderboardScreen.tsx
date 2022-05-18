@@ -53,7 +53,6 @@ function LeaderboardScreen() {
       userStepsArr.map(async (item, index) => {
         const userDetails = await fetchDisplayNameAndPhotoURLFromUid(
           item.uid,
-          authCtxx
         );
         if (userDetails)
           items.push({ rank: index + 1, ...userDetails, steps: item.steps });
@@ -81,14 +80,6 @@ function LeaderboardScreen() {
     </View>
   ) : (
     <View>
-      <Button
-        onPress={() => {
-          reloadLeaderboard();
-        }}
-        mode="text"
-      >
-        <Ionicons name="refresh" size={24} color="gray" />
-      </Button>
       <FlatList
         refreshControl={
           <RefreshControl
@@ -106,6 +97,14 @@ function LeaderboardScreen() {
           return item.rank.toString();
         }}
       />
+      <Button
+        onPress={() => {
+          reloadLeaderboard();
+        }}
+        mode="text"
+      >
+        <Ionicons name="refresh" size={24} color="gray" />
+      </Button>
     </View>
   );
 }

@@ -19,7 +19,7 @@ function LeaderboardItem({ item }: { item: LeaderboardItemType }) {
         <View style={styles.detailsContainer}>
           <View style={styles.nameContainer}>
             <ProfilePicture style={styles.images} uri={item.pfpUrl} />
-            <AppText style={styles.nameText}>{item.displayName}</AppText>
+            <AppText allowFontScaling ellipsizeMode="tail" adjustsFontSizeToFit={true} numberOfLines={2} style={styles.nameText}>{item.displayName}</AppText>
           </View>
           <View
             style={styles.itemContainer}
@@ -37,6 +37,7 @@ export default LeaderboardItem;
 const styles = StyleSheet.create({
   card: {
     marginBottom: 2,
+    height: 70,
   },
   innerContainer: {
     alignItems: "center",
@@ -60,28 +61,32 @@ const styles = StyleSheet.create({
     flex: 5,
   },
   nameContainer: {
-    marginHorizontal: 20,
+    paddingLeft: 20,
+    paddingRight: 40,
     flexDirection: "row",
     alignItems: "center",
+    width: "50%",
     // backgroundColor: "#00DF6C",
-    flex: 5,
+    flex: 1,
+    // flex: 5,
   },
   nameText: {
     fontSize: 20,
+    textAlign: "auto",
   },
   images: {
     width: 50,
     height: 50,
     borderRadius: 25,
     overflow: "hidden",
-    marginRight: 10,
+    marginRight: 20,
   },
   itemContainer: {
     flexDirection: "row",
     // backgroundColor: "#C30000",
     height: "100%",
+    marginLeft: 20,
     alignItems: "center",
     justifyContent: "center",
-    flex: 1,
   }
 });

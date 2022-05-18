@@ -3,6 +3,7 @@ import { View, StyleSheet, StyleProp, ViewStyle, Platform } from "react-native";
 import Colours from "../../constants/Colours";
 import { withTheme } from "react-native-paper";
 import { Theme } from "react-native-paper/lib/typescript/types";
+import { Card as RNPCard } from "react-native-paper";
 
 // Probably useless now, with react-native-paper
 
@@ -15,7 +16,7 @@ function Card({
   style?: StyleProp<ViewStyle>;
   theme: Theme;
 }) {
-  return <View style={[styles(theme).cardContainer, style]}>{children}</View>;
+  return <RNPCard style={[styles(theme).cardContainer, style]}>{children}</RNPCard>;
 }
 
 export default withTheme(Card);
@@ -27,7 +28,7 @@ const styles = (theme: Theme) =>
       padding: 16,
       borderRadius: 8,
       elevation: 4,
-      backgroundColor: theme.colors.surface,
+      // backgroundColor: theme.colors.surface,
       overflow: Platform.OS === "android" ? "hidden" : "visible",
       shadowColor: "black",
       shadowOffset: { width: 1, height: 1 },

@@ -9,13 +9,17 @@ import {
   ActivityIndicator,
   TextInput as RNTextInput,
 } from "react-native";
-import { Button, TextInput, useTheme } from "react-native-paper";
+import { Button, IconButton, TextInput, useTheme } from "react-native-paper";
 import Colours from "../../constants/Colours";
 import { MaterialIcons } from "@expo/vector-icons";
 import TransparentBgButton from "./TransparentBgButton";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { AuthContext } from "../../store/auth-context";
 import AppText from "./AppText";
+
+let text, accent, surface, error;
+
+// TODO: Fix: Currently not modular at all and only made for one purpose
 
 function EditInput({
   label,
@@ -45,13 +49,20 @@ function EditInput({
 
   async function saveDisplayName() {
     setIsUpdating(true);
-    console.log(valueObj.value);
+    const displayName = valueObj.value;
+    displayName.trim().substring(0, 12);
     await authCtx.updateUserDisplayName(valueObj.value);
     setIsUpdating(false);
   }
 
   const displayName = authCtx.getCurrentDisplayName() || "No display name set";
   const theme = useTheme();
+
+  text = theme.colors.text;
+  accent = theme.colors.primary;
+  surface = theme.colors.surface;
+  error = theme.colors.error;
+  const stylesObject = styles({ text, accent, surface, error });
 
   let icon = (
     <MaterialIcons name="mode-edit" size={30} color={theme.colors.text} />
@@ -62,34 +73,48 @@ function EditInput({
     );
   if (isUpdating) icon = <ActivityIndicator size="small" />;
   return (
-    <View style={styles.outerContainer}>
+    <View style={stylesObject.outerContainer}>
       <KeyboardAvoidingView
         style={{ flexDirection: "row", alignItems: "center" }}
       >
-        <TextInput
-          label={label}
-          mode="flat"
-          autoComplete={false}
-          value={
-            isUpdating ? "Updating..." : editable ? valueObj.value : valueObj.value || undefined
-          }
-          style={[styles.inputField, hasError && styles.inputFieldInvalid]}
-          keyboardType={keyboardType}
-          secureTextEntry={secure}
-          autoCapitalize="none"
-          onChangeText={onValueChange}
-          onBlur={(e) => {
-            saveDisplayName();
-            onInputBlur(e);
-            setEditable(false);
-          }}
-          autoCorrect={false}
-          editable={editable}
-          ref={textInput}
-          autoFocus={editable}
-          defaultValue={displayName}
-          {...inputProps}
-        />
+        <View style={{ flex: 1 }}>
+          <AppText style={{ color: theme.colors.placeholder }}>
+            {label}
+          </AppText>
+          <RNTextInput
+            label={label}
+            mode="flat"
+            autoComplete={false}
+            value={
+              isUpdating
+                ? "Updating..."
+                : editable
+                ? valueObj.value
+                : valueObj.value || undefined
+            }
+            style={[
+              stylesObject.inputField,
+              hasError && stylesObject.inputFieldInvalid,
+              editable && stylesObject.inputFieldEditable,
+            ]}
+            keyboardType={keyboardType}
+            secureTextEntry={secure}
+            autoCapitalize="none"
+            onChangeText={onValueChange}
+            onBlur={(e) => {
+              saveDisplayName();
+              onInputBlur(e);
+              setEditable(false);
+            }}
+            autoCorrect={false}
+            editable={editable}
+            ref={textInput}
+            autoFocus={editable}
+            defaultValue={displayName}
+            {...inputProps}
+          />
+        </View>
+        <View></View>
         <Button
           mode="text"
           onPress={() => {
@@ -119,28 +144,45 @@ function EditInput({
 
 export default EditInput;
 
-const styles = StyleSheet.create({
-  outerContainer: {
-    marginBottom: 8,
-  },
-  textLabel: {
-    color: Colours.primary500,
-    fontSize: 18,
-    marginBottom: 8,
-    fontWeight: "bold",
-  },
-  textLabelInvalid: {
-    color: Colours.error600,
-  },
-  inputField: {
-    // borderBottomWidth: 2,
-    // paddingVertical: 8,
-    // paddingHorizontal: 6,
-    // borderBottomColor: Colours.primary100,
-    fontSize: 18,
-    flex: 1,
-  },
-  inputFieldInvalid: {
-    borderBottomColor: Colours.error300,
-  },
-});
+const styles = ({
+  text,
+  accent,
+  surface,
+  error,
+}: {
+  text: string;
+  accent: string;
+  surface: string;
+  error: string;
+}) =>
+  StyleSheet.create({
+    outerContainer: {
+      marginBottom: 8,
+    },
+    textLabel: {
+      color: text,
+      fontSize: 18,
+      marginBottom: 8,
+      fontWeight: "bold",
+    },
+    textLabelInvalid: {
+      color: error,
+    },
+    inputField: {
+      borderBottomWidth: 2,
+      paddingVertical: 8,
+      paddingHorizontal: 6,
+      borderBottomColor: text,
+      color: text,
+      fontSize: 18,
+      flex: 1,
+    },
+    inputFieldInvalid: {
+      borderBottomColor: error,
+      color: error,
+    },
+    inputFieldEditable: {
+      borderBottomColor: accent,
+      color: text,
+    },
+  });

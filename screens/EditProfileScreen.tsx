@@ -23,10 +23,13 @@ function EditProfileScreen({
   }, [isFocused]);
 
   const { value, valueChangeHandler, inputTouchedHandler, hasError, isValid } =
-    useInput(() => true, "Please provide a valid name.");
+    useInput(
+      (curVal) => curVal.trim().length <= 12,
+      "Please provide a valid name not more than 12 characters long."
+    );
 
   return (
-    <ScrollView style={styles.outerContainer}>
+    <ScrollView style={styles.outerContainer} keyboardShouldPersistTaps="never">
       <View style={styles.profilePictureSectionContainer}>
         <TouchableOpacity>
           <ProfilePicture style={styles.pfp} self />

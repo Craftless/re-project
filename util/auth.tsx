@@ -22,7 +22,7 @@ export async function createUser(
       password
     );
     const user = userCredential.user;
-    // await writeUserData({
+    // await updateUserProfile({
 
     // })
     return user;

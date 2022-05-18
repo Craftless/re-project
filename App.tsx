@@ -23,8 +23,8 @@ import {
 import { ColorSchemeName, useColorScheme } from "react-native";
 
 function getTheme(colorScheme: ColorSchemeName) {
-  const CombinedDefaultTheme = merge(PaperDefaultTheme, NavigationDefaultTheme);
-  const CombinedDarkTheme = merge(PaperDarkTheme, NavigationDarkTheme);
+  const CombinedDefaultTheme = merge(NavigationDefaultTheme, PaperDefaultTheme);
+  const CombinedDarkTheme = merge(NavigationDarkTheme, PaperDarkTheme);
   let theme = CombinedDefaultTheme;
   if (colorScheme === "dark") theme = CombinedDarkTheme;
   return theme;
