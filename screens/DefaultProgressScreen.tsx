@@ -6,10 +6,10 @@ import { requestStepsToday } from "../util/steps";
 import { Ionicons } from "@expo/vector-icons";
 import { Button } from "react-native-paper";
 import Card from "../components/ui/Card";
-import { testAchievement } from "../classes/Achievement";
 import RegularButton from "../components/ui/RegularButton";
 import EventEmitter from "../util/EventEmitter";
 import { useReducer } from "react";
+import { achievements } from "../util/AchievementDatas";
 
 function DefaultProgressScreen() {
   const dispatch = useAppDispatch();
@@ -30,16 +30,19 @@ function DefaultProgressScreen() {
         REfresh
       </RegularButton>
       <Card>
-        <AppText>{testAchievement.title}</AppText>
-        <AppText>
-          {testAchievement.isComplete ? "Complete" : "Incomplete"}
-        </AppText>
+        <AppText>Badges Obtained:</AppText>
         <FlatList
           data={achievementIds}
           keyExtractor={(item) => {
             return item + Math.random().toFixed(3).toString();
           }}
-          renderItem={(data) => <AppText>{data.item}</AppText>}
+          renderItem={(data) => {
+            return (
+              <>
+                <AppText>{achievements[data.item].display.title}</AppText>
+              </>
+            );
+          }}
         />
         <RegularButton
           onPress={() => {

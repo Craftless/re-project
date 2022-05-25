@@ -5,12 +5,18 @@ import { store } from "../store/redux/store";
 import EventEmitter from "../util/EventEmitter";
 import * as FileSystem from "expo-file-system";
 
-type AchievementData = {
-  title: string;
-  description: string;
+export type AchievementData = {
+  display: {
+    title: string;
+    description: string;
+  };
   id: string;
   requirementsData: RequirementData[];
   requiredAchievements: Achievement[] | null;
+};
+
+export type AchievementDataWithType = AchievementData & {
+  type: string;
 };
 
 type RequirementData = { type: string; args: any };
@@ -23,8 +29,7 @@ export class Achievement {
   requiredAchievements;
   isComplete;
   constructor({
-    title,
-    description,
+    display: { title, description },
     id,
     requirementsData,
     requiredAchievements,
@@ -70,8 +75,10 @@ export class Achievement {
 
   getAchievementData() {
     const data: AchievementData = {
-      title: this.title,
-      description: this.description,
+      display: {
+        title: this.title,
+        description: this.description,
+      },
       id: this.id,
       requirementsData: Achievement.reqsToData(this.requirements),
       requiredAchievements: this.requiredAchievements,
@@ -86,16 +93,17 @@ export class Achievement {
     }
   };
 
-  public static fromJson(object: { data: AchievementData; type: string }) {
+  public static fromData(object: AchievementDataWithType) {
     // const object: { data: AchievementData; type: string } =
     //   JSON.parse(jsonObject);
     const type: string = object.type;
-    return new achievementClasses["Achievement"]({ ...object.data });
+    return new achievementClasses[type]({ ...object });
   }
 
   public static toJson(achievement: Achievement, type: string) {
     const data = achievement.getAchievementData();
-    return JSON.stringify({ data, type });
+    const dataWithType: AchievementDataWithType = { ...data, type };
+    return JSON.stringify(dataWithType);
   }
 
   public static reqsFromData(data: { type: string; args: any }): Task {
@@ -138,6 +146,30 @@ class TestTask extends Task {
   }
 }
 
+class ObtainNumberTask extends Task {
+  eventName;
+  isComplete;
+  args;
+  constructor(args: { eventName: string; numberToObtain: number }) {
+    super();
+    this.args = args;
+    this.eventName = args.eventName;
+    this.isComplete = false;
+    const unsub = EventEmitter.addListener(args.eventName, (value: number) => {
+      console.log("VALUE: ", args.numberToObtain);
+      if (value >= args.numberToObtain) {
+        this.isComplete = true;
+        this.isDirty();
+        unsub.remove();
+      }
+    });
+  }
+
+  getIsComplete() {
+    return this.isComplete;
+  }
+}
+
 const achievementClasses: any = {
   Achievement,
 };
@@ -145,24 +177,39 @@ const achievementClasses: any = {
 const taskClasses: any = {
   Task,
   TestTask,
+  ObtainNumberTask,
 };
 
 // const testAchievemen: Achievement = new achievementClasses["Achievement"]({
-//   title: "New Title",
-//   description: "Description text",
-//   id: "test",
+//   display: {
+//     title: "5000 Steps - Past 24 hours",
+//     description: "Walk 5000 steps or more in the past 24 hours.",
+//   },
+//   id: "daily_steps_5000",
 //   requirementsData: [
-//     { type: "TestTask", args: { eventName: "test" } },
+//     { type: "ObtainNumberTask", args: { eventName: "test", number: 5000 } },
 //   ] as RequirementData[],
-//   // requirements: [new TestTask({ eventName: "test" })],
 //   requiredAchievements: null,
 // });
 
-const asset = require("../assets/achievements/testAchievement.json");
+// console.log(Achievement.toJson(testAchievemen, "Achievement"));
+
+// const testAchievemen: Achievement = new achievementClasses["Achievement"]({
+// title: "New Title",
+// description: "Description text",
+// id: "test",
+// requirementsData: [
+//   { type: "TestTask", args: { eventName: "test" } },
+// ] as RequirementData[],
+// // requirements: [new TestTask({ eventName: "test" })],
+// requiredAchievements: null,
+// });
+
+// const asset = require("../constants/achievements/test.json");
 
 // console.log(Achievement.toJson(testAchievemen, "Achievement"));
 
-export const testAchievement = Achievement.fromJson(asset);
+// export const testAchievement = Achievement.fromData(asset);
 
 // class StepsAchievement extends Achievement {
 //   constructor(title: string, description: string, requirements: Task[]) {

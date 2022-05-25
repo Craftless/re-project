@@ -1,21 +1,22 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { Achievement } from "../../classes/Achievement";
-import { projectDatabase } from "../../firebase/config";
-import { writeStepsData } from "../../util/leaderboard";
 
 const achievementsSlice = createSlice({
   name: "achievements",
   initialState: {
-    achievementsCompletedId: [] as string[],
+    achievementsCompletedId: [] as string[], // Set is discouraged
   },
   reducers: {
     addAchievement: (state, action) => {
+      if (state.achievementsCompletedId.findIndex(el => el === action.payload.achievementId) >= 0)
+        return;
       state.achievementsCompletedId.push(action.payload.achievementId);
     },
     removeAchievement: (state, action) => {
-      state.achievementsCompletedId = state.achievementsCompletedId.filter((el) => {
-        el !== action.payload.achievementId;
-      });
+      state.achievementsCompletedId = state.achievementsCompletedId.filter(
+        (el) => {
+          el !== action.payload.achievementId;
+        }
+      );
     },
   },
 });
@@ -26,8 +27,6 @@ const achievementsSlice = createSlice({
 //     await writeStepsData(steps);
 //   };
 // };
-
-
 
 export const addAchievement = achievementsSlice.actions.addAchievement;
 export const removeAchievement = achievementsSlice.actions.removeAchievement;

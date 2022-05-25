@@ -1,0 +1,15 @@
+{
+  "display": {
+    "title": "5000 Steps - Past 24 hours",
+    "description": "Walk 5000 steps or more in the past 24 hours."
+  },
+  "id": "daily_steps_5000",
+  "requirementsData": [
+    {
+      "type": "ObtainNumberTask",
+      "args": { "eventName": "steps_24hr", "numberToObtain": 5000 }
+    }
+  ],
+  "requiredAchievements": null,
+  "type": "Achievement"
+}

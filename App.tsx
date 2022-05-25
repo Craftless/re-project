@@ -21,6 +21,7 @@ import {
   Provider as PaperProvider,
 } from "react-native-paper";
 import { ColorSchemeName, useColorScheme } from "react-native";
+import { initialiseAchievements } from "./util/AchievementDatas";
 
 function getTheme(colorScheme: ColorSchemeName) {
   const CombinedDefaultTheme = merge(NavigationDefaultTheme, PaperDefaultTheme);
@@ -62,8 +63,8 @@ function Root() {
         authCtx.logout();
         setWaitingForEvent(false);
       }
-      
     });
+    initialiseAchievements();
 
     return () => unsubscribe();
   }, []);

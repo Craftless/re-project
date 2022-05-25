@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { projectDatabase } from "../../firebase/config";
+import EventEmitter from "../../util/EventEmitter";
 import { writeStepsData } from "../../util/leaderboard";
 
 const stepsSlice = createSlice({
@@ -27,6 +28,7 @@ const stepsSlice = createSlice({
 export const sendStepsData = (steps: number) => {
   return async (dispatch: any) => {
     dispatch(setStepsToday({ steps }));
+    EventEmitter.emit("steps_24hr", 5001);
     await writeStepsData(steps);
   };
 };
