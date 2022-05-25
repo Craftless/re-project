@@ -62,6 +62,7 @@ function Root() {
         authCtx.logout();
         setWaitingForEvent(false);
       }
+      
     });
 
     return () => unsubscribe();

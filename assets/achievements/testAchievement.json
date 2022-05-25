@@ -1,0 +1,12 @@
+{
+  "data": {
+    "title": "New Title",
+    "description": "Description text",
+    "id": "test",
+    "requirementsData": [
+      { "type": "TestTask", "args": { "eventName": "test" } }
+    ],
+    "requiredAchievements": null
+  },
+  "type": "Achievement"
+}

@@ -1,4 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
+import achievementsReducer from "./achievements-slice";
 import leaderboardReducer from "./leaderboard-slice";
 import stepsReducer from "./steps-slice";
 
@@ -6,6 +7,7 @@ export const store = configureStore({
   reducer: {
     stepCount: stepsReducer,
     leaderboard: leaderboardReducer,
+    achievements: achievementsReducer
   },
 });
 
