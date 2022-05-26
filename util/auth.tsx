@@ -52,9 +52,13 @@ export function writeUserData(data: { displayName: string; pfpUrl: string }) {
 }
 
 export function getCurrentUserDisplayNameOrEmailNonNullFromUser(
-  user: firebase.User
+  user: firebase.User,
+  noEmail: boolean = false
 ) {
-  return getCurrentUserDisplayNameFromUser(user) || user.email || "None";
+  let name = getCurrentUserDisplayNameFromUser(user);
+  console.log(name)
+  if (!noEmail && name === "No display name set") name = null;
+  return name || (!noEmail && user.email) || "No display name set";
 }
 
 export function getCurrentUserProfilePictureNonNullFromUser(

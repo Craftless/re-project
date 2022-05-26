@@ -80,6 +80,7 @@ function LeaderboardScreen() {
     </View>
   ) : (
     <View>
+      <LeaderboardItemComponent item={null} />
       <FlatList
         refreshControl={
           <RefreshControl

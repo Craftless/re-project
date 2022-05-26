@@ -7,7 +7,10 @@ import HeavyCard from "../components/ui/HeavyCard";
 import Colours from "../constants/Colours";
 import { auth } from "../firebase/config";
 import { AuthContext } from "../store/auth-context";
-import { ProfilePicture } from "../util/auth";
+import {
+  getCurrentUserDisplayNameOrEmailNonNullFromUser,
+  ProfilePicture,
+} from "../util/auth";
 import { SettingsStackParamList } from "./SettingsStack";
 import { Button } from "react-native-paper";
 // import CachedImage from "expo-cached-image";
@@ -39,8 +42,13 @@ function DefaultSettingsScreen({
       >
         <View style={styles.pfpContainer}>{pfpImage}</View>
         <View style={styles.displayInformationContainer}>
-          <AppText style={styles.profileDisplayNameText}>
-            {authCtx.user ? authCtx.user.displayName || "No name set" : "Error"}
+          <AppText
+            allowFontScaling
+            ellipsizeMode="tail"
+            numberOfLines={1}
+            style={styles.profileDisplayNameText}
+          >
+            {authCtx.user && getCurrentUserDisplayNameOrEmailNonNullFromUser(authCtx.user, true)}
           </AppText>
           <AppText style={styles.profileEmailAddressText}>
             {authCtx.user ? authCtx.user.email : "Error"}
@@ -99,10 +107,12 @@ const styles = StyleSheet.create({
   },
   displayInformationContainer: {
     flexDirection: "column",
+    flex: 1,
   },
   profileDisplayNameText: {
     fontSize: 24,
     fontWeight: "bold",
+    width: "100%",
   },
   profileEmailAddressText: {
     fontSize: 16,

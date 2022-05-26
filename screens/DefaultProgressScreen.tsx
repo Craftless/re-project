@@ -1,4 +1,10 @@
-import { FlatList, RefreshControl, StyleSheet, View } from "react-native";
+import {
+  FlatList,
+  RefreshControl,
+  StyleSheet,
+  View,
+  ScrollView,
+} from "react-native";
 import AppText from "../components/ui/AppText";
 import CardWithTitleAndContent from "../components/ui/CardWithTitleAndContent";
 import { useAppDispatch, useAppSelector } from "../hooks/redux-hooks";
@@ -21,7 +27,7 @@ function DefaultProgressScreen() {
   );
 
   return (
-    <View>
+    <ScrollView>
       <RegularButton
         onPress={() => {
           refreshScreen();
@@ -31,7 +37,14 @@ function DefaultProgressScreen() {
       </RegularButton>
       <Card>
         <AppText>Badges Obtained:</AppText>
-        <FlatList
+        {achievementIds.map((item) => {
+          return (
+            <AppText key={item + Math.random().toFixed(3).toString()}>
+              {achievements[item].display.title}
+            </AppText>
+          );
+        })}
+        {/* <FlatList
           data={achievementIds}
           keyExtractor={(item) => {
             return item + Math.random().toFixed(3).toString();
@@ -43,7 +56,7 @@ function DefaultProgressScreen() {
               </>
             );
           }}
-        />
+        /> */}
         <RegularButton
           onPress={() => {
             EventEmitter.emit("test");
@@ -74,7 +87,7 @@ function DefaultProgressScreen() {
           <AppText>Work in progress</AppText>
         </View>
       </CardWithTitleAndContent>
-    </View>
+    </ScrollView>
   );
 }
 

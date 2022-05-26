@@ -16,6 +16,7 @@ import TransparentBgButton from "./TransparentBgButton";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { AuthContext } from "../../store/auth-context";
 import AppText from "./AppText";
+import { Theme } from "react-native-paper/lib/typescript/types";
 
 let text, accent, surface, error;
 
@@ -62,7 +63,7 @@ function EditInput({
   accent = theme.colors.primary;
   surface = theme.colors.surface;
   error = theme.colors.error;
-  const stylesObject = styles({ text, accent, surface, error });
+  const stylesObject = styles({ text, accent, surface, error, theme });
 
   let icon = (
     <MaterialIcons name="mode-edit" size={30} color={theme.colors.text} />
@@ -78,9 +79,7 @@ function EditInput({
         style={{ flexDirection: "row", alignItems: "center" }}
       >
         <View style={{ flex: 1 }}>
-          <AppText style={{ color: theme.colors.placeholder }}>
-            {label}
-          </AppText>
+          <AppText style={{ color: theme.colors.placeholder }}>{label}</AppText>
           <RNTextInput
             label={label}
             mode="flat"
@@ -149,11 +148,13 @@ const styles = ({
   accent,
   surface,
   error,
+  theme
 }: {
   text: string;
   accent: string;
   surface: string;
   error: string;
+  theme: Theme;
 }) =>
   StyleSheet.create({
     outerContainer: {
@@ -172,7 +173,7 @@ const styles = ({
       borderBottomWidth: 2,
       paddingVertical: 8,
       paddingHorizontal: 6,
-      borderBottomColor: text,
+      borderBottomColor: theme.colors.placeholder,
       color: text,
       fontSize: 18,
       flex: 1,

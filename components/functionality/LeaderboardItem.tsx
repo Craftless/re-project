@@ -1,29 +1,78 @@
 import AppText from "../ui/AppText";
-import { View } from "react-native";
+import { StyleProp, TextStyle, View } from "react-native";
 import { LeaderboardItem as LeaderboardItemType } from "../../types/leaderboard";
 import { auth } from "../../firebase/config";
 import { StyleSheet } from "react-native";
 import { ProfilePicture } from "../../util/auth";
-import { Card } from "react-native-paper";
+import { Card, useTheme } from "react-native-paper";
 
-function LeaderboardItem({ item }: { item: LeaderboardItemType }) {
+function LeaderboardItem({ item }: { item: LeaderboardItemType | null }) {
+  const theme = useTheme();
+
+  if (!item) {
+    return (
+      <Card style={{ marginBottom: 2 }}>
+        <View style={styles.innerContainer}>
+          <View style={styles.rankingContainer}>
+            <AppText>Rank</AppText>
+          </View>
+          <View style={styles.detailsContainer}>
+            <View style={styles.nameContainer}>
+              {/* <ProfilePicture style={styles.images} uri={item.pfpUrl} />
+          <AppText
+            allowFontScaling
+            ellipsizeMode="tail"
+            numberOfLines={1}
+            style={styles.nameText}
+          >
+            {item.displayName}
+          </AppText> */}
+              <AppText>Profile</AppText>
+            </View>
+            <View style={styles.itemContainer}>
+              <AppText>Steps</AppText>
+            </View>
+          </View>
+        </View>
+      </Card>
+    );
+  }
+
+  let rankStyle: StyleProp<TextStyle> = {
+    fontSize: 24,
+    color: theme.colors.text,
+  };
+  if (item.rank <= 3) {
+    rankStyle = {
+      ...rankStyle,
+      fontSize: 32,
+      color: theme.colors.primary,
+    };
+  }
+
   return (
     <Card style={styles.card}>
       <View style={styles.innerContainer}>
         <View style={styles.rankingContainer}>
-          <AppText style={{ fontSize: item.rank <= 3 ? 32 : 28 }}>
-          {/* <AppText adjustsFontSizeToFit={true} numberOfLines={1} > */}
+          <AppText style={rankStyle}>
+            {/* <AppText adjustsFontSizeToFit={true} numberOfLines={1} > */}
             {item.rank}
           </AppText>
         </View>
         <View style={styles.detailsContainer}>
           <View style={styles.nameContainer}>
             <ProfilePicture style={styles.images} uri={item.pfpUrl} />
-            <AppText allowFontScaling ellipsizeMode="tail" adjustsFontSizeToFit={true} numberOfLines={2} style={styles.nameText}>{item.displayName}</AppText>
+            <AppText
+              allowFontScaling
+              ellipsizeMode="tail"
+              numberOfLines={1}
+              style={styles.nameText}
+            >
+              {item.displayName}
+              {/*adjustsFontSizeToFit={true}*/}
+            </AppText>
           </View>
-          <View
-            style={styles.itemContainer}
-          >
+          <View style={styles.itemContainer}>
             <AppText>{item.steps}</AppText>
           </View>
         </View>
@@ -73,6 +122,7 @@ const styles = StyleSheet.create({
   nameText: {
     fontSize: 20,
     textAlign: "auto",
+    flex: 1,
   },
   images: {
     width: 50,
@@ -88,5 +138,5 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     alignItems: "center",
     justifyContent: "center",
-  }
+  },
 });

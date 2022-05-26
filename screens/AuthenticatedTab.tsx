@@ -12,6 +12,7 @@ import LeaderboardScreen from "./LeaderboardScreen";
 import { writeUserData } from "../util/leaderboard";
 import { LeaderboardItem } from "../types/leaderboard";
 import { auth } from "../firebase/config";
+import { requestStepsToday } from "../util/steps";
 
 export type RootTabParamList = {
   Home: undefined;
@@ -46,8 +47,13 @@ function AuthenticatedTab() {
     //     pfpUrl: item.pfpUrl || "None",
     //   });
     // }, 6000);
+    
+    const interval = setInterval(() => {
+      requestStepsToday(dispatch);
+    }, 60000)
 
     return () => {
+      clearInterval(interval);
       // unsubscribe2;
     };
   }, []);
