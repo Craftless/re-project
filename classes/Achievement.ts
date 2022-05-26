@@ -1,14 +1,15 @@
-import { Asset } from "expo-asset";
-import { readDirectoryAsync } from "expo-file-system";
 import { addAchievement } from "../store/redux/achievements-slice";
 import { store } from "../store/redux/store";
 import EventEmitter from "../util/EventEmitter";
-import * as FileSystem from "expo-file-system";
+import { achievementIcons } from "../util/AchievementIcons";
 
 export type AchievementData = {
   display: {
     title: string;
     description: string;
+    icon: {
+      type: "component" | "imageUri" | "svgIcon";
+    };
   };
   id: string;
   requirementsData: RequirementData[];
@@ -24,18 +25,20 @@ type RequirementData = { type: string; args: any };
 export class Achievement {
   title;
   description;
+  iconSettings;
   id;
   requirements: Task[];
   requiredAchievements;
   isComplete;
   constructor({
-    display: { title, description },
+    display: { title, description, icon },
     id,
     requirementsData,
     requiredAchievements,
   }: AchievementData) {
     this.title = title;
     this.description = description;
+    this.iconSettings = icon;
     this.id = id;
     this.requirements = requirementsData.map((el) => {
       return Achievement.reqsFromData(el);
@@ -47,6 +50,7 @@ export class Achievement {
         this.taskIsDirty();
       };
     });
+    this.taskIsDirty();
   }
   checkIfCompleted() {
     this.isComplete = this.getIsCompleted();
@@ -68,7 +72,6 @@ export class Achievement {
   taskIsDirty() {
     const complete = this.checkIfCompleted();
     if (complete) {
-      // update state through redux or react context
       store.dispatch(addAchievement({ achievementId: this.id }));
     }
   }
@@ -78,12 +81,21 @@ export class Achievement {
       display: {
         title: this.title,
         description: this.description,
+        icon: this.iconSettings,
       },
       id: this.id,
       requirementsData: Achievement.reqsToData(this.requirements),
       requiredAchievements: this.requiredAchievements,
     };
     return data;
+  }
+
+  getIcon() {
+    switch (this.iconSettings.type) {
+      case "component":
+        return achievementIcons[this.id];
+        break;
+    }
   }
 
   static AchievementData = class {
@@ -116,19 +128,36 @@ export class Achievement {
       return { type, args };
     });
   }
+
+  public static getIconFromData(
+    data: AchievementData | AchievementDataWithType,
+    withComponent = false
+  ) {
+    switch (data.display.icon.type) {
+      case "component":
+        return achievementIcons[data.id];
+        break;
+      default:
+        return null;
+    }
+  }
 }
 
 class Task {
   args: any;
+  isComplete;
+  constructor(args: { condition: boolean } = { condition: false }) {
+    this.isComplete = args.condition;
+    this.isDirty();
+  }
   isDirty = () => {};
   getIsComplete() {
-    return false;
+    return this.isComplete;
   }
 }
 
 class TestTask extends Task {
   eventName;
-  isComplete;
   args;
   constructor(args: { eventName: string }) {
     super();

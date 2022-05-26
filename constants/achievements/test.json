@@ -1,7 +1,10 @@
 {
   "display": {
     "title": "New Title",
-    "description": "Description text"
+    "description": "Description text",
+    "icon": {
+      "type": "component"
+    }
   },
   "id": "test",
   "requirementsData": [{ "type": "TestTask", "args": { "eventName": "test" } }],

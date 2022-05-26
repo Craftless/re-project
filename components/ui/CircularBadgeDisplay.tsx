@@ -1,17 +1,21 @@
 import { View, StyleSheet } from "react-native";
+import { IconFunc, IconFuncParams } from "../../util/AchievementIcons";
+import AppText from "./AppText";
 
 function CircularBadgeDisplay({
   backgroundColor,
   size,
   badgeIcon,
 }: {
-  backgroundColor: string;
+  backgroundColor?: string;
   size: number;
-  badgeIcon: ({ size }: { size: number }) => React.ReactNode;
+  badgeIcon: IconFunc | null
 }) {
+  if (!badgeIcon) return <AppText>No Icon</AppText>;
+  const icon = badgeIcon({ size } as IconFuncParams);
   return (
-    <View style={styles(backgroundColor, size).outerContainer}>
-      {badgeIcon({ size })}
+    <View style={styles(backgroundColor || icon.colour, size).outerContainer}>
+      {icon.comp}
     </View>
   );
 }

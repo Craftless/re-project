@@ -14,49 +14,48 @@ import { Button } from "react-native-paper";
 import Card from "../components/ui/Card";
 import RegularButton from "../components/ui/RegularButton";
 import EventEmitter from "../util/EventEmitter";
-import { useReducer } from "react";
+import React, { useReducer, useState } from "react";
 import { achievements } from "../util/AchievementDatas";
+import CircularBadgeDisplay from "../components/ui/CircularBadgeDisplay";
+import { achievementIcons } from "../util/AchievementIcons";
+import { Achievement } from "../classes/Achievement";
 
 function DefaultProgressScreen() {
   const dispatch = useAppDispatch();
   requestStepsToday(dispatch);
   const steps = useAppSelector((state) => state.stepCount.stepsToday);
-  const [, refreshScreen] = useReducer((x) => x, 0);
+  const [refreshing, setRefreshing] = useState(false);
   const achievementIds = useAppSelector(
     (state) => state.achievements.achievementsCompletedId
   );
 
   return (
-    <ScrollView>
-      <RegularButton
-        onPress={() => {
-          refreshScreen();
-        }}
-      >
-        REfresh
-      </RegularButton>
+    <ScrollView
+      refreshControl={
+        <RefreshControl
+          onRefresh={() => {
+            setRefreshing(true);
+            setRefreshing(false);
+          }}
+          refreshing={refreshing}
+        />
+      }
+    >
       <Card>
         <AppText>Badges Obtained:</AppText>
         {achievementIds.map((item) => {
           return (
-            <AppText key={item + Math.random().toFixed(3).toString()}>
-              {achievements[item].display.title}
-            </AppText>
+            <React.Fragment key={item + Math.random().toFixed(3).toString()}>
+              <AppText>
+                {achievements[item].display.title}
+              </AppText>
+              <CircularBadgeDisplay
+                badgeIcon={Achievement.getIconFromData(achievements[item])}
+                size={60}
+              />
+            </React.Fragment>
           );
         })}
-        {/* <FlatList
-          data={achievementIds}
-          keyExtractor={(item) => {
-            return item + Math.random().toFixed(3).toString();
-          }}
-          renderItem={(data) => {
-            return (
-              <>
-                <AppText>{achievements[data.item].display.title}</AppText>
-              </>
-            );
-          }}
-        /> */}
         <RegularButton
           onPress={() => {
             EventEmitter.emit("test");

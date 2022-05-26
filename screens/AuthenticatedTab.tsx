@@ -3,15 +3,11 @@ import { Pedometer } from "expo-sensors";
 import { useContext, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks/redux-hooks";
 import { AuthContext } from "../store/auth-context";
-import { addSteps, sendStepsData } from "../store/redux/steps-slice";
 import HomeScreen from "./HomeScreen";
 import ProgressScreen from "./DefaultProgressScreen";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import SettingsScreen from "./SettingsStack";
 import LeaderboardScreen from "./LeaderboardScreen";
-import { writeUserData } from "../util/leaderboard";
-import { LeaderboardItem } from "../types/leaderboard";
-import { auth } from "../firebase/config";
 import { requestStepsToday } from "../util/steps";
 
 export type RootTabParamList = {
@@ -47,7 +43,7 @@ function AuthenticatedTab() {
     //     pfpUrl: item.pfpUrl || "None",
     //   });
     // }, 6000);
-    
+
     const interval = setInterval(() => {
       requestStepsToday(dispatch);
     }, 60000)

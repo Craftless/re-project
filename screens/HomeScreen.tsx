@@ -6,54 +6,71 @@ import CardWithTitleAndContent from "../components/ui/CardWithTitleAndContent";
 import Badge from "../util/Badges";
 import AppText from "../components/ui/AppText";
 import BadgeContainer from "../components/ui/BadgeContainer";
+import { useAppSelector } from "../hooks/redux-hooks";
 
 function HomeScreen() {
+  const stepCount = useAppSelector((state) => state.stepCount.stepsToday);
   return (
     <View>
       <CardWithTitleAndContent title="My progress this week">
         <Progress.Bar
-          progress={0.3}
+          progress={stepCount / 10000}
           width={null}
           height={20}
           style={styles.progressBar}
         />
         <View style={styles.progressDataContainer}>
-          <AppText style={styles.progressDataText}>x/y km walked</AppText>
-          <AppText style={styles.progressDataBadgeText}>
-            y - x km to next badge
-          </AppText>
+          <AppText style={styles.progressDataText}>{stepCount} steps</AppText>
+          <AppText style={styles.progressDataBadgeText}>Goal: 10000 </AppText>
         </View>
       </CardWithTitleAndContent>
       <CardWithTitleAndContent title="Current Badges">
         <BadgeContainer>
           <CircularBadgeDisplay
-            backgroundColor="#7B017F"
             size={60}
-            badgeIcon={({ size }) => (
-              <Ionicons name="hourglass" color="#008C38" size={size / 2} />
-            )}
+            badgeIcon={({ size }) => {
+              return {
+                comp: (
+                  <Ionicons name="hourglass" color="#008C38" size={size / 2} />
+                ),
+                colour: "#7B017F",
+              };
+            }}
           />
           <CircularBadgeDisplay
-            backgroundColor="#4767B8"
             size={60}
-            badgeIcon={({ size }) => (
-              <Ionicons name="airplane" color="#B58D54" size={size / 2} />
-            )}
+            badgeIcon={({ size }) => {
+              return {
+                comp: (
+                  <Ionicons name="airplane" color="#B58D54" size={size / 2} />
+                ),
+                colour: "#4767B8",
+              };
+            }}
           />
           <CircularBadgeDisplay
-            backgroundColor="#BD8C8C"
             size={60}
-            badgeIcon={({ size }) => (
-              <Ionicons name="alarm-sharp" color="#58009F" size={size / 2} />
-            )}
+            badgeIcon={({ size }) => {
+              return {
+                comp: (
+                  <Ionicons
+                    name="alarm-sharp"
+                    color="#58009F"
+                    size={size / 2}
+                  />
+                ),
+                colour: "#BD8C8C",
+              };
+            }}
           />
           <CircularBadgeDisplay
-            backgroundColor="#008609"
             size={60}
-            badgeIcon={({ size }) => (
-              // <Ionicons name="alarm-sharp" color="#58009F" size={size / 2} />
-              <Badge badgeId="fire" width={50} height={50} />
-            )}
+            badgeIcon={({ size }) => {
+              return {
+                comp: <Badge badgeId="fire" width={50} height={50} />,
+                colour: "#008609",
+              };
+            }}
           />
         </BadgeContainer>
       </CardWithTitleAndContent>

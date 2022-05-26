@@ -1,0 +1,13 @@
+{
+  "display": {
+    "title": "Use the app",
+    "description": "Awarded to every user of the app",
+    "icon": {
+      "type": "component"
+    }
+  },
+  "id": "use_app",
+  "requirementsData": [{ "type": "Task", "args": { "condition": true } }],
+  "requiredAchievements": null,
+  "type": "Achievement"
+}
