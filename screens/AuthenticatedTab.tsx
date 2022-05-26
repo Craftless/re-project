@@ -1,5 +1,4 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Pedometer } from "expo-sensors";
 import { useContext, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks/redux-hooks";
 import { AuthContext } from "../store/auth-context";
@@ -46,7 +45,7 @@ function AuthenticatedTab() {
 
     const interval = setInterval(() => {
       requestStepsToday(dispatch);
-    }, 60000)
+    }, 10000)
 
     return () => {
       clearInterval(interval);
