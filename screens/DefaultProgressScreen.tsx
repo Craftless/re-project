@@ -28,6 +28,7 @@ function DefaultProgressScreen() {
   const achievementIds = useAppSelector(
     (state) => state.achievements.achievementsCompletedId
   );
+  const distWalked = useAppSelector((state) => state.location.distanceWalked);
 
   return (
     <ScrollView
@@ -98,6 +99,9 @@ function DefaultProgressScreen() {
           );
         })}
         </View>
+      </CardWithTitleAndContent>
+      <CardWithTitleAndContent title="Distance Walked">
+        <AppText>{distWalked}</AppText>
       </CardWithTitleAndContent>
     </ScrollView>
   );

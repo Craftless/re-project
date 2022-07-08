@@ -12,7 +12,7 @@ import {
   ProfilePicture,
 } from "../util/auth";
 import { SettingsStackParamList } from "./SettingsStack";
-import { Button } from "react-native-paper";
+import { Button, Switch } from "react-native-paper";
 // import CachedImage from "expo-cached-image";
 // import { CachedProfilePicture } from "../util/auth";
 
@@ -48,14 +48,38 @@ function DefaultSettingsScreen({
             numberOfLines={1}
             style={styles.profileDisplayNameText}
           >
-            {authCtx.user && getCurrentUserDisplayNameOrEmailNonNullFromUser(authCtx.user, true)}
+            {authCtx.user &&
+              getCurrentUserDisplayNameOrEmailNonNullFromUser(
+                authCtx.user,
+                true
+              )}
           </AppText>
           <AppText style={styles.profileEmailAddressText}>
             {authCtx.user ? authCtx.user.email : "Error"}
           </AppText>
         </View>
       </HeavyCard>
-      <View style={{ alignItems: "center" }}>
+      <View style={styles.normalBtnsContainer}>
+        <Button mode="contained" icon="bell" onPress={() => {}} style={styles.normalBtns}>
+          Notifications
+        </Button>
+      </View>
+      <View style={styles.normalBtnsContainer}>
+        <Button mode="contained" icon="headphones" onPress={() => {}} style={styles.normalBtns}>
+          Support
+        </Button>
+      </View>
+      <View style={styles.normalBtnsContainer}>
+        <Button mode="contained" icon="information" onPress={() => {}} style={styles.normalBtns}>
+          About
+        </Button>
+      </View>
+      {/* <View>
+        <Switch onValueChange={(value) => {
+          
+        }} />
+      </View> */}
+      <View style={{ alignItems: "center", marginVertical: 16 }}>
         <Button
           mode="outlined"
           icon="logout"
@@ -116,5 +140,13 @@ const styles = StyleSheet.create({
   },
   profileEmailAddressText: {
     fontSize: 16,
+  },
+  normalBtns: {
+    width: "70%",
+    paddingVertical: 8,
+  },
+  normalBtnsContainer: {
+    alignItems: "center",
+    marginVertical: 12,
   },
 });

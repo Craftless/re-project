@@ -20,8 +20,23 @@ import {
   DefaultTheme as PaperDefaultTheme,
   Provider as PaperProvider,
 } from "react-native-paper";
-import { ColorSchemeName, useColorScheme } from "react-native";
+import {
+  Alert,
+  AppState,
+  AppStateStatus,
+  ColorSchemeName,
+  useColorScheme,
+} from "react-native";
 import { initialiseAchievements } from "./util/AchievementDatas";
+import * as TaskManager from "expo-task-manager";
+import { LocationObject } from "expo-location";
+import {
+  startBackgroundTracking,
+  startForegroundTracking,
+  stopBackgroundUpdate,
+  stopForegroundTracking,
+} from "./util/location";
+import { useAppDispatch, useAppSelector } from "./hooks/redux-hooks";
 
 function getTheme(colorScheme: ColorSchemeName) {
   const CombinedDefaultTheme = merge(NavigationDefaultTheme, PaperDefaultTheme);
@@ -30,6 +45,24 @@ function getTheme(colorScheme: ColorSchemeName) {
   if (colorScheme === "dark") theme = CombinedDarkTheme;
   return theme;
 }
+
+const LOCATION_TASK_NAME = "BACKGROUND_LOCATION_TASK";
+let foregroundSubscription = null;
+
+TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }) => {
+  if (error) {
+    console.error(error);
+    return;
+  }
+  if (data) {
+    // Extract location coordinates from data
+    const { locations } = data as { locations: LocationObject[] };
+    const location = locations[0];
+    if (location) {
+      console.log("Location in background", location.coords);
+    }
+  }
+});
 
 export default function App() {
   const colorScheme = useColorScheme();
@@ -52,6 +85,8 @@ export default function App() {
 function Root() {
   const authCtx = useContext(AuthContext);
   const [waitingForEvent, setWaitingForEvent] = useState(true);
+  const foregroundSub = useAppSelector((state) => state.location.foregroundSub);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -65,9 +100,19 @@ function Root() {
       }
     });
     initialiseAchievements();
-
+    AppState.addEventListener("change", onAppStateChanged);
     return () => unsubscribe();
   }, []);
+
+  function onAppStateChanged(newState: AppStateStatus) {
+    if (newState.match(/inactive|background/)) {
+      stopForegroundTracking(foregroundSub);
+      startBackgroundTracking(LOCATION_TASK_NAME);
+    } else {
+      stopBackgroundUpdate(LOCATION_TASK_NAME);
+      startForegroundTracking(dispatch, foregroundSub);
+    }
+  }
 
   return waitingForEvent ? <AppLoading /> : <Navigation />;
 }

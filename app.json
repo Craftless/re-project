@@ -16,7 +16,12 @@
     },
     "assetBundlePatterns": ["**/*", "assets/badges/images/*", "assets/badges/svg/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "UIBackgroundModes": [
+          "location"
+        ]
+      }
     },
     "android": {
       "adaptiveIcon": {

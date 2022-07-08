@@ -8,6 +8,9 @@ import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import SettingsScreen from "./SettingsStack";
 import LeaderboardScreen from "./LeaderboardScreen";
 import { requestStepsToday } from "../util/steps";
+import { getBackgroundPermissionsAsync, getForegroundPermissionsAsync, LocationAccuracy, requestBackgroundPermissionsAsync, watchPositionAsync } from "expo-location";
+import { startForegroundTracking, verifyBGLocationPermissions, verifyFGLocationPermissions } from "../util/location";
+import { updateLocation } from "../store/redux/location-slice";
 
 export type RootTabParamList = {
   Home: undefined;
@@ -23,7 +26,9 @@ function AuthenticatedTab() {
   const authCtx = useContext(AuthContext);
 
   const stepCount = useAppSelector((state) => state.stepCount.stepsToday);
+  const foregroundSubscription = useAppSelector((state) => state.location.foregroundSub);
   const dispatch = useAppDispatch();
+
 
   useEffect(() => {
     // const unsubscribe2 = Pedometer.watchStepCount((result) => {
@@ -42,6 +47,18 @@ function AuthenticatedTab() {
     //     pfpUrl: item.pfpUrl || "None",
     //   });
     // }, 6000);
+    const locationStuff = async() => {
+      const permissionInfo = await getForegroundPermissionsAsync();
+      const foregroundGranted = await verifyFGLocationPermissions(permissionInfo);
+      if (foregroundGranted) {
+        await verifyBGLocationPermissions(await getBackgroundPermissionsAsync());
+        // foregroundSubscription = await watchPositionAsync({
+        //   accuracy: LocationAccuracy.High,
+        // });
+        // startForegroundTracking(dispatch, foregroundSubscription);
+      }
+    }
+    locationStuff();
 
     const interval = setInterval(() => {
       requestStepsToday(dispatch);
