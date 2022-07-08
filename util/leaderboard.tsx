@@ -15,7 +15,7 @@ export async function getCurrentLeaderboardData() {
   const stepsRef = projectDatabase
     .ref("leaderboard")
     .orderByChild("steps")
-    .limitToFirst(5);
+    .limitToLast(7);
   const gotten = await stepsRef.get();
   console.log(`.get() of reordered ref: ${gotten}`);
   return gotten;

@@ -2,7 +2,7 @@ import { useContext, useState } from "react";
 import { Alert, View } from "react-native";
 import useInput from "../../hooks/use-input";
 import { AuthContext } from "../../store/auth-context";
-import { createUser, logIn } from "../../util/auth";
+import { createUser, logIn, writeUserData } from "../../util/auth";
 import Input from "../ui/Input";
 import LoadingOverlay from "../ui/LoadingOverlay";
 import RegularButton from "../ui/RegularButton";

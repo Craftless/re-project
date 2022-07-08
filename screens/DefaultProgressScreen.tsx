@@ -41,7 +41,7 @@ function DefaultProgressScreen() {
         />
       }
     >
-      <Card>
+      {/* <Card>
         <AppText>Badges Obtained:</AppText>
         {achievementIds.map((item) => {
           return (
@@ -63,7 +63,7 @@ function DefaultProgressScreen() {
         >
           Click
         </RegularButton>
-      </Card>
+      </Card> */}
       <CardWithTitleAndContent title="Steps (Last 24 Hours)">
         <View style={styles.stepDataContainer}>
           <AppText
@@ -82,8 +82,21 @@ function DefaultProgressScreen() {
         </View>
       </CardWithTitleAndContent>
       <CardWithTitleAndContent title="My Badges">
-        <View style={styles.stepDataContainer}>
-          <AppText>Work in progress</AppText>
+        <View style={styles.badgeDataContainer}>
+          <AppText style={{fontSize: 28}}>Work in progress</AppText>
+          {achievementIds.map((item) => {
+          return (
+            <React.Fragment key={item + Math.random().toFixed(3).toString()}>
+              <AppText>
+                {achievements[item].display.title}
+              </AppText>
+              <CircularBadgeDisplay
+                badgeIcon={Achievement.getIconFromData(achievements[item])}
+                size={60}
+              />
+            </React.Fragment>
+          );
+        })}
         </View>
       </CardWithTitleAndContent>
     </ScrollView>
@@ -97,4 +110,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
   },
+  badgeDataContainer: {
+    flexDirection: "column",
+
+  }
 });

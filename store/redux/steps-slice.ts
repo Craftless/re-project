@@ -28,7 +28,7 @@ const stepsSlice = createSlice({
 export const sendStepsData = (steps: number) => {
   return async (dispatch: any) => {
     dispatch(setStepsToday({ steps }));
-    EventEmitter.emit("steps_24hr", 5001);
+    EventEmitter.emit("steps_24hr", steps);
     await writeStepsData(steps);
   };
 };

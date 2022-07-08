@@ -31,6 +31,7 @@ function EditInput({
   onInputBlur,
   valueObj,
   inputProps,
+  selectTextOnFocus
 }: {
   label: string;
   keyboardType?: KeyboardTypeOptions;
@@ -39,6 +40,7 @@ function EditInput({
   onValueChange: (text: string) => void;
   onInputBlur: (e: NativeSyntheticEvent<TextInputFocusEventData>) => void;
   valueObj: { value: string };
+  selectTextOnFocus?: boolean;
   inputProps?: any; // can't find TextInputProps equivalent for react-native-paper
 }) {
   const [editable, setEditable] = useState(false);
@@ -110,6 +112,7 @@ function EditInput({
             ref={textInput}
             autoFocus={editable}
             defaultValue={displayName}
+            selectTextOnFocus
             {...inputProps}
           />
         </View>

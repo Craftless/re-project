@@ -22,6 +22,11 @@ export async function createUser(
       password
     );
     const user = userCredential.user;
+    if (auth.currentUser) {
+      await writeCurrentUserData();
+    } else {
+      throw new Error("No user was created");
+    }
     // await updateUserProfile({
 
     // })
@@ -46,9 +51,20 @@ export async function logIn(
     });
 }
 
-export function writeUserData(data: { displayName: string; pfpUrl: string }) {
+export async function writeUserData(data: {
+  displayName: string;
+  pfpUrl: string;
+}) {
   if (!auth.currentUser) return;
-  projectDatabase.ref("userInfo/" + auth.currentUser.uid).set(data);
+  await projectDatabase.ref("userInfo/" + auth.currentUser.uid).set(data);
+}
+
+export async function writeCurrentUserData() {
+  if (!auth.currentUser) return;
+  writeUserData({
+    displayName: getCurrentUserDisplayNameOrEmailNonNullFromUser(auth.currentUser),
+    pfpUrl: getCurrentUserProfilePictureNonNullFromUser(auth.currentUser),
+  });
 }
 
 export function getCurrentUserDisplayNameOrEmailNonNullFromUser(
@@ -56,7 +72,7 @@ export function getCurrentUserDisplayNameOrEmailNonNullFromUser(
   noEmail: boolean = false
 ) {
   let name = getCurrentUserDisplayNameFromUser(user);
-  console.log(name)
+  console.log(name);
   if (!noEmail && name === "No display name set") name = null;
   return name || (!noEmail && user.email) || "No display name set";
 }

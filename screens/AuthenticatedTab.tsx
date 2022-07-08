@@ -47,6 +47,8 @@ function AuthenticatedTab() {
       requestStepsToday(dispatch);
     }, 10000)
 
+    requestStepsToday(dispatch);
+
     return () => {
       clearInterval(interval);
       // unsubscribe2;

@@ -29,7 +29,7 @@ function LeaderboardScreen() {
     const stepsRef = projectDatabase
       .ref("leaderboard")
       .orderByChild("steps")
-      .limitToFirst(5);
+      .limitToLast(5);
 
     const get = await stepsRef.get();
 

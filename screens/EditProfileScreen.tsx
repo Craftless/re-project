@@ -45,6 +45,7 @@ function EditProfileScreen({
           onValueChange={valueChangeHandler}
           onInputBlur={inputTouchedHandler}
           hasError={hasError}
+          selectTextOnFocus
         />
       </View>
     </ScrollView>
