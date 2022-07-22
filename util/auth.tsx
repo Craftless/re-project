@@ -72,7 +72,7 @@ export function getCurrentUserDisplayNameOrEmailNonNullFromUser(
   noEmail: boolean = false
 ) {
   let name = getCurrentUserDisplayNameFromUser(user);
-  console.log(name);
+  console.log("NAme", name);
   if (!noEmail && name === "No display name set") name = null;
   return name || (!noEmail && user.email) || "No display name set";
 }

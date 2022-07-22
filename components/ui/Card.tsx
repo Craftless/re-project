@@ -1,5 +1,13 @@
 import React from "react";
-import { View, StyleSheet, StyleProp, ViewStyle, Platform } from "react-native";
+import {
+  View,
+  StyleSheet,
+  StyleProp,
+  ViewStyle,
+  Platform,
+  TouchableHighlight,
+  TouchableOpacity,
+} from "react-native";
 import Colours from "../../constants/Colours";
 import { withTheme } from "react-native-paper";
 import { Theme } from "react-native-paper/lib/typescript/types";
@@ -16,7 +24,11 @@ function Card({
   style?: StyleProp<ViewStyle>;
   theme: Theme;
 }) {
-  return <RNPCard style={[styles(theme).cardContainer, style]}>{children}</RNPCard>;
+  return (
+      <RNPCard style={[styles(theme).cardContainer, style]}>
+        {children}
+      </RNPCard>
+  );
 }
 
 export default withTheme(Card);

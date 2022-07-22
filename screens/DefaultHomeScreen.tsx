@@ -8,11 +8,11 @@ import AppText from "../components/ui/AppText";
 import BadgeContainer from "../components/ui/BadgeContainer";
 import { useAppSelector } from "../hooks/redux-hooks";
 
-function HomeScreen() {
+function DefaultHomeScreen() {
   const stepCount = useAppSelector((state) => state.stepCount.stepsToday);
   return (
     <View>
-      <CardWithTitleAndContent title="My progress this week">
+      <CardWithTitleAndContent title="My progress today">
         <Progress.Bar
           progress={stepCount / 10000}
           width={null}
@@ -79,7 +79,7 @@ function HomeScreen() {
   );
 }
 
-export default HomeScreen;
+export default DefaultHomeScreen;
 
 const styles = StyleSheet.create({
   outerContainer: {

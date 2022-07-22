@@ -17,7 +17,7 @@ function HeavyCard({
   backgroundColour,
   theme,
 }: {
-  style: StyleProp<ViewStyle>;
+  style?: StyleProp<ViewStyle>;
   children: React.ReactNode;
   onPress: (event: GestureResponderEvent) => void;
   backgroundColour?: string;

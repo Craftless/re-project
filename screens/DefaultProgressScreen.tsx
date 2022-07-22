@@ -1,5 +1,4 @@
 import {
-  FlatList,
   RefreshControl,
   StyleSheet,
   View,
@@ -10,25 +9,27 @@ import CardWithTitleAndContent from "../components/ui/CardWithTitleAndContent";
 import { useAppDispatch, useAppSelector } from "../hooks/redux-hooks";
 import { requestStepsToday } from "../util/steps";
 import { Ionicons } from "@expo/vector-icons";
-import { Button } from "react-native-paper";
-import Card from "../components/ui/Card";
-import RegularButton from "../components/ui/RegularButton";
-import EventEmitter from "../util/EventEmitter";
+import { Button, TouchableRipple } from "react-native-paper";
 import React, { useReducer, useState } from "react";
 import { achievements } from "../util/AchievementDatas";
 import CircularBadgeDisplay from "../components/ui/CircularBadgeDisplay";
-import { achievementIcons } from "../util/AchievementIcons";
 import { Achievement } from "../classes/Achievement";
+import { useNavigation } from "@react-navigation/native";
+import { RootStackParamList } from "./AuthenticatedTab";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 function DefaultProgressScreen() {
   const dispatch = useAppDispatch();
   requestStepsToday(dispatch);
-  const steps = useAppSelector((state) => state.stepCount.stepsToday);
+  const steps24h = useAppSelector((state) => state.stepCount.stepsToday);
+  const stepsFM = useAppSelector((state) => state.stepCount.stepsFromMidnight);
   const [refreshing, setRefreshing] = useState(false);
   const achievementIds = useAppSelector(
     (state) => state.achievements.achievementsCompletedId
   );
   const distWalked = useAppSelector((state) => state.location.distanceWalked);
+
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList, "Tabs">>();
 
   return (
     <ScrollView
@@ -65,12 +66,12 @@ function DefaultProgressScreen() {
           Click
         </RegularButton>
       </Card> */}
-      <CardWithTitleAndContent title="Steps (Last 24 Hours)">
+      <CardWithTitleAndContent title="Steps Today">
         <View style={styles.stepDataContainer}>
           <AppText
             style={{ fontWeight: "bold", fontSize: 52, marginHorizontal: 16 }}
           >
-            {steps}
+            {stepsFM}
           </AppText>
           <Button
             onPress={() => {
@@ -82,23 +83,42 @@ function DefaultProgressScreen() {
           </Button>
         </View>
       </CardWithTitleAndContent>
-      <CardWithTitleAndContent title="My Badges">
-        <View style={styles.badgeDataContainer}>
-          <AppText style={{fontSize: 28}}>Work in progress</AppText>
-          {achievementIds.map((item) => {
-          return (
-            <React.Fragment key={item + Math.random().toFixed(3).toString()}>
-              <AppText>
-                {achievements[item].display.title}
-              </AppText>
-              <CircularBadgeDisplay
-                badgeIcon={Achievement.getIconFromData(achievements[item])}
-                size={60}
-              />
-            </React.Fragment>
-          );
-        })}
+      <CardWithTitleAndContent title="Steps (Last 7 Days)">
+        <View style={styles.stepDataContainer}>
+          <AppText
+            style={{ fontWeight: "bold", fontSize: 52, marginHorizontal: 16 }}
+          >
+            {steps24h}
+          </AppText>
+          <Button
+            onPress={() => {
+              requestStepsToday(dispatch);
+            }}
+            mode="text"
+          >
+            <Ionicons name="refresh" size={24} color="gray" />
+          </Button>
         </View>
+      </CardWithTitleAndContent>
+      <CardWithTitleAndContent title="My Badges" onPress={() => {
+        navigation.navigate("Badges");
+      }}>
+          <View style={styles.badgeDataContainer}>
+            {/* <AppText style={{fontSize: 28}}>Work in progress</AppText> */}
+            {achievementIds.map((item) => {
+            return (
+              <React.Fragment key={item + Math.random().toFixed(4).toString()}>
+                {/* <AppText>
+                  {achievements[item].display.title}
+                </AppText> */}
+                <CircularBadgeDisplay
+                  badgeIcon={Achievement.getIconFromData(achievements[item])}
+                  size={60}
+                />
+              </React.Fragment>
+            );
+          })}
+          </View>
       </CardWithTitleAndContent>
       <CardWithTitleAndContent title="Distance Walked">
         <AppText>{distWalked}</AppText>

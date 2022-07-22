@@ -2,13 +2,19 @@ import { auth, projectDatabase } from "../firebase/config";
 import { Alert } from "react-native";
 import { getCurrentUserDisplayNameOrEmailNonNullFromUser, getCurrentUserProfilePictureNonNullFromUser, updateUserProfile } from "./auth";
 
-export async function writeStepsData(steps: number) {
+export async function writeStepsData(steps: number, fromMidnight: boolean = false) {
   if (!auth.currentUser) return;
 
-  await projectDatabase.ref("leaderboard/" + auth.currentUser.uid).set({
-    steps,
-  });
-  console.log(steps);
+  if (fromMidnight) {
+    await projectDatabase.ref("leaderboard/" + auth.currentUser.uid).set({
+      stepsFromMidnight: steps,
+    });
+  }
+  else {
+    await projectDatabase.ref("leaderboard/" + auth.currentUser.uid).set({
+      steps,
+    });
+  }
 }
 
 export async function getCurrentLeaderboardData() {

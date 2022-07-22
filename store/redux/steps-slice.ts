@@ -6,15 +6,15 @@ import { writeStepsData } from "../../util/leaderboard";
 const stepsSlice = createSlice({
   name: "steps",
   initialState: {
-    steps: 0,
+    stepsFromMidnight: 0,
     stepsToday: 0,
   },
   reducers: {
-    addSteps: (state, action) => {
-      state.steps += action.payload.steps;
+    addStepsFromMidnight: (state, action) => {
+      state.stepsFromMidnight += action.payload.steps;
     },
-    removeSteps: (state, action) => {
-      state.steps -= action.payload.steps;
+    setStepsFromMidnight: (state, action) => {
+      state.stepsFromMidnight = action.payload.steps;
     },
     addStepsToday: (state, action) => {
       state.stepsToday += action.payload.steps;
@@ -25,16 +25,23 @@ const stepsSlice = createSlice({
   },
 }); 
 
-export const sendStepsData = (steps: number) => {
+export const sendStepsData = (steps: number, fromMidnight: boolean = false) => {
   return async (dispatch: any) => {
-    dispatch(setStepsToday({ steps }));
-    EventEmitter.emit("steps_24hr", steps);
-    await writeStepsData(steps);
+    if (fromMidnight) {
+      dispatch(setStepsFM({ steps }));
+      EventEmitter.emit("steps_from_midnight", steps);
+      await writeStepsData(steps, true);
+    }
+    else {
+      dispatch(setStepsToday({ steps }));
+      EventEmitter.emit("steps_24hr", steps);
+      await writeStepsData(steps, false);
+    }
   };
 };
 
-export const addSteps = stepsSlice.actions.addSteps;
-export const removeSteps = stepsSlice.actions.removeSteps;
+export const addStepsFM = stepsSlice.actions.addStepsFromMidnight;
+export const setStepsFM = stepsSlice.actions.setStepsFromMidnight;
 export const addStepsToday = stepsSlice.actions.addStepsToday;
 export const setStepsToday = stepsSlice.actions.setStepsToday;
 export default stepsSlice.reducer;

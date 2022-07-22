@@ -1,19 +1,37 @@
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import {
+  StyleSheet,
+  TouchableHighlight,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { TouchableRipple } from "react-native-paper";
 import AppText from "./AppText";
 import Card from "./Card";
 
 function CardWithTitleAndContent({
   children,
   title,
+  onPress,
 }: {
   children: React.ReactNode;
   title: string;
+  onPress?: () => void;
 }) {
   return (
     <Card style={styles.progressContainer}>
-      <AppText style={styles.cardTitle}>{title}</AppText>
-      <View style={{ padding: 8 }}>{children}</View>
+      {onPress && (
+        <TouchableOpacity onPress={onPress}>
+          <AppText style={styles.cardTitle}>{title}</AppText>
+          <View style={{ padding: 8 }}>{children}</View>
+        </TouchableOpacity>
+      )}
+      {!onPress && (
+        <>
+          <AppText style={styles.cardTitle}>{title}</AppText>
+          <View style={{ padding: 8 }}>{children}</View>
+        </>
+      )}
     </Card>
   );
 }

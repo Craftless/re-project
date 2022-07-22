@@ -65,7 +65,9 @@ function DefaultSettingsScreen({
         </Button>
       </View>
       <View style={styles.normalBtnsContainer}>
-        <Button mode="contained" icon="headphones" onPress={() => {}} style={styles.normalBtns}>
+        <Button mode="contained" icon="headphones" onPress={() => {
+          navigation.navigate("Support");
+        }} style={styles.normalBtns}>
           Support
         </Button>
       </View>

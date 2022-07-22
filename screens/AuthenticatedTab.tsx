@@ -1,16 +1,29 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useContext, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks/redux-hooks";
 import { AuthContext } from "../store/auth-context";
-import HomeScreen from "./HomeScreen";
+import HomeScreen from "./DefaultHomeScreen";
 import ProgressScreen from "./DefaultProgressScreen";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import SettingsScreen from "./SettingsStack";
 import LeaderboardScreen from "./LeaderboardScreen";
 import { requestStepsToday } from "../util/steps";
-import { getBackgroundPermissionsAsync, getForegroundPermissionsAsync, LocationAccuracy, requestBackgroundPermissionsAsync, watchPositionAsync } from "expo-location";
-import { startForegroundTracking, verifyBGLocationPermissions, verifyFGLocationPermissions } from "../util/location";
+import {
+  getBackgroundPermissionsAsync,
+  getForegroundPermissionsAsync,
+  LocationAccuracy,
+  requestBackgroundPermissionsAsync,
+  watchPositionAsync,
+} from "expo-location";
+import {
+  startForegroundTracking,
+  verifyBGLocationPermissions,
+  verifyFGLocationPermissions,
+} from "../util/location";
 import { updateLocation } from "../store/redux/location-slice";
+import BadgesScreen from "./BadgesScreen";
+import BadgeDetailsScreen from "./BadgeDetailsScreen";
 
 export type RootTabParamList = {
   Home: undefined;
@@ -20,15 +33,23 @@ export type RootTabParamList = {
   Blank: undefined;
 };
 
+export type RootStackParamList = {
+  Tabs: undefined;
+  Badges: undefined;
+  BadgeDetails: undefined;
+};
+
 const Tab = createBottomTabNavigator<RootTabParamList>();
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function AuthenticatedTab() {
   const authCtx = useContext(AuthContext);
 
   const stepCount = useAppSelector((state) => state.stepCount.stepsToday);
-  const foregroundSubscription = useAppSelector((state) => state.location.foregroundSub);
+  const foregroundSubscription = useAppSelector(
+    (state) => state.location.foregroundSub
+  );
   const dispatch = useAppDispatch();
-
 
   useEffect(() => {
     // const unsubscribe2 = Pedometer.watchStepCount((result) => {
@@ -47,22 +68,26 @@ function AuthenticatedTab() {
     //     pfpUrl: item.pfpUrl || "None",
     //   });
     // }, 6000);
-    const locationStuff = async() => {
+    const locationStuff = async () => {
       const permissionInfo = await getForegroundPermissionsAsync();
-      const foregroundGranted = await verifyFGLocationPermissions(permissionInfo);
+      const foregroundGranted = await verifyFGLocationPermissions(
+        permissionInfo
+      );
       if (foregroundGranted) {
-        await verifyBGLocationPermissions(await getBackgroundPermissionsAsync());
+        await verifyBGLocationPermissions(
+          await getBackgroundPermissionsAsync()
+        );
         // foregroundSubscription = await watchPositionAsync({
         //   accuracy: LocationAccuracy.High,
         // });
         // startForegroundTracking(dispatch, foregroundSubscription);
       }
-    }
+    };
     locationStuff();
 
     const interval = setInterval(() => {
       requestStepsToday(dispatch);
-    }, 10000)
+    }, 5000);
 
     requestStepsToday(dispatch);
 
@@ -72,6 +97,18 @@ function AuthenticatedTab() {
     };
   }, []);
 
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="Tabs" component={Tabs} options={{
+        headerShown: false,
+      }} />
+      <Stack.Screen name="Badges" component={BadgesScreen} />
+      <Stack.Screen name="BadgeDetails" component={BadgeDetailsScreen} />
+    </Stack.Navigator>
+  );
+}
+
+function Tabs() {
   return (
     <Tab.Navigator>
       <Tab.Screen
@@ -116,4 +153,5 @@ function AuthenticatedTab() {
     </Tab.Navigator>
   );
 }
+
 export default AuthenticatedTab;

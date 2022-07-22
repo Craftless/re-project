@@ -1,11 +1,12 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import AppText from "../components/ui/AppText";
+import { RootStackParamList } from "./AuthenticatedTab";
 import { ProgressStackParamList } from "./ProgressStack";
 
 function BadgeDetailsScreen({
   navigation,
   route,
-}: NativeStackScreenProps<ProgressStackParamList, "BadgeDetails">) {
+}: NativeStackScreenProps<RootStackParamList, "BadgeDetails">) {
   return <AppText>BadgeDetails</AppText>;
 }
 

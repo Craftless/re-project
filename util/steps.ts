@@ -18,11 +18,19 @@ export async function requestStepsToday(
     Dispatch<AnyAction>
 ) {
   try {
-    const startDate = new Date();
-    const endDate = new Date();
-    startDate.setDate(endDate.getDate() - 1);
-    const result = await Pedometer.getStepCountAsync(startDate, endDate);
-    dispatch(sendStepsData(result.steps));
+    const startDate24h = new Date();
+    const endDate24h = new Date();
+    startDate24h.setDate(endDate24h.getDate() - 1);
+
+    const startDateFM = new Date();
+    const endDateFM = new Date();
+    startDateFM.setHours(0, 0, 0, 0);
+
+    const result24h = await Pedometer.getStepCountAsync(startDate24h, endDate24h);
+    dispatch(sendStepsData(result24h.steps, false));
+
+    const resultFM = await Pedometer.getStepCountAsync(startDateFM, endDateFM);
+    dispatch(sendStepsData(resultFM.steps, true));
   } catch (e) {
     console.log(`Error: ${e}`);
   }
