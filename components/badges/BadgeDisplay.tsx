@@ -31,10 +31,12 @@ const styles = StyleSheet.create({
   titleText: {
     fontSize: 24,
     fontWeight: "bold",
+    flexWrap: "wrap",
   },
   detailsContainer: {
     flexDirection: "column",
     justifyContent: "space-evenly",
+    flex: 1,
   },
 });
 

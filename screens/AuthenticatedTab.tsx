@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from "../hooks/redux-hooks";
 import { AuthContext } from "../store/auth-context";
 import HomeScreen from "./DefaultHomeScreen";
 import ProgressScreen from "./DefaultProgressScreen";
-import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import { Ionicons, MaterialIcons, Feather } from "@expo/vector-icons";
 import SettingsScreen from "./SettingsStack";
 import LeaderboardScreen from "./LeaderboardScreen";
 import { requestStepsToday } from "../util/steps";
@@ -24,6 +24,7 @@ import {
 import { updateLocation } from "../store/redux/location-slice";
 import BadgesScreen from "./BadgesScreen";
 import BadgeDetailsScreen from "./BadgeDetailsScreen";
+import MoreScreen from "./MoreScreen";
 
 export type RootTabParamList = {
   Home: undefined;
@@ -31,6 +32,7 @@ export type RootTabParamList = {
   Leaderboard: undefined;
   Settings: undefined;
   Blank: undefined;
+  More: undefined;
 };
 
 export type RootStackParamList = {
@@ -148,6 +150,16 @@ function Tabs() {
         options={{
           tabBarIcon: ({ color, size }: { color: string; size: number }) => {
             return <Ionicons name="settings" color={color} size={size} />;
+          },
+          headerShown: false,
+        }}
+      />
+      <Tab.Screen
+        name="More"
+        component={MoreScreen}
+        options={{
+          tabBarIcon: ({ color, size }: { color: string; size: number }) => {
+            return <Feather name="more-horizontal" size={size} color={color} />
           },
           headerShown: false,
         }}

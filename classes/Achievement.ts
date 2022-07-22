@@ -95,6 +95,8 @@ export class Achievement {
       case "component":
         return achievementIcons[this.id];
         break;
+      case "imageUri":
+        return 
     }
   }
 

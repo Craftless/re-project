@@ -10,7 +10,7 @@
   "requirementsData": [
     {
       "type": "ObtainNumberTask",
-      "args": { "eventName": "steps_24hr", "numberToObtain": 5000 }
+      "args": { "eventName": "steps_24hr", "numberToObtain": 500 }
     }
   ],
   "requiredAchievements": null,
