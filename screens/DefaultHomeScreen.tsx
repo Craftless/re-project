@@ -1,4 +1,4 @@
-import { StyleSheet, View } from "react-native";
+import { FlatList, ScrollView, StyleSheet, View } from "react-native";
 import * as Progress from "react-native-progress";
 import CircularBadgeDisplay from "../components/ui/CircularBadgeDisplay";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -7,11 +7,13 @@ import Badge from "../util/Badges";
 import AppText from "../components/ui/AppText";
 import BadgeContainer from "../components/ui/BadgeContainer";
 import { useAppSelector } from "../hooks/redux-hooks";
+import React from "react";
 
 function DefaultHomeScreen() {
   const stepCount = useAppSelector((state) => state.stepCount.stepsToday);
+  const totalSteps = useAppSelector((state) => state.stepCount.totalSteps);
   return (
-    <View>
+    <ScrollView>
       <CardWithTitleAndContent title="My progress today">
         <Progress.Bar
           progress={stepCount / 10000}
@@ -74,8 +76,31 @@ function DefaultHomeScreen() {
           />
         </BadgeContainer>
       </CardWithTitleAndContent>
+      <CardWithTitleAndContent title="TEST">
+        {/* <FlatList
+          data={totalSteps}
+          renderItem={(itemData) => {
+            return (
+              <>
+                <AppText>Date: {itemData.item.date}</AppText>
+                <AppText>Steps: {itemData.item.steps}</AppText>
+              </>
+            );
+          }}
+        /> */}
+        <>
+          {totalSteps.map((val) => {
+            return (
+              <React.Fragment key={val.date}>
+                <AppText>Date: {val.date}</AppText>
+                <AppText>Steps: {val.steps}</AppText>
+              </React.Fragment>
+            );
+          })}
+        </>
+      </CardWithTitleAndContent>
       {/* <SvgComponent width={500} height={500} /> */}
-    </View>
+    </ScrollView>
   );
 }
 

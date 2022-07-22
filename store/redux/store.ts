@@ -9,10 +9,10 @@ export const store = configureStore({
     stepCount: stepsReducer,
     location: locationReducer,
     leaderboard: leaderboardReducer,
-    achievements: achievementsReducer
+    achievements: achievementsReducer,
   },
 });
 
-export type RootState = ReturnType<typeof store.getState>
+export type RootState = ReturnType<typeof store.getState>;
 
 export type AppDispatch = typeof store.dispatch;
