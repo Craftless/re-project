@@ -20,6 +20,7 @@ function Input({
   onValueChange,
   onInputBlur,
   valueObj,
+  props,
 }: {
   label: string;
   keyboardType?: KeyboardTypeOptions;
@@ -28,6 +29,7 @@ function Input({
   onValueChange: (text: string) => void;
   onInputBlur: (e: NativeSyntheticEvent<TextInputFocusEventData>) => void;
   valueObj: { value: string };
+  props?: any;
 }) {
   return (
     <View style={styles.outerContainer}>
@@ -43,6 +45,7 @@ function Input({
         autoCorrect={false}
         autoComplete={false}
         error={hasError}
+        {...props}
       />
     </View>
   );

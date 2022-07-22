@@ -1,7 +1,7 @@
 import { useIsFocused } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useContext, useEffect, useReducer } from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
+import { Alert, ScrollView, StyleSheet, View } from "react-native";
 import AppText from "../components/ui/AppText";
 import HeavyCard from "../components/ui/HeavyCard";
 import Colours from "../constants/Colours";
@@ -13,6 +13,9 @@ import {
 } from "../util/auth";
 import { SettingsStackParamList } from "./SettingsStack";
 import { Button, Switch } from "react-native-paper";
+import * as MailComposer from 'expo-mail-composer';
+import { SUPPORT_EMAIL } from "../constants/email";
+import { MailComposerStatus } from "expo-mail-composer";
 // import CachedImage from "expo-cached-image";
 // import { CachedProfilePicture } from "../util/auth";
 
@@ -31,6 +34,23 @@ function DefaultSettingsScreen({
 
   const authCtx = useContext(AuthContext);
   const pfpImage = <ProfilePicture style={styles.pfp} self />;
+
+
+  async function supportClickedHandler() {
+    if (!auth.currentUser) return;
+    const isAvailable = await MailComposer.isAvailableAsync();
+    if (!isAvailable) {
+      Alert.alert("Mail Composer is unavailable. If you are on IOS, please check if you have signed in to the Mail app");
+      return;
+    }
+    const name = getCurrentUserDisplayNameOrEmailNonNullFromUser(auth.currentUser);
+    const result = await MailComposer.composeAsync({
+      recipients: [SUPPORT_EMAIL],
+      subject: `Support: ${name}`,
+    });
+    if (result.status == MailComposerStatus.SENT) Alert.alert("Sent!");
+    else Alert.alert("Did not send");
+  }
 
   return (
     <ScrollView contentContainerStyle={styles.outerContainer}>
@@ -65,9 +85,7 @@ function DefaultSettingsScreen({
         </Button>
       </View>
       <View style={styles.normalBtnsContainer}>
-        <Button mode="contained" icon="headphones" onPress={() => {
-          navigation.navigate("Support");
-        }} style={styles.normalBtns}>
+        <Button mode="contained" icon="headphones" onPress={supportClickedHandler} style={styles.normalBtns}>
           Support
         </Button>
       </View>

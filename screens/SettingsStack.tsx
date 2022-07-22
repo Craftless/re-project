@@ -4,11 +4,9 @@ import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { RootTabParamList } from "../screens/AuthenticatedTab";
 import DefaultSettingsScreen from "./DefaultSettingsScreen";
 import EditProfileScreen from "./EditProfileScreen";
-import SupportScreen from "./SupportScreen";
 
 export type SettingsStackParamList = {
   Default: undefined;
-  Support: undefined;
   EditProfile: undefined;
   ChangePfp: undefined;
 };
@@ -27,13 +25,6 @@ function SettingsScreen({
         component={DefaultSettingsScreen}
         options={{
           title: "Settings",
-        }}
-      />
-      <Stack.Screen
-        name="Support"
-        component={SupportScreen}
-        options={{
-          title: "Support",
         }}
       />
       <Stack.Screen
