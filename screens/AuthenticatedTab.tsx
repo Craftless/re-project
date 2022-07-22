@@ -36,7 +36,9 @@ export type RootTabParamList = {
 export type RootStackParamList = {
   Tabs: undefined;
   Badges: undefined;
-  BadgeDetails: undefined;
+  BadgeDetails: {
+    badgeId: string,
+  };
 };
 
 const Tab = createBottomTabNavigator<RootTabParamList>();

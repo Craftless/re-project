@@ -25,6 +25,7 @@ function BadgeDisplay({ item }: { item: string }) {
 const styles = StyleSheet.create({
   outerContainer: {
     flexDirection: "row",
+    justifyContent: "space-between",
     padding: 8,
   },
   titleText: {
