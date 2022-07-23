@@ -6,13 +6,13 @@ export async function writeStepsData(steps: number, fromMidnight: boolean = fals
   if (!auth.currentUser) return;
 
   if (fromMidnight) {
-    await projectDatabase.ref("leaderboard/" + auth.currentUser.uid).set({
+    await projectDatabase.ref("leaderboard/" + auth.currentUser.uid).update({
       stepsFromMidnight: steps,
     });
   }
   else {
-    await projectDatabase.ref("leaderboard/" + auth.currentUser.uid).set({
-      steps,
+    await projectDatabase.ref("leaderboard/" + auth.currentUser.uid).update({
+      steps
     });
   }
 }

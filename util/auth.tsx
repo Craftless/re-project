@@ -5,10 +5,11 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import firebase from "firebase/compat/app";
-import { ActivityIndicator, Image } from "react-native";
+import { ActivityIndicator, Alert, Image } from "react-native";
 import { auth, projectDatabase } from "../firebase/config";
 
 import { useState } from "react";
+import { Button } from "react-native-paper";
 
 export async function createUser(
   email: string,
@@ -62,7 +63,9 @@ export async function writeUserData(data: {
 export async function writeCurrentUserData() {
   if (!auth.currentUser) return;
   writeUserData({
-    displayName: getCurrentUserDisplayNameOrEmailNonNullFromUser(auth.currentUser),
+    displayName: getCurrentUserDisplayNameOrEmailNonNullFromUser(
+      auth.currentUser
+    ),
     pfpUrl: getCurrentUserProfilePictureNonNullFromUser(auth.currentUser),
   });
 }
@@ -150,10 +153,17 @@ export function ProfilePicture(props: any) {
         style={[imgStyle, isLoading && { opacity: 0 }]}
       />
       {isLoading && (
-        <ActivityIndicator
-          size="small"
-          style={{ position: "absolute", alignSelf: "center" }}
-        />
+        <>
+          <ActivityIndicator
+            size="small"
+            style={{ position: "absolute", alignSelf: "center" }}
+          />
+          <Image
+            {...props}
+            source={require("../assets/blankpfp.png")}
+            style={[imgStyle, isLoading && { opacity: 0 }]}
+          />
+        </>
       )}
     </>
   );

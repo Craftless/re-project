@@ -161,7 +161,6 @@ function Tabs() {
           tabBarIcon: ({ color, size }: { color: string; size: number }) => {
             return <Feather name="more-horizontal" size={size} color={color} />
           },
-          headerShown: false,
         }}
       />
     </Tab.Navigator>

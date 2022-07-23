@@ -22,6 +22,7 @@ export async function requestStepsToday(
   > &
     Dispatch<AnyAction>
 ) {
+  console.log("REQUESTED");
   try {
     const startDate24h = new Date();
     const endDate24h = new Date();
@@ -35,10 +36,11 @@ export async function requestStepsToday(
       startDate24h,
       endDate24h
     );
-    dispatch(sendStepsData(result24h.steps, false));
+
+    await dispatch(sendStepsData(result24h.steps, false));
 
     const resultFM = await Pedometer.getStepCountAsync(startDateFM, endDateFM);
-    dispatch(sendStepsData(resultFM.steps, true));
+    await dispatch(sendStepsData(resultFM.steps, true));
 
     const totalSteps = [] as {
       date: string,
@@ -57,7 +59,7 @@ export async function requestStepsToday(
         dateThatDay,
         endOfThatDay
       );
-      console.log(dateThatDay, endOfThatDay);
+      console.log("Date", dateThatDay, endOfThatDay);
       totalSteps.push({ date: yyyymmddFromDate(dateThatDay), steps: resultRange.steps });
     }
 
