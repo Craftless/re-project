@@ -93,7 +93,7 @@ function Root() {
       if (user) {
         authCtx.authenticate(user).then((token) => {
           setWaitingForEvent(false);
-        });
+        }).catch(error => Alert.alert(error));
       } else {
         authCtx.logout();
         setWaitingForEvent(false);

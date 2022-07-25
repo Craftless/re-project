@@ -22,7 +22,7 @@ export const achievementIcons: {
   daily_steps_5000: (params: IconFuncParams) => {
     return {
       // comp: <Ionicons name="battery-charging-outline" size={params.size / 2} />,
-      comp: <Image source={require("../assets/badges/images/5000Steps.png")} style={{width: params.size / 2 * 3.5, height: params.size / 2 * 3.5}} />,
+      comp: <Image source={require("../assets/badges/images/5000StepsDaily.png")} style={{width: params.size / 2 * 3.5, height: params.size / 2 * 3.5}} />,
       colour: "#193797",
     };
   },

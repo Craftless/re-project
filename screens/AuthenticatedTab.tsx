@@ -24,7 +24,7 @@ import {
 import { updateLocation } from "../store/redux/location-slice";
 import BadgesScreen from "./BadgesScreen";
 import BadgeDetailsScreen from "./BadgeDetailsScreen";
-import MoreScreen from "./MoreScreen";
+import MoreScreen from "./MoreStack";
 
 export type RootTabParamList = {
   Home: undefined;
@@ -161,6 +161,7 @@ function Tabs() {
           tabBarIcon: ({ color, size }: { color: string; size: number }) => {
             return <Feather name="more-horizontal" size={size} color={color} />
           },
+          headerShown: false,
         }}
       />
     </Tab.Navigator>

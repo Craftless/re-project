@@ -26,8 +26,9 @@ function DefaultProgressScreen() {
   // requestStepsToday(dispatch);
   const steps24h = useAppSelector((state) => state.stepCount.stepsToday);
   const stepsFM = useAppSelector((state) => state.stepCount.stepsFromMidnight);
-  const totalSteps = [...useAppSelector((state) => state.stepCount.totalSteps)];
-  totalSteps.sort((a, b) => Number(a.date) - Number(b.date));
+  const totalSteps = [...useAppSelector((state) => state.stepCount.totalSteps)]
+    .sort((a, b) => Number(a.date) - Number(b.date))
+    .slice(0, 7);
   const [refreshing, setRefreshing] = useState(false);
   const achievementIds = useAppSelector(
     (state) => state.achievements.achievementsCompletedId
@@ -59,18 +60,21 @@ function DefaultProgressScreen() {
     backgroundGradientFromOpacity: 0,
     backgroundGradientTo: "#CECECE",
     backgroundGradientToOpacity: 0.5,
-    color: (opacity = 1) => theme.dark ? hexToRGB(theme.colors.primary, opacity) : `rgba(50, 50, 82, ${opacity})`,
-  }
+    color: (opacity = 1) =>
+      theme.dark
+        ? hexToRGB(theme.colors.primary, opacity)
+        : `rgba(50, 50, 82, ${opacity})`,
+  };
   if (theme.dark) {
     colours = {
       backgroundGradientFrom: theme.colors.onSurface,
       backgroundGradientFromOpacity: 0.1,
       backgroundGradientTo: theme.colors.onSurface,
-      backgroundGradientToOpacity: 0.5,
+      backgroundGradientToOpacity: 0.1,
       color: (opacity = 1) => hexToRGB(theme.colors.primary, opacity),
-    }
+    };
   }
-  
+
   const chartConfig = {
     // backgroundGradientFrom: "#E5E5E5",
     // backgroundGradientFromOpacity: 0,
@@ -81,12 +85,12 @@ function DefaultProgressScreen() {
     barPercentage: 0.8,
     useShadowColorFromDataset: false, // optional
     decimalPlaces: 0,
-    ...colours
+    ...colours,
   };
 
   const graphStyle = {
     borderRadius: 8,
-  }
+  };
 
   const data = {
     // labels: totalSteps.map((val) => val.date),
@@ -94,10 +98,10 @@ function DefaultProgressScreen() {
     datasets: [
       {
         // data: totalSteps.map((val) => val.steps),
-        data: [5, 3, 7, 9]
+        data: [5, 3, 7, 9],
       },
     ],
-  }
+  };
 
   const screenWidth = Dimensions.get("window").width;
 
@@ -237,6 +241,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   badgeDataContainer: {
-    flexDirection: "column",
+    flexDirection: "row",
   },
 });

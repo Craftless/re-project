@@ -154,14 +154,14 @@ export function ProfilePicture(props: any) {
       />
       {isLoading && (
         <>
-          <ActivityIndicator
-            size="small"
-            style={{ position: "absolute", alignSelf: "center" }}
-          />
           <Image
             {...props}
             source={require("../assets/blankpfp.png")}
             style={[imgStyle, isLoading && { opacity: 0 }]}
+          />
+          <ActivityIndicator
+            size="small"
+            style={{ position: "absolute", alignSelf: "center" }}
           />
         </>
       )}
