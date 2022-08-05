@@ -3,97 +3,76 @@ import * as Progress from "react-native-progress";
 import CircularBadgeDisplay from "../components/ui/CircularBadgeDisplay";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import CardWithTitleAndContent from "../components/ui/CardWithTitleAndContent";
-import Badge from "../util/Badges";
 import AppText from "../components/ui/AppText";
-import BadgeContainer from "../components/ui/BadgeContainer";
 import { useAppSelector } from "../hooks/redux-hooks";
 import React from "react";
+import { achievements } from "../util/AchievementDatas";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "./AuthenticatedTab";
+import { Achievement } from "../classes/Achievement";
 
 function DefaultHomeScreen() {
   const stepCount = useAppSelector((state) => state.stepCount.stepsToday);
   const totalSteps = useAppSelector((state) => state.stepCount.totalSteps);
+  const achievementIds = useAppSelector(
+    (state) => state.achievements.achievementsCompletedId
+  );
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList, "Tabs">>();
+
   return (
     <ScrollView>
       <CardWithTitleAndContent title="My progress today">
         <Progress.Bar
-          progress={stepCount / 10000}
+          progress={stepCount / 75000}
           width={null}
           height={20}
           style={styles.progressBar}
         />
         <View style={styles.progressDataContainer}>
           <AppText style={styles.progressDataText}>{stepCount} steps</AppText>
-          <AppText style={styles.progressDataBadgeText}>Goal: 10000 </AppText>
+          <AppText style={styles.progressDataBadgeText}>Goal: 75000 </AppText>
         </View>
       </CardWithTitleAndContent>
-      <CardWithTitleAndContent title="Current Badges">
-        <BadgeContainer>
-          <CircularBadgeDisplay
-            size={60}
-            badgeIcon={({ size }) => {
-              return {
-                comp: (
-                  <Ionicons name="hourglass" color="#008C38" size={size / 2} />
-                ),
-                colour: "#7B017F",
-              };
-            }}
-          />
-          <CircularBadgeDisplay
-            size={60}
-            badgeIcon={({ size }) => {
-              return {
-                comp: (
-                  <Ionicons name="airplane" color="#B58D54" size={size / 2} />
-                ),
-                colour: "#4767B8",
-              };
-            }}
-          />
-          <CircularBadgeDisplay
-            size={60}
-            badgeIcon={({ size }) => {
-              return {
-                comp: (
-                  <Ionicons
-                    name="alarm-sharp"
-                    color="#58009F"
-                    size={size / 2}
-                  />
-                ),
-                colour: "#BD8C8C",
-              };
-            }}
-          />
-          <CircularBadgeDisplay
-            size={60}
-            badgeIcon={({ size }) => {
-              return {
-                comp: <Badge badgeId="fire" width={50} height={50} />,
-                colour: "#008609",
-              };
-            }}
-          />
-        </BadgeContainer>
+      <CardWithTitleAndContent
+        title="My Badges"
+        onPress={() => {
+          navigation.navigate("Badges");
+        }}
+      >
+        <View style={{ flexDirection: "row" }}>
+          {achievementIds.map((item) => {
+            return (
+              <React.Fragment key={item + Math.random().toFixed(4).toString()}>
+                <CircularBadgeDisplay
+                  badgeIcon={Achievement.getIconFromData(achievements[item])}
+                  size={60}
+                />
+              </React.Fragment>
+            );
+          })}
+        </View>
       </CardWithTitleAndContent>
       <CardWithTitleAndContent title="TEST">
-        {/* <FlatList
-          data={totalSteps}
-          renderItem={(itemData) => {
-            return (
-              <>
-                <AppText>Date: {itemData.item.date}</AppText>
-                <AppText>Steps: {itemData.item.steps}</AppText>
-              </>
-            );
-          }}
-        /> */}
         <>
           {totalSteps.map((val) => {
             return (
               <React.Fragment key={val.date}>
                 <AppText>Date: {val.date}</AppText>
                 <AppText>Steps: {val.steps}</AppText>
+              </React.Fragment>
+            );
+          })}
+        </>
+      </CardWithTitleAndContent>
+      <CardWithTitleAndContent title="Achievements">
+        <>
+          {achievementIds.map((val) => {
+            return (
+              <React.Fragment key={val}>
+                <AppText>Id: {val}</AppText>
+                <AppText>Level: {achievements[val].level ?? "None"}</AppText>
               </React.Fragment>
             );
           })}

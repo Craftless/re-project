@@ -53,8 +53,8 @@ function AuthenticatedTab() {
   const foregroundSubscription = useAppSelector(
     (state) => state.location.foregroundSub
   );
-  const dispatch = useAppDispatch();
 
+  const dispatch = useAppDispatch();
   useEffect(() => {
     // const unsubscribe2 = Pedometer.watchStepCount((result) => {
     //   dispatch(addSteps(result.steps));

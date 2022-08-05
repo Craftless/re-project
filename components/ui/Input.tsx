@@ -43,7 +43,7 @@ function Input({
         onChangeText={onValueChange}
         onBlur={onInputBlur}
         autoCorrect={false}
-        autoComplete={false}
+        autoComplete="off"
         error={hasError}
         {...props}
       />

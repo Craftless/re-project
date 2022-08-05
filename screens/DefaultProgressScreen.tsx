@@ -42,7 +42,7 @@ function DefaultProgressScreen() {
 
   // const chartConfig = {
   //   backgroundGradientFrom: "#1E2923",
-  //   backgroundGradientFromOpacity: 0,
+  //   backgroundGradientFromOpacity:2 0,
   //   backgroundGradientTo: "#08130D",
   //   backgroundGradientToOpacity: 0.5,
   //   color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
@@ -51,7 +51,6 @@ function DefaultProgressScreen() {
   //   useShadowColorFromDataset: false, // optional
   //   decimalPlaces: 0,
   // };
-  console.log(theme.colors.primary);
 
   let colours;
 
@@ -157,6 +156,7 @@ function DefaultProgressScreen() {
         yAxisSuffix=""
         height={220}
         chartConfig={chartConfig}
+        fromZero
         style={{
           marginVertical: 8,
           borderRadius: 16,
@@ -210,13 +210,9 @@ function DefaultProgressScreen() {
         }}
       >
         <View style={styles.badgeDataContainer}>
-          {/* <AppText style={{fontSize: 28}}>Work in progress</AppText> */}
           {achievementIds.map((item) => {
             return (
               <React.Fragment key={item + Math.random().toFixed(4).toString()}>
-                {/* <AppText>
-                  {achievements[item].display.title}
-                </AppText> */}
                 <CircularBadgeDisplay
                   badgeIcon={Achievement.getIconFromData(achievements[item])}
                   size={60}

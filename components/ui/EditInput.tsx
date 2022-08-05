@@ -85,7 +85,7 @@ function EditInput({
           <RNTextInput
             label={label}
             mode="flat"
-            autoComplete={false}
+            autoComplete="off"
             value={
               isUpdating
                 ? "Updating..."

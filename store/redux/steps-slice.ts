@@ -1,7 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { Alert } from "react-native";
 import { projectDatabase } from "../../firebase/config";
 import EventEmitter from "../../util/EventEmitter";
-import { writeStepsData } from "../../util/leaderboard";
+import { writeStepsData, writeTotalSteps } from "../../util/leaderboard";
 
 const stepsSlice = createSlice({
   name: "steps",
@@ -40,13 +41,11 @@ const stepsSlice = createSlice({
           (val) => val.date == result[i].date
         );
         if (index != -1) {
-          state.totalSteps[index] = result[i];
+          if (result[i] > state.totalSteps[index]) state.totalSteps[index] = result[i];
         } else {
           state.totalSteps.push(result[i]);
-          console.log("Pushed");
         }
       }
-      for (const obj of state.totalSteps) console.log(obj);
     },
   },
 });
@@ -59,11 +58,25 @@ export const sendStepsData = (steps: number, fromMidnight: boolean = false) => {
       await writeStepsData(steps, true);
     } else {
       dispatch(setStepsToday({ steps }));
-      EventEmitter.emit("steps_24hr", steps);
+      EventEmitter.emit("steps_7d", steps);
       await writeStepsData(steps, false);
     }
   };
 };
+
+export const sendTotalSteps = (totalSteps: {date: string, steps: number}[]) => {
+  return async (dispatch: any) => {
+    try {
+      await writeTotalSteps(totalSteps);
+      dispatch(addToTotalSteps({ result: totalSteps }));
+    }
+    catch (e) {
+      console.log(e);
+      Alert.alert("Error", (e as Error).message);
+    }
+  };
+};
+
 
 export const addStepsFM = stepsSlice.actions.addStepsFromMidnight;
 export const setStepsFM = stepsSlice.actions.setStepsFromMidnight;

@@ -5,6 +5,7 @@ import { useAppDispatch } from "../hooks/redux-hooks";
 import {
   addToTotalSteps,
   sendStepsData,
+  sendTotalSteps,
   setStepsToday,
 } from "../store/redux/steps-slice";
 import { yyyymmddFromDate } from "./math";
@@ -24,27 +25,34 @@ export async function requestStepsToday(
 ) {
   console.log("REQUESTED");
   try {
-    const startDate24h = new Date();
-    const endDate24h = new Date();
-    startDate24h.setDate(endDate24h.getDate() - 1);
+    // const startDate24h = new Date();
+    // const endDate24h = new Date();
+    // startDate24h.setDate(endDate24h.getDate() - 1);
 
     const startDateFM = new Date();
     const endDateFM = new Date();
     startDateFM.setHours(0, 0, 0, 0);
 
-    const result24h = await Pedometer.getStepCountAsync(
-      startDate24h,
-      endDate24h
-    );
+    // const result24h = await Pedometer.getStepCountAsync(
+    //   startDate24h,
+    //   endDate24h
+    // );
 
-    await dispatch(sendStepsData(result24h.steps, false));
+    // await dispatch(sendStepsData(result24h.steps, false));
 
     const resultFM = await Pedometer.getStepCountAsync(startDateFM, endDateFM);
     await dispatch(sendStepsData(resultFM.steps, true));
 
+    const startDate7d = new Date();
+    const endDate7d = new Date();
+    startDate7d.setDate(endDate7d.getDate() - 7);
+    console.log(startDate7d, endDate7d);
+    const result7d = await Pedometer.getStepCountAsync(startDate7d, endDate7d);
+    await dispatch(sendStepsData(result7d.steps, false));
+
     const totalSteps = [] as {
-      date: string,
-      steps: number,
+      date: string;
+      steps: number;
     }[];
 
     const dateToday = new Date();
@@ -59,15 +67,18 @@ export async function requestStepsToday(
         dateThatDay,
         endOfThatDay
       );
-      console.log("Date", dateThatDay, endOfThatDay);
-      totalSteps.push({ date: yyyymmddFromDate(dateThatDay), steps: resultRange.steps });
+      // console.log("Date", dateThatDay, endOfThatDay);
+      totalSteps.push({
+        date: yyyymmddFromDate(dateThatDay),
+        steps: resultRange.steps,
+      });
     }
-
-    dispatch(
-      addToTotalSteps({
-        result: totalSteps,
-      })
-    );
+    dispatch(sendTotalSteps(totalSteps));
+    // dispatch(
+    //   addToTotalSteps({
+    //     result: totalSteps,
+    //   })
+    // );
   } catch (e) {
     console.log(`Error: ${e}`);
   }

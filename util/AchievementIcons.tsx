@@ -19,17 +19,45 @@ export const achievementIcons: {
       colour: "#E40000",
     };
   },
-  daily_steps_5000: (params: IconFuncParams) => {
-    return {
-      // comp: <Ionicons name="battery-charging-outline" size={params.size / 2} />,
-      comp: <Image source={require("../assets/badges/images/5000StepsDaily.png")} style={{width: params.size / 2 * 3.5, height: params.size / 2 * 3.5}} />,
-      colour: "#193797",
-    };
-  },
   use_app: (params: IconFuncParams) => {
     return {
       comp: <Ionicons name="cart-outline" size={params.size / 2} />,
       colour: "#A2B800",
     };
   },
+};
+
+export const levelableAchievementIcons: { [key: string]: IconFunc[] } = {
+  daily_steps_5000: [
+    (params: IconFuncParams) => {
+      return {
+        comp: (
+          <Image
+            source={require("../assets/badges/images/5000StepsDaily.png")}
+            style={{
+              width: (params.size / 2) * 3.5,
+              height: (params.size / 2) * 3.5,
+            }}
+          />
+        ),
+        colour: "#193797",
+      };
+    },
+  ],
+  levelable_1000_steps_daily: [
+    (params: IconFuncParams) => {
+      return {
+        comp: (
+          <Image
+            source={require("../assets/badges/images/5000StepsDaily.png")}
+            style={{
+              width: (params.size / 2) * 3.5,
+              height: (params.size / 2) * 3.5,
+            }}
+          />
+        ),
+        colour: "#193797",
+      };
+    },
+  ],
 };

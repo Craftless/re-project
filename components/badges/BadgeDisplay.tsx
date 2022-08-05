@@ -16,6 +16,7 @@ function BadgeDisplay({ item }: { item: string }) {
         <View style={styles.detailsContainer}>
           <AppText style={styles.titleText}>{achievements[item].display.title}</AppText>
           <AppText>{achievements[item].display.description}</AppText>
+          {achievements[item].level && <AppText>Level {achievements[item].level}</AppText>}
         </View>
       </View>
     </Card>

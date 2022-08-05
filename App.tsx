@@ -87,6 +87,8 @@ function Root() {
   const [waitingForEvent, setWaitingForEvent] = useState(true);
   const foregroundSub = useAppSelector((state) => state.location.foregroundSub);
   const dispatch = useAppDispatch();
+  const achievementIds = useAppSelector(state => state.achievements.achievementsCompletedId);
+  const levelMaps = useAppSelector(state => state.achievements.achievementIdToLevel);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -99,7 +101,7 @@ function Root() {
         setWaitingForEvent(false);
       }
     });
-    initialiseAchievements();
+    initialiseAchievements(achievementIds, levelMaps);
     AppState.addEventListener("change", onAppStateChanged);
     return () => unsubscribe();
   }, []);
