@@ -5,6 +5,7 @@ import { RootTabParamList } from "./AuthenticatedTab";
 import DefaultSettingsScreen from "./DefaultSettingsScreen";
 import EditProfileScreen from "./EditProfileScreen";
 import DefaultMoreScreen from "./DefaultMoreScreen";
+import HeightAndWeightScreen from "./HeightAndWeightScreen";
 
 export type MoreStackParamList = {
   Default: undefined;
@@ -29,7 +30,7 @@ function MoreScreen({
       />
       <Stack.Screen
         name="HeightAndWeight"
-        component={EditProfileScreen}
+        component={HeightAndWeightScreen}
         options={{
           title: "Edit Height and Weight",
         }}

@@ -22,7 +22,7 @@ function BadgeDetailsScreen({
         </AppText>
         <CircularBadgeDisplay
           badgeIcon={Achievement.getIconFromData(achievements[item])}
-          size={(Dimensions.get("window").width * 2) / 3}
+          size={Dimensions.get("window").width * (2 / 3)}
         />
         <View style={styles.wordsContainer}>
           <AppText>{achievements[item].display.description}</AppText>

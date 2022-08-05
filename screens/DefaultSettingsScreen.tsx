@@ -80,7 +80,7 @@ function DefaultSettingsScreen({
         </View>
       </HeavyCard>
       <View style={styles.normalBtnsContainer}>
-        <Button mode="contained" icon="bell" onPress={() => {}} style={styles.normalBtns}>
+        <Button mode="contained" icon="bell" onPress={() => {navigation.navigate("Notifications")}} style={styles.normalBtns}>
           Notifications
         </Button>
       </View>
@@ -90,7 +90,7 @@ function DefaultSettingsScreen({
         </Button>
       </View>
       <View style={styles.normalBtnsContainer}>
-        <Button mode="contained" icon="information" onPress={() => {}} style={styles.normalBtns}>
+        <Button mode="contained" icon="information" onPress={() => {navigation.navigate("About")}} style={styles.normalBtns}>
           About
         </Button>
       </View>
