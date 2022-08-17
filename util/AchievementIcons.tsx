@@ -27,13 +27,445 @@ export const achievementIcons: {
   },
 };
 
-export const levelableAchievementIcons: { [key: string]: IconFunc[] } = {
-  daily_steps_5000: [
-    (params: IconFuncParams) => {
+export const levelableAchievementIcons: {
+  [key: string]: (level?: number) => IconFunc;
+} = {
+  levelable_10000_steps_daily: (level?: number) => {
+    const arr = [
+      (params: IconFuncParams) => {
+        return {
+          comp: (
+            <Image
+              source={require("../assets/badges/images/10000StepsLevelable/10000stepslevel1.png")}
+              style={{
+                width: (params.size / 2) * 3.5,
+                height: (params.size / 2) * 3.5,
+              }}
+            />
+          ),
+          colour: "#193797",
+        };
+      },
+      (params: IconFuncParams) => {
+        return {
+          comp: (
+            <Image
+              source={require("../assets/badges/images/10000StepsLevelable/10000stepslevel2.png")}
+              style={{
+                width: (params.size / 2) * 3.5,
+                height: (params.size / 2) * 3.5,
+              }}
+            />
+          ),
+          colour: "#193797",
+        };
+      },
+      (params: IconFuncParams) => {
+        return {
+          comp: (
+            <Image
+              source={require("../assets/badges/images/10000StepsLevelable/10000stepslevel3.png")}
+              style={{
+                width: (params.size / 2) * 3.5,
+                height: (params.size / 2) * 3.5,
+              }}
+            />
+          ),
+          colour: "#193797",
+        };
+      },
+      (params: IconFuncParams) => {
+        return {
+          comp: (
+            <Image
+              source={require("../assets/badges/images/10000StepsLevelable/10000stepslevel4.png")}
+              style={{
+                width: (params.size / 2) * 3.5,
+                height: (params.size / 2) * 3.5,
+              }}
+            />
+          ),
+          colour: "#193797",
+        };
+      },
+      (params: IconFuncParams) => {
+        return {
+          comp: (
+            <Image
+              source={require("../assets/badges/images/10000StepsLevelable/10000stepslevel5.png")}
+              style={{
+                width: (params.size / 2) * 3.5,
+                height: (params.size / 2) * 3.5,
+              }}
+            />
+          ),
+          colour: "#193797",
+        };
+      },
+      (params: IconFuncParams) => {
+        return {
+          comp: (
+            <Image
+              source={require("../assets/badges/images/10000StepsLevelable/10000stepslevel6.png")}
+              style={{
+                width: (params.size / 2) * 3.5,
+                height: (params.size / 2) * 3.5,
+              }}
+            />
+          ),
+          colour: "#193797",
+        };
+      },
+      (params: IconFuncParams) => {
+        return {
+          comp: (
+            <Image
+              source={require("../assets/badges/images/10000StepsLevelable/10000stepslevel7.png")}
+              style={{
+                width: (params.size / 2) * 3.5,
+                height: (params.size / 2) * 3.5,
+              }}
+            />
+          ),
+          colour: "#193797",
+        };
+      },
+      (params: IconFuncParams) => {
+        return {
+          comp: (
+            <Image
+              source={require("../assets/badges/images/10000StepsLevelable/10000stepslevel8.png")}
+              style={{
+                width: (params.size / 2) * 3.5,
+                height: (params.size / 2) * 3.5,
+              }}
+            />
+          ),
+          colour: "#193797",
+        };
+      },
+      (params: IconFuncParams) => {
+        return {
+          comp: (
+            <Image
+              source={require("../assets/badges/images/10000StepsLevelable/10000stepslevel9.png")}
+              style={{
+                width: (params.size / 2) * 3.5,
+                height: (params.size / 2) * 3.5,
+              }}
+            />
+          ),
+          colour: "#193797",
+        };
+      },
+      (params: IconFuncParams) => {
+        return {
+          comp: (
+            <Image
+              source={require("../assets/badges/images/10000StepsLevelable/10000stepslevel10.png")}
+              style={{
+                width: (params.size / 2) * 3.5,
+                height: (params.size / 2) * 3.5,
+              }}
+            />
+          ),
+          colour: "#193797",
+        };
+      },
+      (params: IconFuncParams) => {
+        return {
+          comp: (
+            <Image
+              source={require("../assets/badges/images/10000StepsLevelable/10000stepslevel11.png")}
+              style={{
+                width: (params.size / 2) * 3.5,
+                height: (params.size / 2) * 3.5,
+              }}
+            />
+          ),
+          colour: "#193797",
+        };
+      },
+      (params: IconFuncParams) => {
+        return {
+          comp: (
+            <Image
+              source={require("../assets/badges/images/10000StepsLevelable/10000stepslevel12.png")}
+              style={{
+                width: (params.size / 2) * 3.5,
+                height: (params.size / 2) * 3.5,
+              }}
+            />
+          ),
+          colour: "#193797",
+        };
+      },
+      (params: IconFuncParams) => {
+        return {
+          comp: (
+            <Image
+              source={require("../assets/badges/images/10000StepsLevelable/10000stepslevel13.png")}
+              style={{
+                width: (params.size / 2) * 3.5,
+                height: (params.size / 2) * 3.5,
+              }}
+            />
+          ),
+          colour: "#193797",
+        };
+      },
+      (params: IconFuncParams) => {
+        return {
+          comp: (
+            <Image
+              source={require("../assets/badges/images/10000StepsLevelable/10000stepslevel14.png")}
+              style={{
+                width: (params.size / 2) * 3.5,
+                height: (params.size / 2) * 3.5,
+              }}
+            />
+          ),
+          colour: "#193797",
+        };
+      },
+      (params: IconFuncParams) => {
+        return {
+          comp: (
+            <Image
+              source={require("../assets/badges/images/10000StepsLevelable/10000stepslevel15.png")}
+              style={{
+                width: (params.size / 2) * 3.5,
+                height: (params.size / 2) * 3.5,
+              }}
+            />
+          ),
+          colour: "#193797",
+        };
+      },
+    ];
+    return level ? arr[level] ?? arr[0] : arr[0];
+  },
+  levelable_5000_steps_daily: (level?: number) => {
+    const arr = [
+      (params: IconFuncParams) => {
+        return {
+          comp: (
+            <Image
+              source={require("../assets/badges/images/5000StepsLevelable/5000stepslevel1.png")}
+              style={{
+                width: (params.size / 2) * 3.5,
+                height: (params.size / 2) * 3.5,
+              }}
+            />
+          ),
+          colour: "#193797",
+        };
+      },
+      (params: IconFuncParams) => {
+        return {
+          comp: (
+            <Image
+              source={require("../assets/badges/images/5000StepsLevelable/5000stepslevel2.png")}
+              style={{
+                width: (params.size / 2) * 3.5,
+                height: (params.size / 2) * 3.5,
+              }}
+            />
+          ),
+          colour: "#193797",
+        };
+      },
+      (params: IconFuncParams) => {
+        return {
+          comp: (
+            <Image
+              source={require("../assets/badges/images/5000StepsLevelable/5000stepslevel3.png")}
+              style={{
+                width: (params.size / 2) * 3.5,
+                height: (params.size / 2) * 3.5,
+              }}
+            />
+          ),
+          colour: "#193797",
+        };
+      },
+      (params: IconFuncParams) => {
+        return {
+          comp: (
+            <Image
+              source={require("../assets/badges/images/5000StepsLevelable/5000stepslevel4.png")}
+              style={{
+                width: (params.size / 2) * 3.5,
+                height: (params.size / 2) * 3.5,
+              }}
+            />
+          ),
+          colour: "#193797",
+        };
+      },
+      (params: IconFuncParams) => {
+        return {
+          comp: (
+            <Image
+              source={require("../assets/badges/images/5000StepsLevelable/5000stepslevel5.png")}
+              style={{
+                width: (params.size / 2) * 3.5,
+                height: (params.size / 2) * 3.5,
+              }}
+            />
+          ),
+          colour: "#193797",
+        };
+      },
+      (params: IconFuncParams) => {
+        return {
+          comp: (
+            <Image
+              source={require("../assets/badges/images/5000StepsLevelable/5000stepslevel6.png")}
+              style={{
+                width: (params.size / 2) * 3.5,
+                height: (params.size / 2) * 3.5,
+              }}
+            />
+          ),
+          colour: "#193797",
+        };
+      },
+      (params: IconFuncParams) => {
+        return {
+          comp: (
+            <Image
+              source={require("../assets/badges/images/5000StepsLevelable/5000stepslevel7.png")}
+              style={{
+                width: (params.size / 2) * 3.5,
+                height: (params.size / 2) * 3.5,
+              }}
+            />
+          ),
+          colour: "#193797",
+        };
+      },
+      (params: IconFuncParams) => {
+        return {
+          comp: (
+            <Image
+              source={require("../assets/badges/images/5000StepsLevelable/5000stepslevel8.png")}
+              style={{
+                width: (params.size / 2) * 3.5,
+                height: (params.size / 2) * 3.5,
+              }}
+            />
+          ),
+          colour: "#193797",
+        };
+      },
+      (params: IconFuncParams) => {
+        return {
+          comp: (
+            <Image
+              source={require("../assets/badges/images/5000StepsLevelable/5000stepslevel9.png")}
+              style={{
+                width: (params.size / 2) * 3.5,
+                height: (params.size / 2) * 3.5,
+              }}
+            />
+          ),
+          colour: "#193797",
+        };
+      },
+      (params: IconFuncParams) => {
+        return {
+          comp: (
+            <Image
+              source={require("../assets/badges/images/5000StepsLevelable/5000stepslevel10.png")}
+              style={{
+                width: (params.size / 2) * 3.5,
+                height: (params.size / 2) * 3.5,
+              }}
+            />
+          ),
+          colour: "#193797",
+        };
+      },
+      (params: IconFuncParams) => {
+        return {
+          comp: (
+            <Image
+              source={require("../assets/badges/images/5000StepsLevelable/5000stepslevel11.png")}
+              style={{
+                width: (params.size / 2) * 3.5,
+                height: (params.size / 2) * 3.5,
+              }}
+            />
+          ),
+          colour: "#193797",
+        };
+      },
+      (params: IconFuncParams) => {
+        return {
+          comp: (
+            <Image
+              source={require("../assets/badges/images/5000StepsLevelable/5000stepslevel12.png")}
+              style={{
+                width: (params.size / 2) * 3.5,
+                height: (params.size / 2) * 3.5,
+              }}
+            />
+          ),
+          colour: "#193797",
+        };
+      },
+      (params: IconFuncParams) => {
+        return {
+          comp: (
+            <Image
+              source={require("../assets/badges/images/5000StepsLevelable/5000stepslevel13.png")}
+              style={{
+                width: (params.size / 2) * 3.5,
+                height: (params.size / 2) * 3.5,
+              }}
+            />
+          ),
+          colour: "#193797",
+        };
+      },
+      (params: IconFuncParams) => {
+        return {
+          comp: (
+            <Image
+              source={require("../assets/badges/images/5000StepsLevelable/5000stepslevel14.png")}
+              style={{
+                width: (params.size / 2) * 3.5,
+                height: (params.size / 2) * 3.5,
+              }}
+            />
+          ),
+          colour: "#193797",
+        };
+      },
+      (params: IconFuncParams) => {
+        return {
+          comp: (
+            <Image
+              source={require("../assets/badges/images/5000StepsLevelable/5000stepslevel15.png")}
+              style={{
+                width: (params.size / 2) * 3.5,
+                height: (params.size / 2) * 3.5,
+              }}
+            />
+          ),
+          colour: "#193797",
+        };
+      },
+    ];
+    return level ? arr[level] ?? arr[0] : arr[0];
+  },
+  levelable_15000_steps_daily: (level?: number) => {
+    return (params: IconFuncParams) => {
       return {
         comp: (
           <Image
-            source={require("../assets/badges/images/5000StepsDaily.png")}
+            source={require("../assets/badges/images/15000stepssingle.png")}
             style={{
               width: (params.size / 2) * 3.5,
               height: (params.size / 2) * 3.5,
@@ -42,14 +474,14 @@ export const levelableAchievementIcons: { [key: string]: IconFunc[] } = {
         ),
         colour: "#193797",
       };
-    },
-  ],
-  levelable_1000_steps_daily: [
-    (params: IconFuncParams) => {
+    }
+  },
+  levelable_20000_steps_daily: (level?: number) => {
+    return (params: IconFuncParams) => {
       return {
         comp: (
           <Image
-            source={require("../assets/badges/images/5000StepsDaily.png")}
+            source={require("../assets/badges/images/20000stepssingle.png")}
             style={{
               width: (params.size / 2) * 3.5,
               height: (params.size / 2) * 3.5,
@@ -58,6 +490,6 @@ export const levelableAchievementIcons: { [key: string]: IconFunc[] } = {
         ),
         colour: "#193797",
       };
-    },
-  ],
+    }
+  }
 };

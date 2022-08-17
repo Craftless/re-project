@@ -38,6 +38,24 @@ export async function writeTotalSteps(
   }
 }
 
+export async function loadTotalSteps(
+  totalSteps: { date: string; steps: number }[]
+) {
+  if (!auth.currentUser) return;
+  else {
+    const snapshot = await projectDatabase.ref(`userData/${auth.currentUser.uid}/totalSteps`).get();
+    const val = snapshot.val();
+    console.log("snapshot", snapshot, "val", val);
+    for (const totalStep of totalSteps) {
+      await projectDatabase
+        .ref(`userData/${auth.currentUser.uid}/totalSteps/${totalStep.date}`)
+        .update({
+          steps: totalStep.steps,
+        });
+    }
+  }
+}
+
 export async function getCurrentLeaderboardData() {
   const stepsRef = projectDatabase
     .ref("leaderboard")

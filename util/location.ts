@@ -77,7 +77,7 @@ export async function startForegroundTracking(
     AnyAction
   > &
     Dispatch<AnyAction>,
-  foregroundSubscription: LocationSubscription | null,
+  foregroundSubscription: LocationSubscription | null
 ) {
   if (!foregroundSubscription) return;
   const { granted } = await getForegroundPermissionsAsync();
@@ -86,15 +86,19 @@ export async function startForegroundTracking(
     console.log("location tracking denied");
     return;
   }
-  foregroundSubscription.remove();
-  foregroundSubscription = await watchPositionAsync(
-    {
-      accuracy: LocationAccuracy.High,
-    },
-    (location) => {
-      dispatch(updateLocation({location}));
-    }
-  );
+  try {
+    foregroundSubscription.remove();
+    foregroundSubscription = await watchPositionAsync(
+      {
+        accuracy: LocationAccuracy.High,
+      },
+      (location) => {
+        dispatch(updateLocation({ location }));
+      }
+    );
+  } catch (e) {
+    console.log("Location Error", (e as Error).message);
+  }
 }
 
 export function stopForegroundTracking(
@@ -120,17 +124,21 @@ export async function startBackgroundTracking(LOCATION_TASK_NAME: string) {
     console.log("Already started");
     return;
   }
-  await startLocationUpdatesAsync(LOCATION_TASK_NAME, {
-    // For better logs, we set the accuracy to the most sensitive option
-    accuracy: LocationAccuracy.High,
-    // Make sure to enable this notification if you want to consistently track in the background
-    showsBackgroundLocationIndicator: false,
-    foregroundService: {
-      notificationTitle: "Location",
-      notificationBody: "Location tracking in background",
-      notificationColor: "#fff",
-    },
-  });
+  try {
+    await startLocationUpdatesAsync(LOCATION_TASK_NAME, {
+      // For better logs, we set the accuracy to the most sensitive option
+      accuracy: LocationAccuracy.High,
+      // Make sure to enable this notification if you want to consistently track in the background
+      showsBackgroundLocationIndicator: false,
+      foregroundService: {
+        notificationTitle: "Location",
+        notificationBody: "Location tracking in background",
+        notificationColor: "#fff",
+      },
+    });
+  } catch (e) {
+    console.log("Location Error", (e as Error).message);
+  }
 }
 
 export async function stopBackgroundUpdate(LOCATION_TASK_NAME: string) {

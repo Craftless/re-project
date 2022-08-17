@@ -25,6 +25,11 @@ import { updateLocation } from "../store/redux/location-slice";
 import BadgesScreen from "./BadgesScreen";
 import BadgeDetailsScreen from "./BadgeDetailsScreen";
 import MoreScreen from "./MoreStack";
+import {
+  loadAchievementsUnlocked,
+  loadExtraData,
+} from "../store/redux/achievements-slice";
+import { initialiseAchievements } from "../util/AchievementDatas";
 
 export type RootTabParamList = {
   Home: undefined;
@@ -39,7 +44,7 @@ export type RootStackParamList = {
   Tabs: undefined;
   Badges: undefined;
   BadgeDetails: {
-    badgeId: string,
+    badgeId: string;
   };
 };
 
@@ -55,6 +60,10 @@ function AuthenticatedTab() {
   );
 
   const dispatch = useAppDispatch();
+
+  const extraDataMap = useAppSelector(
+    (state) => state.achievements.idExtraDataMap
+  );
   useEffect(() => {
     // const unsubscribe2 = Pedometer.watchStepCount((result) => {
     //   dispatch(addSteps(result.steps));
@@ -72,6 +81,13 @@ function AuthenticatedTab() {
     //     pfpUrl: item.pfpUrl || "None",
     //   });
     // }, 6000);
+    const initAchievements = async () => {
+      await dispatch(loadExtraData());
+      console.log("MAP IS", extraDataMap);
+      await dispatch(loadAchievementsUnlocked(initialiseAchievements));
+    };
+    
+    initAchievements();
     const locationStuff = async () => {
       const permissionInfo = await getForegroundPermissionsAsync();
       const foregroundGranted = await verifyFGLocationPermissions(
@@ -103,9 +119,13 @@ function AuthenticatedTab() {
 
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Tabs" component={Tabs} options={{
-        headerShown: false,
-      }} />
+      <Stack.Screen
+        name="Tabs"
+        component={Tabs}
+        options={{
+          headerShown: false,
+        }}
+      />
       <Stack.Screen name="Badges" component={BadgesScreen} />
       <Stack.Screen name="BadgeDetails" component={BadgeDetailsScreen} />
     </Stack.Navigator>
@@ -159,7 +179,7 @@ function Tabs() {
         component={MoreScreen}
         options={{
           tabBarIcon: ({ color, size }: { color: string; size: number }) => {
-            return <Feather name="more-horizontal" size={size} color={color} />
+            return <Feather name="more-horizontal" size={size} color={color} />;
           },
           headerShown: false,
         }}

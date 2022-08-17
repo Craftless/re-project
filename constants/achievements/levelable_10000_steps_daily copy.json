@@ -1,19 +1,19 @@
 {
   "display": {
-    "title": "5000 Steps - Today",
-    "description": "Walk 5000 steps or more today.",
+    "title": "50000 Steps - In 7 Days",
+    "description": "Walk 50000 steps or more in the last 7 days.",
     "icon": {
       "type": "component"
     }
   },
-  "id": "daily_steps_5000",
+  "id": "levelable_10000_steps_daily",
   "level": 0,
-  "maxLevel": 1,
+  "maxLevel": 15,
   "levelable": true,
   "requirementsData": [
     {
       "type": "ObtainNumberTask",
-      "args": { "eventName": "steps_from_midnight", "numberToObtain": 5000 }
+      "args": { "eventName": "steps_7d", "numberToObtain": 50000 }
     }
   ],
   "requiredAchievements": null,

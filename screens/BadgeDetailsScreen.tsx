@@ -8,6 +8,7 @@ import { achievements } from "../util/AchievementDatas";
 import { RootStackParamList } from "./AuthenticatedTab";
 import { ProgressStackParamList } from "./ProgressStack";
 import { Dimensions } from "react-native";
+import { AchievementHelper } from "../classes/AchievementHelper";
 
 function BadgeDetailsScreen({
   navigation,
@@ -21,13 +22,13 @@ function BadgeDetailsScreen({
           {achievements[item].display.title}
         </AppText>
         <CircularBadgeDisplay
-          badgeIcon={Achievement.getIconFromData(achievements[item])}
+          badgeIcon={AchievementHelper.getIconFromData(achievements[item])}
           size={Dimensions.get("window").width * (2 / 3)}
         />
         <View style={styles.wordsContainer}>
           <AppText>{achievements[item].display.description}</AppText>
-          {achievements[item].level && (
-            <AppText>Level {achievements[item].level}</AppText>
+          {achievements[item].levelable && (
+            <AppText>Level {achievements[item].level ?? "No Level"}</AppText>
           )}
         </View>
       </View>

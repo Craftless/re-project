@@ -1,11 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { auth, projectDatabase } from "../../firebase/config";
+import { Alert } from "react-native";
+import { achievementObjects } from "../../util/AchievementObjects";
+import type { LevelableAchievement } from "../../classes/LevelableAchievement";
 
 const achievementsSlice = createSlice({
   name: "achievements",
   initialState: {
-    achievementsCompletedId: [] as string[], // Set is discouraged
-    achievementIdToLevel: {} as { id: string; level: number }[],
+    achievementsCompletedId: [] as string[],
+    achievementIdToLevel: [] as { id: string; level: number }[],
     idExtraDataMap: {} as { [id: string]: any },
   },
   reducers: {
@@ -25,11 +29,23 @@ const achievementsSlice = createSlice({
         }
       );
     },
+    setAchievements: (state, action) => {
+      state.achievementsCompletedId = action.payload.achievementsCompletedId;
+    },
     setIdExtraDataMap: (state, action) => {
-      state.idExtraDataMap[action.payload.id] = action.payload.extraData;
+      // console.log("DATA PURPLE: ", "extraData", action.payload.extraData, "id", action.payload.id, "idExtraDataMap", state.idExtraDataMap);
+      // TODO IMPORTANT PEC fix this
+      if (action.payload.extraData && action.payload.id && state.idExtraDataMap)
+        state.idExtraDataMap[action.payload.id] = action.payload.extraData;
+    },
+    replaceIdExtraDataMap: (state, action) => {
+      state.idExtraDataMap = action.payload.idExtraDataMap;
     },
     setAchievementIdLevel: (state, action) => {
       state.achievementIdToLevel[action.payload.id] = action.payload.level;
+    },
+    setIdLevelMap: (state, action) => {
+      state.achievementIdToLevel = action.payload.map;
     }
   },
 });
@@ -41,15 +57,96 @@ const achievementsSlice = createSlice({
 //   };
 // };
 
-export const saveExtraData = (payload: {id: string, extraData: any}) => {
+export const saveExtraData = (payload: { id: string; extraData: any }) => {
+  return async (dispatch: any, getState: any) => {
+    const idExtraDataMap = getState().achievements.idExtraDataMap;
+    idExtraDataMap[payload.id] = payload.extraData;
+    try {
+      await AsyncStorage.setItem(
+        "idExtraDataMap",
+        JSON.stringify(idExtraDataMap)
+      );
+      dispatch(replaceIdExtraDataMap(idExtraDataMap));
+    } catch (e) {
+      console.log(
+        "Error saving idExtraDataMap from asyncstorage",
+        (e as Error).message
+      );
+    }
+  };
+};
+
+export const loadExtraData = () => {
   return async (dispatch: any) => {
-    await AsyncStorage.setItem("idExtraDataMap", JSON.stringify(payload.extraData));
-    dispatch(setIdExtraDataMap(payload));
+    const idExtraDataMap = await AsyncStorage.getItem("idExtraDataMap");
+    dispatch(replaceIdExtraDataMap({ idExtraDataMap }));
+  };
+};
+
+export const sendAchievementsUnlocked = (achievementId: string, level?: number) => {
+  return async (dispatch: any) => {
+    if (!auth.currentUser) return;
+    try {
+      const level = (achievementObjects[achievementId] as LevelableAchievement).level ?? null;
+      await projectDatabase
+        .ref(`userData/${auth.currentUser.uid}/achievementsCompletedId/${achievementId}`)
+        .set({
+          level: level ?? -1,
+        });
+      dispatch(addAchievement({ achievementId }));
+    } catch (e) {
+      Alert.alert(
+        "Sending achievements failed! Please email us to fix.",
+        `Message: ${(e as Error).message}, Cause: ${(e as Error).cause}`
+      );
+    }
+  };
+};
+
+export const loadAchievementsUnlocked = (initialiseAchievements: any) => {
+  return async (dispatch: any, getState: any) => {
+    if (!auth.currentUser) return;
+    try {
+      console.log("FirstBLUE");
+      const snapshot = await projectDatabase
+        .ref(`userData/${auth.currentUser.uid}/achievementsCompletedId`)
+        .get();
+      const value = snapshot.val();
+      console.log("SnapshotVal:", value);
+      if (value != null) {
+        const ids: string[] = [];
+        const levels: string[] = [];
+        for (const key in value) {
+          ids.push(key);
+          levels.push(value[key]);
+        }
+        console.log("NewArr:", ids)
+        await dispatch(setAchievements({ achievementsCompletedId: ids }));
+        await dispatch(setIdLevelMap({ map: levels }))
+      }
+    } catch (e) {
+      Alert.alert(
+        "Loading achievements failed! Please email us to fix.",
+        (e as Error).message
+      );
+    }
+    console.log("Loaded");
+    initialiseAchievements(
+      getState().achievements.achievementsCompletedId,
+      getState().achievements.achievementIdToLevel,
+      getState().achievements.idExtraDataMap
+    );
   };
 };
 
 export const addAchievement = achievementsSlice.actions.addAchievement;
 export const removeAchievement = achievementsSlice.actions.removeAchievement;
+export const setAchievements = achievementsSlice.actions.setAchievements;
 export const setIdExtraDataMap = achievementsSlice.actions.setIdExtraDataMap;
-export const setAchievementIdLevel = achievementsSlice.actions.setAchievementIdLevel;
+export const replaceIdExtraDataMap =
+  achievementsSlice.actions.replaceIdExtraDataMap;
+export const setAchievementIdLevel =
+  achievementsSlice.actions.setAchievementIdLevel;
+  export const setIdLevelMap =
+  achievementsSlice.actions.setIdLevelMap;
 export default achievementsSlice.reducer;

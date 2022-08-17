@@ -2,24 +2,30 @@
 
 import {
   Achievement,
-  AchievementDataWithType,
-  AnyAchievementType,
 } from "../classes/Achievement";
+import { AnyAchievementType } from "../classes/AchievementClasses";
+import { AchievementDataWithType } from "../classes/AchievementData";
+import { AchievementHelper } from "../classes/AchievementHelper";
 import { store } from "../store/redux/store";
+import { achievementObjects } from "./AchievementObjects";
 const test = require("../constants/achievements/test.json");
 const daily_steps_5000 = require("../constants/achievements/daily_steps_5000.json");
 const use_app = require("../constants/achievements/use_app.json");
-const levelable_1000_steps_daily = require("../constants/achievements/levelable_1000_steps_daily.json");
+const levelable_5000_steps_daily = require("../constants/achievements/levelable_5000_steps_daily.json");
+const levelable_10000_steps_daily = require("../constants/achievements/levelable_10000_steps_daily.json");
+const levelable_15000_steps_daily = require("../constants/achievements/levelable_15000_steps_daily.json");
+const levelable_20000_steps_daily = require("../constants/achievements/levelable_20000_steps_daily.json");
 
 // const achievements = new Map<string, AchievementDataWithType>();
 export const achievements: { [key: string]: AchievementDataWithType } = {
-  test,
-  daily_steps_5000,
+  // test,
+  // daily_steps_5000,
   use_app,
-  levelable_1000_steps_daily,
+  levelable_5000_steps_daily,
+  levelable_10000_steps_daily,
+  levelable_15000_steps_daily,
+  levelable_20000_steps_daily
 };
-
-export const achievementObjects: { [key: string]: AnyAchievementType } = {};
 
 export function initialiseAchievements(
   ids: string[],
@@ -27,23 +33,35 @@ export function initialiseAchievements(
     id: string;
     level: number;
   }[],
+  idExtraDataMap: { [id: string]: any }
 ) {
-  for (const key in achievements) {
-    if (!ids.includes(key)) {
-      const achievement: AnyAchievementType = Achievement.fromData(
-        achievements[key]
-      );
+  console.log("Initialised");
+  for (const id in achievements) {
+    let extraData;
+    if (idExtraDataMap && idExtraDataMap[id]) extraData = idExtraDataMap[id];
+    const baseAchievementData = {
+      ...achievements[id],
+      extraData,
+    };
+    if (!ids.includes(id)) {
+      const achievement: AnyAchievementType = AchievementHelper.fromData(baseAchievementData);
+      achievement;
       achievementObjects[achievement.id] = achievement;
-    }
-    else if (achievements[key].levelable) {
-      const indexOf = levelMap.findIndex(val => val.id == achievements[key].id);
+    } else if (achievements[id].levelable) {
+      const indexOf = levelMap.findIndex(
+        (val) => val.id == achievements[id].id
+      );
       if (indexOf == -1) continue;
-      const achievement: AnyAchievementType = Achievement.fromData(
-        {...achievements[key], level: levelMap[indexOf].level}
-      );
+      const achievement: AnyAchievementType = AchievementHelper.fromData({
+        ...baseAchievementData,
+        level: levelMap[indexOf].level,
+      });
       achievementObjects[achievement.id] = achievement;
-      levelMap[indexOf].level
+      levelMap[indexOf].level;
     }
+  }
+  for (const achievement in achievementObjects) {
+    achievement;
   }
 }
 

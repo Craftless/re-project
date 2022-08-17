@@ -1,35 +1,16 @@
 import {
-  addAchievement,
-  setIdExtraDataMap,
+  saveExtraData,
+  sendAchievementsUnlocked,
 } from "../store/redux/achievements-slice";
 import { store } from "../store/redux/store";
-import EventEmitter from "../util/EventEmitter";
 import {
   achievementIcons,
-  levelableAchievementIcons,
 } from "../util/AchievementIcons";
+import { AchievementData } from "./AchievementData";
+import { AchievementHelper } from "./AchievementHelper";
+import { Task } from "./Task";
 
-export type AchievementData = {
-  display: {
-    title: string;
-    description: string;
-    icon: {
-      type: "component" | "imageUri" | "svgIcon";
-    };
-  };
-  id: string;
-  levelable?: boolean;
-  level?: number;
-  requirementsData: RequirementData[];
-  requiredAchievements: Achievement[] | null;
-  extraData?: any;
-};
-
-export type AchievementDataWithType = AchievementData & {
-  type: string;
-};
-
-type RequirementData = { type: string; args: any };
+export type RequirementData = { type: string; args: any };
 
 export class Achievement {
   title;
@@ -42,6 +23,7 @@ export class Achievement {
   constructor({
     display: { title, description, icon },
     id,
+    extraData,
     requirementsData,
     requiredAchievements,
   }: AchievementData) {
@@ -50,7 +32,7 @@ export class Achievement {
     this.iconSettings = icon;
     this.id = id;
     this.requirements = requirementsData.map((el) => {
-      return Achievement.reqsFromData(el);
+      return AchievementHelper.reqsFromData(el);
     });
     this.requiredAchievements = requiredAchievements;
     this.isComplete = false;
@@ -86,7 +68,7 @@ export class Achievement {
   checkCompletedAndUpdate() {
     const complete = this.checkIfCompleted();
     if (complete) {
-      store.dispatch(addAchievement({ achievementId: this.id }));
+      store.dispatch(sendAchievementsUnlocked(this.id));
     }
   }
 
@@ -98,7 +80,7 @@ export class Achievement {
         icon: this.iconSettings,
       },
       id: this.id,
-      requirementsData: Achievement.reqsToData(this.requirements),
+      requirementsData: AchievementHelper.reqsToData(this.requirements),
       requiredAchievements: this.requiredAchievements,
     };
     console.log("ACHIEVEMENT  DUCK");
@@ -106,236 +88,21 @@ export class Achievement {
   }
 
   setExtraData(extraData: any) {
-    store.dispatch(setIdExtraDataMap({id: this.id, extraData: extraData} as { id: string; extraData: any }));
+    store.dispatch(saveExtraData({id: this.id, extraData: extraData} as { id: string; extraData: any }));
   }
 
   getIcon() {
     switch (this.iconSettings.type) {
       case "component":
         return achievementIcons[this.id];
-        break;
       case "imageUri":
         return;
     }
   }
-
-  static AchievementData = class {
-    title;
-    constructor(title: string) {
-      this.title = title;
-    }
-  };
-
-  public static fromData(object: AchievementDataWithType) {
-    // const object: { data: AchievementData; type: string } =
-    //   JSON.parse(jsonObject);
-    const type: string = object.type;
-    console.log("LEvel", object.level);
-    return new achievementClasses[type]({ ...object });
-  }
-
-  public static toJson(achievement: Achievement, type: string) {
-    const data = achievement.getAchievementData();
-    const dataWithType: AchievementDataWithType = { ...data, type };
-    return JSON.stringify(dataWithType);
-  }
-
-  public static reqsFromData(data: { type: string; args: any }): Task {
-    return new taskClasses[data.type](data.args);
-  }
-  public static reqsToData(reqs: Task[]): RequirementData[] {
-    return reqs.map((el) => {
-      const type = el.constructor.name;
-      const args = el.args;
-      return { type, args };
-    });
-  }
-
-  public static getIconFromData(
-    data: AchievementData | AchievementDataWithType,
-    level?: number,
-    withComponent = false
-  ) {
-    if (data.level) {
-      switch (data.display.icon.type) {
-        case "component":
-          return levelableAchievementIcons[data.id][data.level - 1];
-          break;
-        default:
-          return null;
-      }
-    } else {
-      switch (data.display.icon.type) {
-        case "component":
-          return achievementIcons[data.id];
-          break;
-        default:
-          return null;
-      }
-    }
-  }
 }
 
-export class LevelableAchievement extends Achievement {
-  level; // If level == -1, there isn't any
-  canLevelUp;
-  achieved;
-  constructor(achievementData: AchievementData) {
-    // this.title = title;
-    // this.description = description;
-    // this.iconSettings = icon;
-    // this.id = id;
-    // this.requirements = requirementsData.map((el) => {
-    //   return Achievement.reqsFromData(el);
-    // });
-    // this.requiredAchievements = requiredAchievements;
-    // this.isComplete = false;
-    // this.requirements.forEach((element) => {
-    //   element.isDirty = () => {
-    //     this.taskIsDirty();
-    //   };
-    // });
-    // this.taskIsDirty();
-    super(achievementData);
-    this.level = achievementData.level ?? -1;
-    console.log(this.id, "ACL", achievementData.level, "MY OWN", this.level);
-    this.canLevelUp = true;
-    this.achieved = false;
-    this.taskIsDirty();
-  }
 
-  taskIsDirty(): void {
-    console.log(this.id, "TDMY OWN", this.level);
-    const complete = this.checkIfCompleted();
-    const canLevelUp = this.checkIfCanLevelUp();
-    console.log(this.id, "Complete: ", complete, "canLevelUp: ", canLevelUp);
-    if (this.level == -1 || 0) {
-      super.taskIsDirty(); // update completed status
-    } else {
-      if (complete && canLevelUp) {
-        if (!this.isComplete) {
-          super.checkCompletedAndUpdate();
-        }
-        super.taskIsDirty();
-        this.level++;
-        this.afterLevelUp();
-      }
-    }
-  }
 
-  afterLevelUp() {}
-
-  checkIfCanLevelUp() {
-    return false;
-  }
-
-  getAchievementData() {
-    const data = super.getAchievementData();
-    console.log("ACHIEVEMENT WARN CONSOLE RED FLAG DUCK");
-    data.level = this.level;
-    return data;
-  }
-}
-
-export class DailyLevelableAchievement extends LevelableAchievement {
-  newDate;
-  constructor(achievementData: AchievementData) {
-    super(achievementData);
-    this.newDate = new Date();
-    this.newDate.setHours(0, 0, 0, 0);
-    setTimeout(() => {
-      console.log(this.id, this.level);
-    }, 1000);
-  }
-
-  afterLevelUp() {
-    super.afterLevelUp();
-    this.canLevelUp = false;
-    const date = new Date();
-    date.setDate(date.getDate() + 1);
-    date.setHours(0, 0, 0, 0);
-    this.newDate = date;
-    this.setExtraData({ newDate: this.newDate })
-    this.taskIsDirty();
-  }
-
-  checkIfCanLevelUp(): boolean {
-    return new Date() > this.newDate;
-  }
-}
-
-class Task {
-  args: any;
-  isComplete;
-  constructor(args: { condition: boolean } = { condition: false }) {
-    this.isComplete = args.condition;
-    this.isDirty();
-  }
-  isDirty = () => {};
-  getIsComplete() {
-    return this.isComplete;
-  }
-}
-
-class TestTask extends Task {
-  eventName;
-  args;
-  constructor(args: { eventName: string }) {
-    super();
-    this.args = args;
-    this.eventName = args.eventName;
-    this.isComplete = false;
-    EventEmitter.once(args.eventName, () => {
-      this.isComplete = true;
-      this.isDirty();
-    });
-  }
-
-  getIsComplete() {
-    return this.isComplete;
-  }
-}
-
-class ObtainNumberTask extends Task {
-  eventName;
-  isComplete;
-  args;
-  constructor(args: { eventName: string; numberToObtain: number }) {
-    super();
-    this.args = args;
-    this.eventName = args.eventName;
-    this.isComplete = false;
-    const unsub = EventEmitter.addListener(args.eventName, (value: number) => {
-      console.log("VALUE: ", args.numberToObtain);
-      if (value >= args.numberToObtain) {
-        this.isComplete = true;
-        this.isDirty();
-        unsub.remove();
-      }
-    });
-  }
-
-  getIsComplete() {
-    return this.isComplete;
-  }
-}
-
-const achievementClasses: any = {
-  Achievement,
-  LevelableAchievement,
-  DailyLevelableAchievement,
-};
-
-export type AnyAchievementType =
-  | Achievement
-  | LevelableAchievement
-  | DailyLevelableAchievement;
-
-const taskClasses: any = {
-  Task,
-  TestTask,
-  ObtainNumberTask,
-};
 
 // const testAchievemen: Achievement = new achievementClasses["Achievement"]({
 //   display: {

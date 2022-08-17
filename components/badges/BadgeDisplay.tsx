@@ -4,19 +4,26 @@ import AppText from "../ui/AppText";
 import Card from "../ui/Card";
 import CircularBadgeDisplay from "../ui/CircularBadgeDisplay";
 import { StyleSheet, View } from "react-native";
+import { achievementObjects } from "../../util/AchievementObjects";
+import { LevelableAchievement } from "../../classes/LevelableAchievement";
+import { AchievementHelper } from "../../classes/AchievementHelper";
 
 function BadgeDisplay({ item }: { item: string }) {
   return (
     <Card>
       <View style={styles.outerContainer}>
         <CircularBadgeDisplay
-          badgeIcon={Achievement.getIconFromData(achievements[item])}
+          badgeIcon={AchievementHelper.getIconFromData(achievements[item])}
           size={60}
         />
         <View style={styles.detailsContainer}>
-          <AppText style={styles.titleText}>{achievements[item].display.title}</AppText>
+          <AppText style={styles.titleText}>
+            {achievements[item].display.title}
+          </AppText>
           <AppText>{achievements[item].display.description}</AppText>
-          {achievements[item].level && <AppText>Level {achievements[item].level}</AppText>}
+          {achievements[item].levelable && (
+            <AppText>Level {achievements[item].levelable ? (achievementObjects[item] as LevelableAchievement)?.level || "Error" : "None"}</AppText>
+          )}
         </View>
       </View>
     </Card>

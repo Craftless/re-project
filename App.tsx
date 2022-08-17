@@ -27,7 +27,6 @@ import {
   ColorSchemeName,
   useColorScheme,
 } from "react-native";
-import { initialiseAchievements } from "./util/AchievementDatas";
 import * as TaskManager from "expo-task-manager";
 import { LocationObject } from "expo-location";
 import {
@@ -38,7 +37,7 @@ import {
 } from "./util/location";
 import { useAppDispatch, useAppSelector } from "./hooks/redux-hooks";
 
-function getTheme(colorScheme: ColorSchemeName) {
+export function getTheme(colorScheme: ColorSchemeName) {
   const CombinedDefaultTheme = merge(NavigationDefaultTheme, PaperDefaultTheme);
   const CombinedDarkTheme = merge(NavigationDarkTheme, PaperDarkTheme);
   let theme = CombinedDefaultTheme;
@@ -87,32 +86,45 @@ function Root() {
   const [waitingForEvent, setWaitingForEvent] = useState(true);
   const foregroundSub = useAppSelector((state) => state.location.foregroundSub);
   const dispatch = useAppDispatch();
-  const achievementIds = useAppSelector(state => state.achievements.achievementsCompletedId);
-  const levelMaps = useAppSelector(state => state.achievements.achievementIdToLevel);
+  const achievementIds = useAppSelector(
+    (state) => state.achievements.achievementsCompletedId
+  );
+  const levelMaps = useAppSelector(
+    (state) => state.achievements.achievementIdToLevel
+  );
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
-        authCtx.authenticate(user).then((token) => {
-          setWaitingForEvent(false);
-        }).catch(error => Alert.alert(error));
+        authCtx
+          .authenticate(user)
+          .then((token) => {
+            setWaitingForEvent(false);
+          })
+          .catch((error) => Alert.alert(error));
       } else {
         authCtx.logout();
         setWaitingForEvent(false);
       }
     });
-    initialiseAchievements(achievementIds, levelMaps);
     AppState.addEventListener("change", onAppStateChanged);
-    return () => unsubscribe();
+    return () => {
+      unsubscribe();
+      AppState.removeEventListener("change", onAppStateChanged);
+    };
   }, []);
 
   function onAppStateChanged(newState: AppStateStatus) {
-    if (newState.match(/inactive|background/)) {
-      stopForegroundTracking(foregroundSub);
-      startBackgroundTracking(LOCATION_TASK_NAME);
-    } else {
-      stopBackgroundUpdate(LOCATION_TASK_NAME);
-      startForegroundTracking(dispatch, foregroundSub);
+    try {
+      if (newState.match(/inactive|background/)) {
+        stopForegroundTracking(foregroundSub);
+        startBackgroundTracking(LOCATION_TASK_NAME);
+      } else {
+        stopBackgroundUpdate(LOCATION_TASK_NAME);
+        startForegroundTracking(dispatch, foregroundSub);
+      }
+    } catch (e) {
+      console.log("Location Error", (e as Error).message);
     }
   }
 

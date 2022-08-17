@@ -13,6 +13,7 @@ const stepsSlice = createSlice({
       date: string;
       steps: number;
     }[],
+    totalNumSteps: 0,
   },
   reducers: {
     addStepsFromMidnight: (state, action) => {
@@ -26,6 +27,9 @@ const stepsSlice = createSlice({
     },
     setStepsToday: (state, action) => {
       state.stepsToday = action.payload.steps;
+    },
+    setTotalNumSteps: (state, action) => {
+      state.totalNumSteps = action.payload.totalNumSteps;
     },
     addToTotalSteps: (
       state,
@@ -41,7 +45,8 @@ const stepsSlice = createSlice({
           (val) => val.date == result[i].date
         );
         if (index != -1) {
-          if (result[i] > state.totalSteps[index]) state.totalSteps[index] = result[i];
+          if (result[i] > state.totalSteps[index])
+            state.totalSteps[index] = result[i];
         } else {
           state.totalSteps.push(result[i]);
         }
@@ -52,35 +57,71 @@ const stepsSlice = createSlice({
 
 export const sendStepsData = (steps: number, fromMidnight: boolean = false) => {
   return async (dispatch: any) => {
-    if (fromMidnight) {
-      dispatch(setStepsFM({ steps }));
-      EventEmitter.emit("steps_from_midnight", steps);
-      await writeStepsData(steps, true);
-    } else {
-      dispatch(setStepsToday({ steps }));
-      EventEmitter.emit("steps_7d", steps);
-      await writeStepsData(steps, false);
+    try {
+      if (fromMidnight) {
+        await writeStepsData(steps, true);
+        dispatch(setStepsFM({ steps }));
+        EventEmitter.emit("steps_from_midnight", steps);
+      } else {
+        await writeStepsData(steps, false);
+        dispatch(setStepsToday({ steps }));
+        EventEmitter.emit("steps_7d", steps);
+      }
+    } catch (e) {
+      Alert.alert("Unable to send steps data.", (e as Error).message);
     }
   };
 };
 
-export const sendTotalSteps = (totalSteps: {date: string, steps: number}[]) => {
+export const sendTotalSteps = (
+  totalSteps: { date: string; steps: number }[]
+) => {
   return async (dispatch: any) => {
     try {
       await writeTotalSteps(totalSteps);
       dispatch(addToTotalSteps({ result: totalSteps }));
-    }
-    catch (e) {
+      const totalNum = getTotalStepsFromArr(totalSteps);
+
+      EventEmitter.emit("total_steps", totalNum);
+      dispatch(setTotalNumSteps({ totalNumSteps: totalNum }));
+    } catch (e) {
       console.log(e);
-      Alert.alert("Error", (e as Error).message);
+      Alert.alert("Could not send total steps", (e as Error).message);
     }
   };
 };
 
+export const loadTotalSteps = (
+  totalSteps: { date: string; steps: number }[]
+) => {
+  return async (dispatch: any) => {
+    try {
+      await writeTotalSteps(totalSteps);
+      dispatch(addToTotalSteps({ result: totalSteps }));
+      const totalNum = getTotalStepsFromArr(totalSteps);
+
+      EventEmitter.emit("total_steps", totalNum);
+      dispatch(setTotalNumSteps({ totalNumSteps: totalNum }));
+    } catch (e) {
+      console.log(e);
+      Alert.alert("Could not send total steps", (e as Error).message);
+    }
+  };
+};
+
+export function getTotalStepsFromArr(
+  totalSteps: {
+    date: string;
+    steps: number;
+  }[]
+) {
+  return totalSteps.reduce((prev, cur) => prev + cur.steps, 0);
+}
 
 export const addStepsFM = stepsSlice.actions.addStepsFromMidnight;
 export const setStepsFM = stepsSlice.actions.setStepsFromMidnight;
 export const addStepsToday = stepsSlice.actions.addStepsToday;
 export const setStepsToday = stepsSlice.actions.setStepsToday;
 export const addToTotalSteps = stepsSlice.actions.addToTotalSteps;
+export const setTotalNumSteps = stepsSlice.actions.setTotalNumSteps;
 export default stepsSlice.reducer;

@@ -11,6 +11,10 @@ import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "./AuthenticatedTab";
 import { Achievement } from "../classes/Achievement";
+import { useTheme } from "react-native-paper";
+import { achievementObjects } from "../util/AchievementObjects";
+import { LevelableAchievement } from "../classes/LevelableAchievement";
+import { AchievementHelper } from "../classes/AchievementHelper";
 
 function DefaultHomeScreen() {
   const stepCount = useAppSelector((state) => state.stepCount.stepsToday);
@@ -21,6 +25,9 @@ function DefaultHomeScreen() {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList, "Tabs">>();
 
+  const theme = useTheme();
+
+
   return (
     <ScrollView>
       <CardWithTitleAndContent title="My progress today">
@@ -29,6 +36,7 @@ function DefaultHomeScreen() {
           width={null}
           height={20}
           style={styles.progressBar}
+          color={theme.colors.primary}
         />
         <View style={styles.progressDataContainer}>
           <AppText style={styles.progressDataText}>{stepCount} steps</AppText>
@@ -46,7 +54,7 @@ function DefaultHomeScreen() {
             return (
               <React.Fragment key={item + Math.random().toFixed(4).toString()}>
                 <CircularBadgeDisplay
-                  badgeIcon={Achievement.getIconFromData(achievements[item])}
+                  badgeIcon={AchievementHelper.getIconFromData(achievements[item])}
                   size={60}
                 />
               </React.Fragment>
@@ -72,7 +80,7 @@ function DefaultHomeScreen() {
             return (
               <React.Fragment key={val}>
                 <AppText>Id: {val}</AppText>
-                <AppText>Level: {achievements[val].level ?? "None"}</AppText>
+                <AppText>Level: {(achievementObjects[val] as LevelableAchievement)?.level ?? "None"}</AppText>
               </React.Fragment>
             );
           })}

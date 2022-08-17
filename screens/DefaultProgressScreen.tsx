@@ -20,6 +20,7 @@ import { RootStackParamList } from "./AuthenticatedTab";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { BarChart } from "react-native-chart-kit";
 import { hexToRGB, yyyymmddToString } from "../util/math";
+import { AchievementHelper } from "../classes/AchievementHelper";
 
 function DefaultProgressScreen() {
   const dispatch = useAppDispatch();
@@ -214,7 +215,7 @@ function DefaultProgressScreen() {
             return (
               <React.Fragment key={item + Math.random().toFixed(4).toString()}>
                 <CircularBadgeDisplay
-                  badgeIcon={Achievement.getIconFromData(achievements[item])}
+                  badgeIcon={AchievementHelper.getIconFromData(achievements[item])}
                   size={60}
                 />
               </React.Fragment>
