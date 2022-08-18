@@ -21,15 +21,17 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { BarChart } from "react-native-chart-kit";
 import { hexToRGB, yyyymmddToString } from "../util/math";
 import { AchievementHelper } from "../classes/AchievementHelper";
+import BadgesPreview from "../components/badges/BadgesPreview";
 
 function DefaultProgressScreen() {
   const dispatch = useAppDispatch();
-  // requestStepsToday(dispatch);
+  requestStepsToday(dispatch);
   const steps24h = useAppSelector((state) => state.stepCount.stepsToday);
   const stepsFM = useAppSelector((state) => state.stepCount.stepsFromMidnight);
-  const totalSteps = [...useAppSelector((state) => state.stepCount.totalSteps)]
+  const totalStepsSel = useAppSelector((state) => state.stepCount.totalSteps);
+  const totalSteps = totalStepsSel ? [...totalStepsSel]
     .sort((a, b) => Number(a.date) - Number(b.date))
-    .slice(0, 7);
+    .slice(0, 5) : undefined;
   const [refreshing, setRefreshing] = useState(false);
   const achievementIds = useAppSelector(
     (state) => state.achievements.achievementsCompletedId
@@ -140,29 +142,31 @@ function DefaultProgressScreen() {
           Click
         </RegularButton>
       </Card> */}
-      <BarChart
-        data={{
-          labels: totalSteps.map((val) => yyyymmddToString(val.date)),
-          // labels: [1, 2, 3, 4],
-          datasets: [
-            {
-              data: totalSteps.map((val) => val.steps),
-              // data: [5, 3, 7, 9]
-            },
-          ],
-        }}
-        width={Dimensions.get("window").width}
-        // width={400}
-        yAxisLabel=""
-        yAxisSuffix=""
-        height={220}
-        chartConfig={chartConfig}
-        fromZero
-        style={{
-          marginVertical: 8,
-          borderRadius: 16,
-        }}
-      />
+      {!!totalSteps && (
+        <BarChart
+          data={{
+            labels: totalSteps.map((val) => yyyymmddToString(val.date)),
+            // labels: [1, 2, 3, 4],
+            datasets: [
+              {
+                data: totalSteps.map((val) => val.steps),
+                // data: [5, 3, 7, 9]
+              },
+            ],
+          }}
+          width={Dimensions.get("window").width}
+          // width={400}
+          yAxisLabel=""
+          yAxisSuffix=""
+          height={220}
+          chartConfig={chartConfig}
+          fromZero
+          style={{
+            marginVertical: 8,
+            borderRadius: 16,
+          }}
+        />
+      )}
       {/* <BarChart
         style={graphStyle}
         data={data}
@@ -204,25 +208,9 @@ function DefaultProgressScreen() {
           </Button>
         </View>
       </CardWithTitleAndContent>
-      <CardWithTitleAndContent
-        title="My Badges"
-        onPress={() => {
-          navigation.navigate("Badges");
-        }}
-      >
-        <View style={styles.badgeDataContainer}>
-          {achievementIds.map((item) => {
-            return (
-              <React.Fragment key={item + Math.random().toFixed(4).toString()}>
-                <CircularBadgeDisplay
-                  badgeIcon={AchievementHelper.getIconFromData(achievements[item])}
-                  size={60}
-                />
-              </React.Fragment>
-            );
-          })}
-        </View>
-      </CardWithTitleAndContent>
+      <BadgesPreview onPress={() => {
+        navigation.navigate("Badges");
+      }} achievementIds={achievementIds} />
       <CardWithTitleAndContent title="Distance Walked">
         <AppText>{distWalked}</AppText>
       </CardWithTitleAndContent>

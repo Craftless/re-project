@@ -4,6 +4,7 @@ import { auth, projectDatabase } from "../../firebase/config";
 import { Alert } from "react-native";
 import { achievementObjects } from "../../util/AchievementObjects";
 import type { LevelableAchievement } from "../../classes/LevelableAchievement";
+import EventEmitter from "../../util/EventEmitter";
 
 const achievementsSlice = createSlice({
   name: "achievements",
@@ -87,13 +88,15 @@ export const sendAchievementsUnlocked = (achievementId: string, level?: number) 
   return async (dispatch: any) => {
     if (!auth.currentUser) return;
     try {
-      const level = (achievementObjects[achievementId] as LevelableAchievement).level ?? null;
+      const obj = (achievementObjects[achievementId] as LevelableAchievement);
+      const level = obj?.level ?? null;
       await projectDatabase
         .ref(`userData/${auth.currentUser.uid}/achievementsCompletedId/${achievementId}`)
         .set({
           level: level ?? -1,
         });
       dispatch(addAchievement({ achievementId }));
+      
     } catch (e) {
       Alert.alert(
         "Sending achievements failed! Please email us to fix.",
@@ -123,6 +126,7 @@ export const loadAchievementsUnlocked = (initialiseAchievements: any) => {
         console.log("NewArr:", ids)
         await dispatch(setAchievements({ achievementsCompletedId: ids }));
         await dispatch(setIdLevelMap({ map: levels }))
+        EventEmitter.emit("number_of_achievements", getState().achievements.achievementsCompletedId.length);
       }
     } catch (e) {
       Alert.alert(

@@ -1,0 +1,22 @@
+{
+  "display": {
+    "title": "50000 Steps - Weekly",
+    "description": "Walk 50000 steps or more in the last 7 days.",
+    "icon": {
+      "type": "component"
+    }
+  },
+  "id": "levelable_50000_steps_weekly",
+  "level": 0,
+  "maxLevel": 15,
+  "levelable": true,
+  "days": 7,
+  "requirementsData": [
+    {
+      "type": "ObtainNumberTask",
+      "args": { "eventName": "steps_7d", "numberToObtain": 50000 }
+    }
+  ],
+  "requiredAchievements": null,
+  "type": "DailyLevelableAchievement"
+}

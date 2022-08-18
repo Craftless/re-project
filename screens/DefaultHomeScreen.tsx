@@ -1,24 +1,30 @@
-import { FlatList, ScrollView, StyleSheet, View } from "react-native";
+import {
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  View,
+} from "react-native";
 import * as Progress from "react-native-progress";
-import CircularBadgeDisplay from "../components/ui/CircularBadgeDisplay";
-import Ionicons from "@expo/vector-icons/Ionicons";
 import CardWithTitleAndContent from "../components/ui/CardWithTitleAndContent";
 import AppText from "../components/ui/AppText";
 import { useAppSelector } from "../hooks/redux-hooks";
-import React from "react";
-import { achievements } from "../util/AchievementDatas";
+import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "./AuthenticatedTab";
-import { Achievement } from "../classes/Achievement";
 import { useTheme } from "react-native-paper";
 import { achievementObjects } from "../util/AchievementObjects";
 import { LevelableAchievement } from "../classes/LevelableAchievement";
-import { AchievementHelper } from "../classes/AchievementHelper";
+import BadgesPreview from "../components/badges/BadgesPreview";
 
 function DefaultHomeScreen() {
   const stepCount = useAppSelector((state) => state.stepCount.stepsToday);
   const totalSteps = useAppSelector((state) => state.stepCount.totalSteps);
+  const [refreshing, setRefreshing] = useState(false);
+  console.log("TOTALSTEPS GOOSE", totalSteps);
+  const totalNumSteps = useAppSelector(
+    (state) => state.stepCount.totalNumSteps
+  );
   const achievementIds = useAppSelector(
     (state) => state.achievements.achievementsCompletedId
   );
@@ -27,9 +33,18 @@ function DefaultHomeScreen() {
 
   const theme = useTheme();
 
-
   return (
-    <ScrollView>
+    <ScrollView
+      refreshControl={
+        <RefreshControl
+          onRefresh={() => {
+            setRefreshing(true);
+            setRefreshing(false);
+          }}
+          refreshing={refreshing}
+        />
+      }
+    >
       <CardWithTitleAndContent title="My progress today">
         <Progress.Bar
           progress={stepCount / 75000}
@@ -42,36 +57,27 @@ function DefaultHomeScreen() {
           <AppText style={styles.progressDataText}>{stepCount} steps</AppText>
           <AppText style={styles.progressDataBadgeText}>Goal: 75000 </AppText>
         </View>
+        <View>
+          <AppText>Total steps: {totalNumSteps}</AppText>
+        </View>
       </CardWithTitleAndContent>
-      <CardWithTitleAndContent
-        title="My Badges"
+      <BadgesPreview
         onPress={() => {
           navigation.navigate("Badges");
         }}
-      >
-        <View style={{ flexDirection: "row" }}>
-          {achievementIds.map((item) => {
-            return (
-              <React.Fragment key={item + Math.random().toFixed(4).toString()}>
-                <CircularBadgeDisplay
-                  badgeIcon={AchievementHelper.getIconFromData(achievements[item])}
-                  size={60}
-                />
-              </React.Fragment>
-            );
-          })}
-        </View>
-      </CardWithTitleAndContent>
+        achievementIds={achievementIds}
+      />
       <CardWithTitleAndContent title="TEST">
         <>
-          {totalSteps.map((val) => {
-            return (
-              <React.Fragment key={val.date}>
-                <AppText>Date: {val.date}</AppText>
-                <AppText>Steps: {val.steps}</AppText>
-              </React.Fragment>
-            );
-          })}
+          {!!totalSteps &&
+            totalSteps.map((val) => {
+              return (
+                <React.Fragment key={val.date}>
+                  <AppText>Date: {val.date}</AppText>
+                  <AppText>Steps: {val.steps}</AppText>
+                </React.Fragment>
+              );
+            })}
         </>
       </CardWithTitleAndContent>
       <CardWithTitleAndContent title="Achievements">
@@ -80,7 +86,11 @@ function DefaultHomeScreen() {
             return (
               <React.Fragment key={val}>
                 <AppText>Id: {val}</AppText>
-                <AppText>Level: {(achievementObjects[val] as LevelableAchievement)?.level ?? "None"}</AppText>
+                <AppText>
+                  Level:{" "}
+                  {(achievementObjects[val] as LevelableAchievement)?.level ??
+                    "None"}
+                </AppText>
               </React.Fragment>
             );
           })}

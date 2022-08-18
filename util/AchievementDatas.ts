@@ -11,6 +11,12 @@ import { achievementObjects } from "./AchievementObjects";
 const test = require("../constants/achievements/test.json");
 const daily_steps_5000 = require("../constants/achievements/daily_steps_5000.json");
 const use_app = require("../constants/achievements/use_app.json");
+const lifetime_10000_steps = require("../constants/achievements/lifetime_10000_steps.json");
+const lifetime_15000_steps = require("../constants/achievements/lifetime_15000_steps.json");
+const lifetime_20000_steps = require("../constants/achievements/lifetime_20000_steps.json");
+const lifetime_30000_steps = require("../constants/achievements/lifetime_30000_steps.json");
+const lifetime_40000_steps = require("../constants/achievements/lifetime_40000_steps.json");
+const lifetime_50000_steps = require("../constants/achievements/lifetime_50000_steps.json");
 const levelable_5000_steps_daily = require("../constants/achievements/levelable_5000_steps_daily.json");
 const levelable_10000_steps_daily = require("../constants/achievements/levelable_10000_steps_daily.json");
 const levelable_15000_steps_daily = require("../constants/achievements/levelable_15000_steps_daily.json");
@@ -21,6 +27,12 @@ export const achievements: { [key: string]: AchievementDataWithType } = {
   // test,
   // daily_steps_5000,
   use_app,
+  lifetime_10000_steps,
+  lifetime_15000_steps,
+  lifetime_20000_steps,
+  lifetime_30000_steps,
+  lifetime_40000_steps,
+  lifetime_50000_steps,
   levelable_5000_steps_daily,
   levelable_10000_steps_daily,
   levelable_15000_steps_daily,

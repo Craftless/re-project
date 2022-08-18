@@ -15,6 +15,7 @@ export type AchievementData = {
   requirementsData: RequirementData[];
   requiredAchievements: Achievement[] | null;
   extraData?: any;
+  days?: number
 };
 
 export type AchievementDataWithType = AchievementData & {

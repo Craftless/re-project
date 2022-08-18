@@ -5,6 +5,8 @@ import {
   getCurrentUserProfilePictureNonNullFromUser,
   updateUserProfile,
 } from "./auth";
+import { getTotalStepsFromArr, setTotalNumSteps, setTotalSteps } from "../store/redux/steps-slice";
+import EventEmitter from "./EventEmitter";
 
 export async function writeStepsData(
   steps: number,
@@ -26,6 +28,7 @@ export async function writeStepsData(
 export async function writeTotalSteps(
   totalSteps: { date: string; steps: number }[]
 ) {
+  Alert.alert("WRIJE");
   if (!auth.currentUser) return;
   else {
     for (const totalStep of totalSteps) {
@@ -38,21 +41,36 @@ export async function writeTotalSteps(
   }
 }
 
-export async function loadTotalSteps(
-  totalSteps: { date: string; steps: number }[]
-) {
-  if (!auth.currentUser) return;
+export async function loadTotalSteps(dispatch: any) {
+  if (!auth.currentUser) {
+    Alert.alert("No cur user");
+    return;
+  }
   else {
-    const snapshot = await projectDatabase.ref(`userData/${auth.currentUser.uid}/totalSteps`).get();
+    // Alert.alert("Hello");
+    Alert.alert("Bye");
+
+    const snapshot = await projectDatabase
+      .ref(`userData/${auth.currentUser.uid}/totalSteps`)
+      .get();
     const val = snapshot.val();
     console.log("snapshot", snapshot, "val", val);
-    for (const totalStep of totalSteps) {
-      await projectDatabase
-        .ref(`userData/${auth.currentUser.uid}/totalSteps/${totalStep.date}`)
-        .update({
-          steps: totalStep.steps,
-        });
+    const arr = [] as { date: string; steps: number }[];
+    for (const key in val) {
+      arr.push({ date: key, steps: val[key].steps });
     }
+    dispatch(setTotalSteps({ totalSteps: arr }));
+    const totalNum = getTotalStepsFromArr(arr);
+    EventEmitter.emit("total_steps", totalNum);
+    dispatch(setTotalNumSteps({ totalNumSteps: totalNum }));
+    Alert.alert(`Total num is ${totalNum}`);
+    // for (const totalStep of totalSteps) {
+    //   await projectDatabase
+    //     .ref(`userData/${auth.currentUser.uid}/totalSteps/${totalStep.date}`)
+    //     .update({
+    //       steps: totalStep.steps,
+    //     });
+    // }
   }
 }
 
@@ -65,6 +83,7 @@ export async function getCurrentLeaderboardData() {
   console.log(`.get() of reordered ref: ${gotten}`);
   return gotten;
 }
+
 
 export async function fetchDisplayNameAndPhotoURLFromUid(uid: string) {
   const userRef = projectDatabase.ref("userInfo").orderByKey().equalTo(uid);

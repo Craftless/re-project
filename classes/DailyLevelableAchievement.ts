@@ -5,10 +5,13 @@ import { LevelableAchievement } from "./LevelableAchievement";
 type DailyLevelableExtraData = {
   newDate: string;
 }
+
 export class DailyLevelableAchievement extends LevelableAchievement {
   newDate;
+  days;
   constructor(achievementData: AchievementData) {
     super(achievementData);
+    this.days = achievementData.days ?? 1;
     if ((achievementData?.extraData as DailyLevelableExtraData)?.newDate) {
       this.newDate = new Date(achievementData.extraData.newDate);
       console.log("BLue blue blue new Date", this.newDate)
@@ -24,7 +27,7 @@ export class DailyLevelableAchievement extends LevelableAchievement {
     super.afterLevelUp();
     this.canLevelUp = false;
     const date = new Date();
-    date.setDate(date.getDate() + 1);
+    date.setDate(date.getDate() + this.days);
     date.setHours(0, 0, 0, 0);
     this.newDate = date;
     if (this.newDate) {

@@ -41,6 +41,9 @@ const stepsSlice = createSlice({
     ) => {
       const result = action.payload.result;
       for (let i = 0; i < result.length; i++) {
+        // const steps = state.totalSteps[result[i].date];
+        // if (!steps) {
+        //   state.totalSteps[result[i].date] = result[i].steps;
         const index = state.totalSteps.findIndex(
           (val) => val.date == result[i].date
         );
@@ -50,7 +53,15 @@ const stepsSlice = createSlice({
         } else {
           state.totalSteps.push(result[i]);
         }
+
+        // else if (result[i].steps > state.totalSteps[result[i].date]) {
+        //   state.totalSteps[result[i].date] = result[i].steps;
+        // }
       }
+    },
+    setTotalSteps: (state, action) => {
+      // only for loading
+      state.totalSteps = action.payload.totalSteps;
     },
   },
 });
@@ -91,23 +102,24 @@ export const sendTotalSteps = (
   };
 };
 
-export const loadTotalSteps = (
-  totalSteps: { date: string; steps: number }[]
-) => {
-  return async (dispatch: any) => {
-    try {
-      await writeTotalSteps(totalSteps);
-      dispatch(addToTotalSteps({ result: totalSteps }));
-      const totalNum = getTotalStepsFromArr(totalSteps);
-
-      EventEmitter.emit("total_steps", totalNum);
-      dispatch(setTotalNumSteps({ totalNumSteps: totalNum }));
-    } catch (e) {
-      console.log(e);
-      Alert.alert("Could not send total steps", (e as Error).message);
-    }
-  };
-};
+// export const loadTotalSteps = (
+//   totalSteps: { date: string; steps: number }[]
+// ) => {
+//   return async (dispatch: any) => {
+//     try {
+//       await writeTotalSteps(totalSteps);
+//       dispatch(addToTotalSteps({ result: totalSteps }));
+//       const totalNum = getTotalStepsFromArr(totalSteps);
+//       console.log("Totalnum", totalNum);
+//       Alert.alert(`Totalnum, ${totalNum}`);
+//       EventEmitter.emit("total_steps", totalNum);
+//       // dispatch(setTotalNumSteps({ totalNumSteps: totalNum }));
+//     } catch (e) {
+//       console.log(e);
+//       Alert.alert("Could not send total steps", (e as Error).message);
+//     }
+//   };
+// };
 
 export function getTotalStepsFromArr(
   totalSteps: {
@@ -123,5 +135,6 @@ export const setStepsFM = stepsSlice.actions.setStepsFromMidnight;
 export const addStepsToday = stepsSlice.actions.addStepsToday;
 export const setStepsToday = stepsSlice.actions.setStepsToday;
 export const addToTotalSteps = stepsSlice.actions.addToTotalSteps;
+export const setTotalSteps = stepsSlice.actions.setTotalSteps;
 export const setTotalNumSteps = stepsSlice.actions.setTotalNumSteps;
 export default stepsSlice.reducer;

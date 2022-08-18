@@ -7,7 +7,7 @@ import HomeScreen from "./DefaultHomeScreen";
 import ProgressScreen from "./DefaultProgressScreen";
 import { Ionicons, MaterialIcons, Feather } from "@expo/vector-icons";
 import SettingsScreen from "./SettingsStack";
-import LeaderboardScreen from "./LeaderboardScreen";
+import { LeaderboardTab } from "./LeaderboardScreen";
 import { requestStepsToday } from "../util/steps";
 import {
   getBackgroundPermissionsAsync,
@@ -30,6 +30,8 @@ import {
   loadExtraData,
 } from "../store/redux/achievements-slice";
 import { initialiseAchievements } from "../util/AchievementDatas";
+import { loadTotalSteps } from "../util/leaderboard";
+import { Alert } from "react-native";
 
 export type RootTabParamList = {
   Home: undefined;
@@ -81,12 +83,14 @@ function AuthenticatedTab() {
     //     pfpUrl: item.pfpUrl || "None",
     //   });
     // }, 6000);
+    loadTotalSteps(dispatch);
+
     const initAchievements = async () => {
       await dispatch(loadExtraData());
       console.log("MAP IS", extraDataMap);
       await dispatch(loadAchievementsUnlocked(initialiseAchievements));
     };
-    
+
     initAchievements();
     const locationStuff = async () => {
       const permissionInfo = await getForegroundPermissionsAsync();
@@ -155,7 +159,7 @@ function Tabs() {
       />
       <Tab.Screen
         name="Leaderboard"
-        component={LeaderboardScreen}
+        component={LeaderboardTab}
         options={{
           tabBarIcon: ({ color, size }: { color: string; size: number }) => {
             return (

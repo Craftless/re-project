@@ -42,7 +42,7 @@ export class AchievementHelper {
         case "component":
           console.log("achievementObjects", achievementObjects);
           console.log("levelableAchievementIcons", levelableAchievementIcons);
-          return levelableAchievementIcons[data.id][(achievementObjects[data.id] as LevelableAchievement)?.level - 1 || 0];
+          return levelableAchievementIcons[data.id]((achievementObjects[data.id] as LevelableAchievement)?.level - 1 || 0);
         default:
           return null;
       }
