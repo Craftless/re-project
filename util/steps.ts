@@ -1,6 +1,8 @@
 import { AnyAction, ThunkDispatch } from "@reduxjs/toolkit";
 import { Pedometer } from "expo-sensors";
 import { Dispatch } from "react";
+import { Platform } from "react-native";
+import googleFit from "react-native-google-fit";
 import { useAppDispatch } from "../hooks/redux-hooks";
 import {
   addToTotalSteps,
@@ -33,15 +35,30 @@ export async function requestStepsToday(
     const endDateFM = new Date();
     startDateFM.setHours(0, 0, 0, 0);
 
+
     // const result24h = await Pedometer.getStepCountAsync(
     //   startDate24h,
     //   endDate24h
     // );
 
     // await dispatch(sendStepsData(result24h.steps, false));
-
-    const resultFM = await Pedometer.getStepCountAsync(startDateFM, endDateFM);
-    await dispatch(sendStepsData(resultFM.steps, true));
+    if (Platform.OS == "ios") {
+      const resultFM = await Pedometer.getStepCountAsync(startDateFM, endDateFM);
+      await dispatch(sendStepsData(resultFM.steps, true));
+    }
+    else if (Platform.OS == "android") {
+      const res = await googleFit.getDailySteps();
+      if (res.length !== 0) {
+        for (var i = 0; i < res.length; i++) {
+          if (res[i].source === 'com.google.android.gms:estimated_steps') {
+            const today = res[i].steps;
+            await dispatch(sendStepsData(today[0].value, true));
+          }
+        }
+      } else {
+        console.log('Not Found');
+      }
+    }
 
     const startDate7d = new Date();
     const endDate7d = new Date();

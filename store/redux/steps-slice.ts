@@ -1,14 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { Alert } from "react-native";
+import { State } from "react-native-gesture-handler";
 import { projectDatabase } from "../../firebase/config";
 import EventEmitter from "../../util/EventEmitter";
 import { writeStepsData, writeTotalSteps } from "../../util/leaderboard";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const stepsSlice = createSlice({
   name: "steps",
   initialState: {
     stepsFromMidnight: 0,
     stepsToday: 0,
+    stepsFromWatch: 0,
+    baseStepsFromWatch: 0,
     totalSteps: [] as {
       date: string;
       steps: number;
@@ -63,6 +67,12 @@ const stepsSlice = createSlice({
       // only for loading
       state.totalSteps = action.payload.totalSteps;
     },
+    setStepsFromWatch: (state, action) => {
+      state.stepsFromWatch = action.payload.stepsFromWatch;
+    },
+    setBaseStepsFromWatch: (state, action) => {
+      state.baseStepsFromWatch = action.payload.baseStepsFromWatch;
+    },
   },
 });
 
@@ -80,6 +90,29 @@ export const sendStepsData = (steps: number, fromMidnight: boolean = false) => {
       }
     } catch (e) {
       Alert.alert("Unable to send steps data.", (e as Error).message);
+    }
+  };
+};
+
+export const sendStepsFromWatch = (steps: number) => {
+  return async (dispatch: any, getState: any) => {
+    try {
+      await AsyncStorage.setItem("steps_from_watch", (steps + getState().stepCount.baseStepsFromWatch).toString());
+      dispatch(setStepsFromWatch({ stepsFromWatch: steps }));
+    } catch (e) {
+      console.log((e as Error).message);
+    }
+  };
+};
+
+export const loadStepsFromWatch = () => {
+  return async (dispatch: any) => {
+    try {
+      const item = await AsyncStorage.getItem("steps_from_watch");
+      dispatch(setBaseStepsFromWatch({ baseStepsFromWatch: Number(item) }));
+      // dispatch(setStepsFromWatch({ stepsFromWatch: Number(item) }));
+    } catch (e) {
+      console.log((e as Error).message);
     }
   };
 };
@@ -137,4 +170,6 @@ export const setStepsToday = stepsSlice.actions.setStepsToday;
 export const addToTotalSteps = stepsSlice.actions.addToTotalSteps;
 export const setTotalSteps = stepsSlice.actions.setTotalSteps;
 export const setTotalNumSteps = stepsSlice.actions.setTotalNumSteps;
+export const setStepsFromWatch = stepsSlice.actions.setStepsFromWatch;
+export const setBaseStepsFromWatch = stepsSlice.actions.setBaseStepsFromWatch;
 export default stepsSlice.reducer;

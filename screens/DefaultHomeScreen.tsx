@@ -25,6 +25,12 @@ function DefaultHomeScreen() {
   const totalNumSteps = useAppSelector(
     (state) => state.stepCount.totalNumSteps
   );
+  const watchedSteps = useAppSelector(
+    (state) => state.stepCount.stepsFromWatch
+  );
+  const baseWatchedSteps = useAppSelector(
+    (state) => state.stepCount.baseStepsFromWatch
+  );
   const achievementIds = useAppSelector(
     (state) => state.achievements.achievementsCompletedId
   );
@@ -59,6 +65,7 @@ function DefaultHomeScreen() {
         </View>
         <View>
           <AppText>Total steps: {totalNumSteps}</AppText>
+          <AppText>Watched: {watchedSteps + baseWatchedSteps}</AppText>
         </View>
       </CardWithTitleAndContent>
       <BadgesPreview

@@ -31,7 +31,14 @@ import {
 } from "../store/redux/achievements-slice";
 import { initialiseAchievements } from "../util/AchievementDatas";
 import { loadTotalSteps } from "../util/leaderboard";
-import { Alert } from "react-native";
+import { Alert, Platform } from "react-native";
+import { Pedometer } from "expo-sensors";
+import {
+  loadStepsFromWatch,
+  sendStepsFromWatch,
+  setStepsFromWatch,
+} from "../store/redux/steps-slice";
+import GoogleFit, { Scopes } from "react-native-google-fit";
 
 export type RootTabParamList = {
   Home: undefined;
@@ -67,9 +74,52 @@ function AuthenticatedTab() {
     (state) => state.achievements.idExtraDataMap
   );
   useEffect(() => {
-    // const unsubscribe2 = Pedometer.watchStepCount((result) => {
-    //   dispatch(addSteps(result.steps));
-    // });
+    function googleFitAuthorisation() {
+      const options = {
+        scopes: [
+          Scopes.FITNESS_ACTIVITY_READ,
+          Scopes.FITNESS_ACTIVITY_WRITE,
+          Scopes.FITNESS_BODY_READ,
+          Scopes.FITNESS_BODY_WRITE,
+        ],
+      };
+      GoogleFit.checkIsAuthorized().then(() => {
+        var authorized = GoogleFit.isAuthorized;
+        console.log(authorized);
+        if (authorized) {
+          // if already authorized, fetch data
+        } else {
+          // Authentication if already not authorized for a particular device
+          GoogleFit.authorize(options)
+            .then((authResult) => {
+              if (authResult.success) {
+                console.log("AUTH_SUCCESS");
+
+                // if successfully authorized, fetch data
+              } else {
+                console.log("AUTH_DENIED " + authResult.message);
+              }
+            })
+            .catch((e) => {
+              Alert.alert(
+                "Was not authorised to fetch Google Fit data",
+                (e as Error).message
+              );
+            });
+        }
+      });
+    }
+    if (Platform.OS == "android") googleFitAuthorisation();
+
+    let unsubscribe2: Pedometer.Subscription;
+    const hello = async () => {
+      await dispatch(loadStepsFromWatch());
+      unsubscribe2 = Pedometer.watchStepCount((result) => {
+        dispatch(sendStepsFromWatch(result.steps));
+        console.log(result.steps);
+      });
+    };
+    hello();
 
     // setInterval(async () => {
     //   if (!auth.currentUser) return;
@@ -83,7 +133,7 @@ function AuthenticatedTab() {
     //     pfpUrl: item.pfpUrl || "None",
     //   });
     // }, 6000);
-    loadTotalSteps(dispatch);
+    // loadTotalSteps(dispatch);
 
     const initAchievements = async () => {
       await dispatch(loadExtraData());
@@ -117,7 +167,7 @@ function AuthenticatedTab() {
 
     return () => {
       clearInterval(interval);
-      // unsubscribe2;
+      unsubscribe2.remove();
     };
   }, []);
 

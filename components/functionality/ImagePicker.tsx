@@ -18,6 +18,10 @@ function isLessThanMB(fileSize: number, smallerThan: number) {
   return fileSize / 1024 / 1024 < smallerThan;
 }
 
+
+
+
+
 function ImagePicker({
   onImageChosen,
 }: {
@@ -30,6 +34,12 @@ function ImagePicker({
 
   const [pickedImageURI, setPickedImageURI] = useState("");
   const [previewImageURI, setPreviewImageURI] = useState("");
+
+  function chooseAvatarHandler() {
+    
+  }
+
+
 
 
   // TODO: Code duplication
@@ -167,6 +177,7 @@ function ImagePicker({
       <View style={styles.imagePreviewContainer}>{imagePreview}</View>
       <RegularButton onPress={takeImageHandler}>Take image</RegularButton>
       <RegularButton onPress={selectImageHandler}>Select image</RegularButton>
+      <RegularButton onPress={chooseAvatarHandler}>Choose an Avatar</RegularButton>
       <RegularButton onPress={confirmImageHandler}>Confirm</RegularButton>
     </View>
   );

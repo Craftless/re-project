@@ -7,7 +7,7 @@ function HeightAndWeightScreen() {
   return (
     <View>
       <AppText>Height And Weight Screen</AppText>
-      {/* <TextInput mode="flat" /> */}
+      <TextInput mode="flat" autoComplete="off" />
     </View>
   );
 }

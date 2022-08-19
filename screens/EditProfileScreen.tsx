@@ -2,6 +2,8 @@ import { useIsFocused } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useContext, useEffect, useReducer } from "react";
 import { StyleSheet, View, ScrollView, TouchableOpacity } from "react-native";
+import { useTheme } from "react-native-paper";
+import AppText from "../components/ui/AppText";
 import EditInput from "../components/ui/EditInput";
 import RegularButton from "../components/ui/RegularButton";
 import useInput from "../hooks/use-input";
@@ -17,6 +19,7 @@ function EditProfileScreen({
   const authCtx = useContext(AuthContext);
   const [, refreshScreen] = useReducer((x) => x, 0);
   const isFocused = useIsFocused();
+  const theme = useTheme();
 
   useEffect(() => {
     refreshScreen();
@@ -34,11 +37,29 @@ function EditProfileScreen({
         <TouchableOpacity>
           <ProfilePicture style={styles.pfp} self />
         </TouchableOpacity>
-        <RegularButton onPress={() => navigation.navigate("ChangePfp")}>
-          Replace profile picture
-        </RegularButton>
+        <View
+          style={{
+            borderBottomColor: theme.colors.placeholder,
+            borderBottomWidth: 2,
+            padding: 8
+          }}
+        >
+          <AppText style={{ fontSize: 24, fontWeight: "600" }}>
+            Replace Profile Picture
+          </AppText>
+          <View
+            style={{ flexDirection: "row", justifyContent: "space-evenly" }}
+          >
+            <RegularButton onPress={() => navigation.navigate("ChangePfp")}>
+              Use Image
+            </RegularButton>
+            <RegularButton onPress={() => navigation.navigate("ChooseAvatar")}>
+              Choose Avatar
+            </RegularButton>
+          </View>
+        </View>
       </View>
-      <View>
+      <View style={{padding: 8, flex: 1}}>
         <EditInput
           label="Display Name"
           valueObj={{ value: value }}

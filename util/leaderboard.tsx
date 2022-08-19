@@ -28,7 +28,6 @@ export async function writeStepsData(
 export async function writeTotalSteps(
   totalSteps: { date: string; steps: number }[]
 ) {
-  Alert.alert("WRIJE");
   if (!auth.currentUser) return;
   else {
     for (const totalStep of totalSteps) {
@@ -48,7 +47,6 @@ export async function loadTotalSteps(dispatch: any) {
   }
   else {
     // Alert.alert("Hello");
-    Alert.alert("Bye");
 
     const snapshot = await projectDatabase
       .ref(`userData/${auth.currentUser.uid}/totalSteps`)
