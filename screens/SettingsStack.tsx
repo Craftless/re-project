@@ -6,13 +6,11 @@ import DefaultSettingsScreen from "./DefaultSettingsScreen";
 import EditProfileScreen from "./EditProfileScreen";
 import NotificationsScreen from "./NotificationsScreen";
 import AboutScreen from "./AboutScreen";
-import ChooseAvatarScreen from "./ChooseAvatarScreen";
 
 export type SettingsStackParamList = {
   Default: undefined;
   EditProfile: undefined;
   ChangePfp: undefined;
-  ChooseAvatar: undefined;
   Notifications: undefined;
   About: undefined;
 };
@@ -41,7 +39,6 @@ function SettingsScreen({
         }}
       />
       <Stack.Screen name="ChangePfp" component={ChangeProfilePictureScreen} />
-      <Stack.Screen name="ChooseAvatar" component={ChooseAvatarScreen} />
       <Stack.Screen name="Notifications" component={NotificationsScreen} />
       <Stack.Screen name="About" component={AboutScreen} />
     </Stack.Navigator>

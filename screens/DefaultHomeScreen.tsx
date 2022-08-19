@@ -16,6 +16,7 @@ import { useTheme } from "react-native-paper";
 import { achievementObjects } from "../util/AchievementObjects";
 import { LevelableAchievement } from "../classes/LevelableAchievement";
 import BadgesPreview from "../components/badges/BadgesPreview";
+// import GoogleFit from "react-native-google-fit";
 
 function DefaultHomeScreen() {
   const stepCount = useAppSelector((state) => state.stepCount.stepsToday);
@@ -66,6 +67,7 @@ function DefaultHomeScreen() {
         <View>
           <AppText>Total steps: {totalNumSteps}</AppText>
           <AppText>Watched: {watchedSteps + baseWatchedSteps}</AppText>
+          {/* <AppText>Google Fit Authorised Status: {String(GoogleFit.isAuthorized)}</AppText> */}
         </View>
       </CardWithTitleAndContent>
       <BadgesPreview
@@ -74,7 +76,7 @@ function DefaultHomeScreen() {
         }}
         achievementIds={achievementIds}
       />
-      <CardWithTitleAndContent title="TEST">
+      {/* <CardWithTitleAndContent title="TEST">
         <>
           {!!totalSteps &&
             totalSteps.map((val) => {
@@ -86,8 +88,8 @@ function DefaultHomeScreen() {
               );
             })}
         </>
-      </CardWithTitleAndContent>
-      <CardWithTitleAndContent title="Achievements">
+      </CardWithTitleAndContent> */}
+      {/* <CardWithTitleAndContent title="Achievements">
         <>
           {achievementIds.map((val) => {
             return (
@@ -102,7 +104,7 @@ function DefaultHomeScreen() {
             );
           })}
         </>
-      </CardWithTitleAndContent>
+      </CardWithTitleAndContent> */}
       {/* <SvgComponent width={500} height={500} /> */}
     </ScrollView>
   );

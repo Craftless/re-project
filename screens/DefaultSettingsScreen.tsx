@@ -79,11 +79,11 @@ function DefaultSettingsScreen({
           </AppText>
         </View>
       </HeavyCard>
-      <View style={styles.normalBtnsContainer}>
+      {/* <View style={styles.normalBtnsContainer}>
         <Button mode="contained" icon="bell" onPress={() => {navigation.navigate("Notifications")}} style={styles.normalBtns}>
           Notifications
         </Button>
-      </View>
+      </View> */}
       <View style={styles.normalBtnsContainer}>
         <Button mode="contained" icon="headphones" onPress={supportClickedHandler} style={styles.normalBtns}>
           Support

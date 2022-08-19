@@ -103,7 +103,7 @@ function Root() {
           })
           .catch((error) => Alert.alert(error));
       } else {
-        authCtx.logout();
+        authCtx.logout(dispatch);
         setWaitingForEvent(false);
       }
     });

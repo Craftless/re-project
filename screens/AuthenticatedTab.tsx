@@ -38,7 +38,7 @@ import {
   sendStepsFromWatch,
   setStepsFromWatch,
 } from "../store/redux/steps-slice";
-import GoogleFit, { Scopes } from "react-native-google-fit";
+// import GoogleFit, { Scopes } from "react-native-google-fit";
 
 export type RootTabParamList = {
   Home: undefined;
@@ -74,42 +74,71 @@ function AuthenticatedTab() {
     (state) => state.achievements.idExtraDataMap
   );
   useEffect(() => {
-    function googleFitAuthorisation() {
-      const options = {
-        scopes: [
-          Scopes.FITNESS_ACTIVITY_READ,
-          Scopes.FITNESS_ACTIVITY_WRITE,
-          Scopes.FITNESS_BODY_READ,
-          Scopes.FITNESS_BODY_WRITE,
-        ],
-      };
-      GoogleFit.checkIsAuthorized().then(() => {
-        var authorized = GoogleFit.isAuthorized;
-        console.log(authorized);
-        if (authorized) {
-          // if already authorized, fetch data
-        } else {
-          // Authentication if already not authorized for a particular device
-          GoogleFit.authorize(options)
-            .then((authResult) => {
-              if (authResult.success) {
-                console.log("AUTH_SUCCESS");
 
-                // if successfully authorized, fetch data
-              } else {
-                console.log("AUTH_DENIED " + authResult.message);
-              }
-            })
-            .catch((e) => {
-              Alert.alert(
-                "Was not authorised to fetch Google Fit data",
-                (e as Error).message
-              );
-            });
-        }
-      });
+    async function perms() {
+      const res = await Pedometer.isAvailableAsync();
+      Alert.alert(`Availability: ${res}`);
     }
-    if (Platform.OS == "android") googleFitAuthorisation();
+    perms();
+    
+    // const options = {
+    //   scopes: [
+    //     Scopes.FITNESS_ACTIVITY_READ,
+    //     Scopes.FITNESS_ACTIVITY_WRITE,
+    //     Scopes.FITNESS_BODY_READ,
+    //     Scopes.FITNESS_BODY_WRITE,
+    //   ],
+    // };
+
+
+    // GoogleFit.authorize(options)
+    //   .then((authResult) => {
+    //     if (authResult.success) {
+    //       console.log("AUTH_SUCCESS");
+
+    //       // if successfully authorized, fetch data
+    //     } else {
+    //       console.log("AUTH_DENIED " + authResult.message);
+    //     }
+    //   })
+    //   .catch((e) => {
+    //     Alert.alert(
+    //       "Was not authorised to fetch Google Fit data",
+    //       (e as Error).message
+    //     );
+    //   });
+
+    function googleFitAuthorisation() {
+      Alert.alert("attempting to authorise");
+
+      // GoogleFit.checkIsAuthorized().then(() => {
+      //   var authorized = GoogleFit.isAuthorized;
+      //   console.log(authorized);
+      //   if (authorized) {
+      //     Alert.alert("authorised");
+      //   } else {
+      //     Alert.alert("not authorised");
+      //     // Authentication if already not authorized for a particular device
+      //     GoogleFit.authorize(options)
+      //       .then((authResult) => {
+      //         if (authResult.success) {
+      //           console.log("AUTH_SUCCESS");
+
+      //           // if successfully authorized, fetch data
+      //         } else {
+      //           console.log("AUTH_DENIED " + authResult.message);
+      //         }
+      //       })
+      //       .catch((e) => {
+      //         Alert.alert(
+      //           "Was not authorised to fetch Google Fit data",
+      //           (e as Error).message
+      //         );
+      //       });
+      //   }
+      // });
+    }
+    googleFitAuthorisation();
 
     let unsubscribe2: Pedometer.Subscription;
     const hello = async () => {
@@ -117,6 +146,7 @@ function AuthenticatedTab() {
       unsubscribe2 = Pedometer.watchStepCount((result) => {
         dispatch(sendStepsFromWatch(result.steps));
         console.log(result.steps);
+        Alert.alert(result.steps.toString());
       });
     };
     hello();

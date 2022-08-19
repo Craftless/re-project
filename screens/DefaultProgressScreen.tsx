@@ -22,6 +22,7 @@ import { BarChart } from "react-native-chart-kit";
 import { hexToRGB, yyyymmddToString } from "../util/math";
 import { AchievementHelper } from "../classes/AchievementHelper";
 import BadgesPreview from "../components/badges/BadgesPreview";
+import { AbstractChartConfig } from "react-native-chart-kit/dist/AbstractChart";
 
 function DefaultProgressScreen() {
   const dispatch = useAppDispatch();
@@ -77,7 +78,7 @@ function DefaultProgressScreen() {
     };
   }
 
-  const chartConfig = {
+  const chartConfig: AbstractChartConfig = {
     // backgroundGradientFrom: "#E5E5E5",
     // backgroundGradientFromOpacity: 0,
     // backgroundGradientTo: "#CECECE",
@@ -85,24 +86,13 @@ function DefaultProgressScreen() {
     // color: (opacity = 1) => theme.dark ? hexToRGB(theme.colors.primary, opacity) : `rgba(50, 50, 82, ${opacity})`,
     strokeWidth: 1, // optional, default 3
     barPercentage: 0.8,
-    useShadowColorFromDataset: false, // optional
+    useShadowColorFromDataset: true, // optional
     decimalPlaces: 0,
     ...colours,
   };
 
   const graphStyle = {
     borderRadius: 8,
-  };
-
-  const data = {
-    // labels: totalSteps.map((val) => val.date),
-    labels: [1, 2, 3, 4],
-    datasets: [
-      {
-        // data: totalSteps.map((val) => val.steps),
-        data: [5, 3, 7, 9],
-      },
-    ],
   };
 
   const screenWidth = Dimensions.get("window").width;
@@ -144,13 +134,13 @@ function DefaultProgressScreen() {
       </Card> */}
       {!!totalSteps && (
         <BarChart
+          // yAxisInterval={1000}
           data={{
             labels: totalSteps.map((val) => yyyymmddToString(val.date)),
             // labels: [1, 2, 3, 4],
             datasets: [
               {
                 data: totalSteps.map((val) => val.steps),
-                // data: [5, 3, 7, 9]
               },
             ],
           }}
@@ -165,15 +155,10 @@ function DefaultProgressScreen() {
             marginVertical: 8,
             borderRadius: 16,
           }}
+          // segments={5}
+          
         />
       )}
-      {/* <BarChart
-        style={graphStyle}
-        data={data}
-        width={screenWidth}
-        height={220}
-        chartConfig={chartConfig}
-    /> */}
       <CardWithTitleAndContent title="Steps Today">
         <View style={styles.stepDataContainer}>
           <AppText
@@ -211,9 +196,9 @@ function DefaultProgressScreen() {
       <BadgesPreview onPress={() => {
         navigation.navigate("Badges");
       }} achievementIds={achievementIds} />
-      <CardWithTitleAndContent title="Distance Walked">
+      {/* <CardWithTitleAndContent title="Distance Walked">
         <AppText>{distWalked}</AppText>
-      </CardWithTitleAndContent>
+      </CardWithTitleAndContent> */}
     </ScrollView>
   );
 }

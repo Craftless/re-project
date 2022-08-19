@@ -9,7 +9,7 @@ function CircularBadgeDisplay({
 }: {
   backgroundColor?: string;
   size: number;
-  badgeIcon: IconFunc | null
+  badgeIcon: IconFunc | null;
 }) {
   if (!badgeIcon) return <AppText>No Icon</AppText>;
   const icon = badgeIcon({ size } as IconFuncParams);
@@ -22,13 +22,13 @@ function CircularBadgeDisplay({
 
 export default CircularBadgeDisplay;
 
-const styles = (backgroundColor: string, badgeSize: number) =>
+const styles = (backgroundColor: string | undefined, badgeSize: number) =>
   StyleSheet.create({
     outerContainer: {
       backgroundColor: backgroundColor,
       width: badgeSize,
       height: badgeSize,
-      borderRadius: badgeSize / 2,
+      borderRadius: backgroundColor ? badgeSize / 2 : undefined,
       overflow: "hidden",
       justifyContent: "center",
       alignItems: "center",

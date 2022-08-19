@@ -9,6 +9,8 @@ import { RootStackParamList } from "./AuthenticatedTab";
 import { ProgressStackParamList } from "./ProgressStack";
 import { Dimensions } from "react-native";
 import { AchievementHelper } from "../classes/AchievementHelper";
+import { achievementObjects } from "../util/AchievementObjects";
+import { LevelableAchievement } from "../classes/LevelableAchievement";
 
 function BadgeDetailsScreen({
   navigation,
@@ -28,7 +30,7 @@ function BadgeDetailsScreen({
         <View style={styles.wordsContainer}>
           <AppText>{achievements[item].display.description}</AppText>
           {achievements[item].levelable && (
-            <AppText>Level {achievements[item].level ?? "No Level"}</AppText>
+            <AppText>Level {achievements[item].levelable ? (achievementObjects[item] as LevelableAchievement)?.level || "Error" : "None"}</AppText>
           )}
         </View>
       </View>

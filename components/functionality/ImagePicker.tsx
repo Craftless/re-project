@@ -35,9 +35,6 @@ function ImagePicker({
   const [pickedImageURI, setPickedImageURI] = useState("");
   const [previewImageURI, setPreviewImageURI] = useState("");
 
-  function chooseAvatarHandler() {
-    
-  }
 
 
 
@@ -177,7 +174,6 @@ function ImagePicker({
       <View style={styles.imagePreviewContainer}>{imagePreview}</View>
       <RegularButton onPress={takeImageHandler}>Take image</RegularButton>
       <RegularButton onPress={selectImageHandler}>Select image</RegularButton>
-      <RegularButton onPress={chooseAvatarHandler}>Choose an Avatar</RegularButton>
       <RegularButton onPress={confirmImageHandler}>Confirm</RegularButton>
     </View>
   );

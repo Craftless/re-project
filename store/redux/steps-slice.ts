@@ -97,7 +97,10 @@ export const sendStepsData = (steps: number, fromMidnight: boolean = false) => {
 export const sendStepsFromWatch = (steps: number) => {
   return async (dispatch: any, getState: any) => {
     try {
-      await AsyncStorage.setItem("steps_from_watch", (steps + getState().stepCount.baseStepsFromWatch).toString());
+      await AsyncStorage.setItem(
+        "steps_from_watch",
+        (steps + getState().stepCount.baseStepsFromWatch).toString()
+      );
       dispatch(setStepsFromWatch({ stepsFromWatch: steps }));
     } catch (e) {
       console.log((e as Error).message);
@@ -132,6 +135,17 @@ export const sendTotalSteps = (
       console.log(e);
       Alert.alert("Could not send total steps", (e as Error).message);
     }
+  };
+};
+
+export const resetStepsSlice = () => {
+  return async (dispatch: any) => {
+    dispatch(setStepsFM({ steps: 0 }));
+    dispatch(setStepsToday({ steps: 0 }));
+    dispatch(setStepsFromWatch({ stepsFromWatch: 0 }));
+    dispatch(setBaseStepsFromWatch({ baseStepsFromWatch: 0 }));
+    dispatch(setTotalSteps({ totalSteps: [] }));
+    dispatch(setTotalNumSteps({ totalNumSteps: 0 }));
   };
 };
 

@@ -47,7 +47,7 @@ const achievementsSlice = createSlice({
     },
     setIdLevelMap: (state, action) => {
       state.achievementIdToLevel = action.payload.map;
-    }
+    },
   },
 });
 
@@ -84,19 +84,23 @@ export const loadExtraData = () => {
   };
 };
 
-export const sendAchievementsUnlocked = (achievementId: string, level?: number) => {
+export const sendAchievementsUnlocked = (
+  achievementId: string,
+  level?: number
+) => {
   return async (dispatch: any) => {
     if (!auth.currentUser) return;
     try {
-      const obj = (achievementObjects[achievementId] as LevelableAchievement);
+      const obj = achievementObjects[achievementId] as LevelableAchievement;
       const level = obj?.level ?? null;
       await projectDatabase
-        .ref(`userData/${auth.currentUser.uid}/achievementsCompletedId/${achievementId}`)
+        .ref(
+          `userData/${auth.currentUser.uid}/achievementsCompletedId/${achievementId}`
+        )
         .set({
           level: level ?? -1,
         });
       dispatch(addAchievement({ achievementId }));
-      
     } catch (e) {
       Alert.alert(
         "Sending achievements failed! Please email us to fix.",
@@ -123,10 +127,13 @@ export const loadAchievementsUnlocked = (initialiseAchievements: any) => {
           ids.push(key);
           levels.push(value[key]);
         }
-        console.log("NewArr:", ids)
+        console.log("NewArr:", ids);
         await dispatch(setAchievements({ achievementsCompletedId: ids }));
-        await dispatch(setIdLevelMap({ map: levels }))
-        EventEmitter.emit("number_of_achievements", getState().achievements.achievementsCompletedId.length);
+        await dispatch(setIdLevelMap({ map: levels }));
+        EventEmitter.emit(
+          "number_of_achievements",
+          getState().achievements.achievementsCompletedId.length
+        );
       }
     } catch (e) {
       Alert.alert(
@@ -143,6 +150,14 @@ export const loadAchievementsUnlocked = (initialiseAchievements: any) => {
   };
 };
 
+export const resetAchievementsSlice = () => {
+  return async (dispatch: any) => {
+    dispatch(setAchievements({ achievementsCompletedId: [] }));
+    dispatch(setIdExtraDataMap({ extraData: {} }));
+    dispatch(setIdLevelMap({ map: [] }));
+  };
+};
+
 export const addAchievement = achievementsSlice.actions.addAchievement;
 export const removeAchievement = achievementsSlice.actions.removeAchievement;
 export const setAchievements = achievementsSlice.actions.setAchievements;
@@ -151,6 +166,5 @@ export const replaceIdExtraDataMap =
   achievementsSlice.actions.replaceIdExtraDataMap;
 export const setAchievementIdLevel =
   achievementsSlice.actions.setAchievementIdLevel;
-  export const setIdLevelMap =
-  achievementsSlice.actions.setIdLevelMap;
+export const setIdLevelMap = achievementsSlice.actions.setIdLevelMap;
 export default achievementsSlice.reducer;

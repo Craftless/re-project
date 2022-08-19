@@ -3,6 +3,8 @@ import React, { createContext, useEffect, useState } from "react";
 import firebase from "firebase/compat/app";
 import { projectStorage } from "../firebase/config";
 import { getCurrentUserDisplayNameFromUser, getCurrentUserProfilePictureFromUser, updateUserProfile } from "../util/auth";
+import { resetStepsSlice } from "./redux/steps-slice";
+import { resetAchievementsSlice } from "./redux/achievements-slice";
 
 export interface IAuthContext {
   token: string;
@@ -15,7 +17,7 @@ export interface IAuthContext {
   getCurrentPfp: () => string | undefined;
   getCurrentDisplayName: () => string | null;
   authenticate: (user: firebase.User) => Promise<void>;
-  logout: () => void;
+  logout: (dispatch: any) => void;
 }
 
 export const AuthContext = createContext({
@@ -25,7 +27,7 @@ export const AuthContext = createContext({
   updatePfp: async (uri: string) => {},
   getCurrentDisplayName: () => {},
   authenticate: async (user: firebase.User) => {},
-  logout: () => {},
+  logout: (dispatch: any) => {},
 } as IAuthContext);
 
 function AuthContextProvider({ children }: { children: React.ReactNode }) {
@@ -87,9 +89,11 @@ function AuthContextProvider({ children }: { children: React.ReactNode }) {
     return image;
   }
 
-  function logout() {
+  function logout(dispatch: any) {
     setToken("");
     console.log("Logging out");
+    dispatch(resetStepsSlice());
+    dispatch(resetAchievementsSlice());
   }
 
   return (

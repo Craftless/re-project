@@ -53,9 +53,6 @@ function EditProfileScreen({
             <RegularButton onPress={() => navigation.navigate("ChangePfp")}>
               Use Image
             </RegularButton>
-            <RegularButton onPress={() => navigation.navigate("ChooseAvatar")}>
-              Choose Avatar
-            </RegularButton>
           </View>
         </View>
       </View>

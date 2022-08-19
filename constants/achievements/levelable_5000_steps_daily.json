@@ -13,7 +13,7 @@
   "requirementsData": [
     {
       "type": "ObtainNumberTask",
-      "args": { "eventName": "steps_from_midnight", "numberToObtain": 5000 }
+      "args": { "eventName": "steps_from_midnight", "numberToObtain": 5 }
     }
   ],
   "requiredAchievements": null,

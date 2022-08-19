@@ -1,4 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
+import { FontAwesome5 } from '@expo/vector-icons'; 
 import { Image } from "react-native";
 
 export type IconFuncParams = {
@@ -7,7 +8,7 @@ export type IconFuncParams = {
 
 export type IconFunc = (params: IconFuncParams) => {
   comp: React.ReactNode;
-  colour: string;
+  colour?: string;
 };
 
 export const achievementIcons: {
@@ -16,12 +17,11 @@ export const achievementIcons: {
   test: (params: IconFuncParams) => {
     return {
       comp: <Ionicons name="add" size={params.size / 2} />,
-      colour: "#E40000",
     };
   },
   use_app: (params: IconFuncParams) => {
     return {
-      comp: <Ionicons name="cart-outline" size={params.size / 2} />,
+      comp: <FontAwesome5 name="app-store-ios" size={params.size * 3 / 4} />,
       colour: "#A2B800",
     };
   },
@@ -31,12 +31,12 @@ export const achievementIcons: {
         <Image
           source={require("../assets/badges/images/lifetime_10000_steps.png")}
           style={{
-            width: (params.size / 2) * 2.1,
-            height: (params.size / 2) * 2.1,
+            width: params.size,
+            height: params.size,
+            resizeMode: "contain",
           }}
         />
       ),
-      colour: "#A2B800",
     };
   },
   lifetime_15000_steps: (params: IconFuncParams) => {
@@ -45,12 +45,12 @@ export const achievementIcons: {
         <Image
           source={require("../assets/badges/images/lifetime_15000_steps.png")}
           style={{
-            width: (params.size / 2) * 2.1,
-            height: (params.size / 2) * 2.1,
+            width: params.size,
+            height: params.size,
+            resizeMode: "contain",
           }}
         />
       ),
-      colour: "#A2B800",
     };
   },
   lifetime_20000_steps: (params: IconFuncParams) => {
@@ -59,12 +59,12 @@ export const achievementIcons: {
         <Image
           source={require("../assets/badges/images/lifetime_20000_steps.png")}
           style={{
-            width: (params.size / 2) * 2.1,
-            height: (params.size / 2) * 2.1,
+            width: params.size,
+            height: params.size,
+            resizeMode: "contain",
           }}
         />
       ),
-      colour: "#A2B800",
     };
   },
   lifetime_30000_steps: (params: IconFuncParams) => {
@@ -73,12 +73,12 @@ export const achievementIcons: {
         <Image
           source={require("../assets/badges/images/lifetime_30000_steps.png")}
           style={{
-            width: (params.size / 2) * 2.1,
-            height: (params.size / 2) * 2.1,
+            width: params.size,
+            height: params.size,
+            resizeMode: "contain",
           }}
         />
       ),
-      colour: "#A2B800",
     };
   },
   lifetime_40000_steps: (params: IconFuncParams) => {
@@ -87,12 +87,12 @@ export const achievementIcons: {
         <Image
           source={require("../assets/badges/images/lifetime_40000_steps.png")}
           style={{
-            width: (params.size / 2) * 2.1,
-            height: (params.size / 2) * 2.1,
+            width: params.size,
+            height: params.size,
+            resizeMode: "contain",
           }}
         />
       ),
-      colour: "#A2B800",
     };
   },
   lifetime_50000_steps: (params: IconFuncParams) => {
@@ -101,12 +101,12 @@ export const achievementIcons: {
         <Image
           source={require("../assets/badges/images/lifetime_50000_steps.png")}
           style={{
-            width: (params.size / 2) * 2.1,
-            height: (params.size / 2) * 2.1,
+            width: params.size,
+            height: params.size,
+            resizeMode: "contain",
           }}
         />
       ),
-      colour: "#A2B800",
     };
   },
 };
@@ -122,12 +122,12 @@ export const levelableAchievementIcons: {
             <Image
               source={require("../assets/badges/images/5000StepsLevelable/5000stepslevel1.png")}
               style={{
-                width: (params.size / 2) * 3.5,
-                height: (params.size / 2) * 3.5,
+                width: params.size,
+                height: params.size,
+                resizeMode: "contain",
               }}
             />
           ),
-          colour: "#193797",
         };
       },
       (params: IconFuncParams) => {
@@ -136,12 +136,12 @@ export const levelableAchievementIcons: {
             <Image
               source={require("../assets/badges/images/5000StepsLevelable/5000stepslevel2.png")}
               style={{
-                width: (params.size / 2) * 3.5,
-                height: (params.size / 2) * 3.5,
+                width: params.size,
+                height: params.size,
+                resizeMode: "contain",
               }}
             />
           ),
-          colour: "#193797",
         };
       },
       (params: IconFuncParams) => {
@@ -150,12 +150,13 @@ export const levelableAchievementIcons: {
             <Image
               source={require("../assets/badges/images/5000StepsLevelable/5000stepslevel3.png")}
               style={{
-                width: (params.size / 2) * 3.5,
-                height: (params.size / 2) * 3.5,
+                width: params.size,
+                height: params.size,
+                resizeMode: "contain",
               }}
             />
           ),
-          colour: "#193797",
+          //
         };
       },
       (params: IconFuncParams) => {
@@ -164,12 +165,12 @@ export const levelableAchievementIcons: {
             <Image
               source={require("../assets/badges/images/5000StepsLevelable/5000stepslevel4.png")}
               style={{
-                width: (params.size / 2) * 3.5,
-                height: (params.size / 2) * 3.5,
+                width: params.size,
+                height: params.size,
+                resizeMode: "contain",
               }}
             />
           ),
-          colour: "#193797",
         };
       },
       (params: IconFuncParams) => {
@@ -178,12 +179,12 @@ export const levelableAchievementIcons: {
             <Image
               source={require("../assets/badges/images/5000StepsLevelable/5000stepslevel5.png")}
               style={{
-                width: (params.size / 2) * 3.5,
-                height: (params.size / 2) * 3.5,
+                width: params.size,
+                height: params.size,
+                resizeMode: "contain",
               }}
             />
           ),
-          colour: "#193797",
         };
       },
       (params: IconFuncParams) => {
@@ -192,12 +193,12 @@ export const levelableAchievementIcons: {
             <Image
               source={require("../assets/badges/images/5000StepsLevelable/5000stepslevel6.png")}
               style={{
-                width: (params.size / 2) * 3.5,
-                height: (params.size / 2) * 3.5,
+                width: params.size,
+                height: params.size,
+                resizeMode: "contain",
               }}
             />
           ),
-          colour: "#193797",
         };
       },
       (params: IconFuncParams) => {
@@ -206,12 +207,12 @@ export const levelableAchievementIcons: {
             <Image
               source={require("../assets/badges/images/5000StepsLevelable/5000stepslevel7.png")}
               style={{
-                width: (params.size / 2) * 3.5,
-                height: (params.size / 2) * 3.5,
+                width: params.size,
+                height: params.size,
+                resizeMode: "contain",
               }}
             />
           ),
-          colour: "#193797",
         };
       },
       (params: IconFuncParams) => {
@@ -220,12 +221,12 @@ export const levelableAchievementIcons: {
             <Image
               source={require("../assets/badges/images/5000StepsLevelable/5000stepslevel8.png")}
               style={{
-                width: (params.size / 2) * 3.5,
-                height: (params.size / 2) * 3.5,
+                width: params.size,
+                height: params.size,
+                resizeMode: "contain",
               }}
             />
           ),
-          colour: "#193797",
         };
       },
       (params: IconFuncParams) => {
@@ -234,12 +235,12 @@ export const levelableAchievementIcons: {
             <Image
               source={require("../assets/badges/images/5000StepsLevelable/5000stepslevel9.png")}
               style={{
-                width: (params.size / 2) * 3.5,
-                height: (params.size / 2) * 3.5,
+                width: params.size,
+                height: params.size,
+                resizeMode: "contain",
               }}
             />
           ),
-          colour: "#193797",
         };
       },
       (params: IconFuncParams) => {
@@ -248,12 +249,12 @@ export const levelableAchievementIcons: {
             <Image
               source={require("../assets/badges/images/5000StepsLevelable/5000stepslevel10.png")}
               style={{
-                width: (params.size / 2) * 3.5,
-                height: (params.size / 2) * 3.5,
+                width: params.size,
+                height: params.size,
+                resizeMode: "contain",
               }}
             />
           ),
-          colour: "#193797",
         };
       },
       (params: IconFuncParams) => {
@@ -262,12 +263,12 @@ export const levelableAchievementIcons: {
             <Image
               source={require("../assets/badges/images/5000StepsLevelable/5000stepslevel11.png")}
               style={{
-                width: (params.size / 2) * 3.5,
-                height: (params.size / 2) * 3.5,
+                width: params.size,
+                height: params.size,
+                resizeMode: "contain",
               }}
             />
           ),
-          colour: "#193797",
         };
       },
       (params: IconFuncParams) => {
@@ -276,12 +277,12 @@ export const levelableAchievementIcons: {
             <Image
               source={require("../assets/badges/images/5000StepsLevelable/5000stepslevel12.png")}
               style={{
-                width: (params.size / 2) * 3.5,
-                height: (params.size / 2) * 3.5,
+                width: params.size,
+                height: params.size,
+                resizeMode: "contain",
               }}
             />
           ),
-          colour: "#193797",
         };
       },
       (params: IconFuncParams) => {
@@ -290,12 +291,12 @@ export const levelableAchievementIcons: {
             <Image
               source={require("../assets/badges/images/5000StepsLevelable/5000stepslevel13.png")}
               style={{
-                width: (params.size / 2) * 3.5,
-                height: (params.size / 2) * 3.5,
+                width: params.size,
+                height: params.size,
+                resizeMode: "contain",
               }}
             />
           ),
-          colour: "#193797",
         };
       },
       (params: IconFuncParams) => {
@@ -304,12 +305,12 @@ export const levelableAchievementIcons: {
             <Image
               source={require("../assets/badges/images/5000StepsLevelable/5000stepslevel14.png")}
               style={{
-                width: (params.size / 2) * 3.5,
-                height: (params.size / 2) * 3.5,
+                width: params.size,
+                height: params.size,
+                resizeMode: "contain",
               }}
             />
           ),
-          colour: "#193797",
         };
       },
       (params: IconFuncParams) => {
@@ -318,12 +319,12 @@ export const levelableAchievementIcons: {
             <Image
               source={require("../assets/badges/images/5000StepsLevelable/5000stepslevel15.png")}
               style={{
-                width: (params.size / 2) * 3.5,
-                height: (params.size / 2) * 3.5,
+                width: params.size,
+                height: params.size,
+                resizeMode: "contain",
               }}
             />
           ),
-          colour: "#193797",
         };
       },
     ];
@@ -337,12 +338,12 @@ export const levelableAchievementIcons: {
             <Image
               source={require("../assets/badges/images/10000StepsLevelable/10000stepslevel1.png")}
               style={{
-                width: (params.size / 2) * 3.5,
-                height: (params.size / 2) * 3.5,
+                width: params.size,
+                height: params.size,
+                resizeMode: "contain",
               }}
             />
           ),
-          colour: "#193797",
         };
       },
       (params: IconFuncParams) => {
@@ -351,12 +352,12 @@ export const levelableAchievementIcons: {
             <Image
               source={require("../assets/badges/images/10000StepsLevelable/10000stepslevel2.png")}
               style={{
-                width: (params.size / 2) * 3.5,
-                height: (params.size / 2) * 3.5,
+                width: params.size,
+                height: params.size,
+                resizeMode: "contain",
               }}
             />
           ),
-          colour: "#193797",
         };
       },
       (params: IconFuncParams) => {
@@ -365,12 +366,12 @@ export const levelableAchievementIcons: {
             <Image
               source={require("../assets/badges/images/10000StepsLevelable/10000stepslevel3.png")}
               style={{
-                width: (params.size / 2) * 3.5,
-                height: (params.size / 2) * 3.5,
+                width: params.size,
+                height: params.size,
+                resizeMode: "contain",
               }}
             />
           ),
-          colour: "#193797",
         };
       },
       (params: IconFuncParams) => {
@@ -379,12 +380,12 @@ export const levelableAchievementIcons: {
             <Image
               source={require("../assets/badges/images/10000StepsLevelable/10000stepslevel4.png")}
               style={{
-                width: (params.size / 2) * 3.5,
-                height: (params.size / 2) * 3.5,
+                width: params.size,
+                height: params.size,
+                resizeMode: "contain",
               }}
             />
           ),
-          colour: "#193797",
         };
       },
       (params: IconFuncParams) => {
@@ -393,12 +394,12 @@ export const levelableAchievementIcons: {
             <Image
               source={require("../assets/badges/images/10000StepsLevelable/10000stepslevel5.png")}
               style={{
-                width: (params.size / 2) * 3.5,
-                height: (params.size / 2) * 3.5,
+                width: params.size,
+                height: params.size,
+                resizeMode: "contain",
               }}
             />
           ),
-          colour: "#193797",
         };
       },
       (params: IconFuncParams) => {
@@ -407,12 +408,12 @@ export const levelableAchievementIcons: {
             <Image
               source={require("../assets/badges/images/10000StepsLevelable/10000stepslevel6.png")}
               style={{
-                width: (params.size / 2) * 3.5,
-                height: (params.size / 2) * 3.5,
+                width: params.size,
+                height: params.size,
+                resizeMode: "contain",
               }}
             />
           ),
-          colour: "#193797",
         };
       },
       (params: IconFuncParams) => {
@@ -421,12 +422,12 @@ export const levelableAchievementIcons: {
             <Image
               source={require("../assets/badges/images/10000StepsLevelable/10000stepslevel7.png")}
               style={{
-                width: (params.size / 2) * 3.5,
-                height: (params.size / 2) * 3.5,
+                width: params.size,
+                height: params.size,
+                resizeMode: "contain",
               }}
             />
           ),
-          colour: "#193797",
         };
       },
       (params: IconFuncParams) => {
@@ -435,12 +436,12 @@ export const levelableAchievementIcons: {
             <Image
               source={require("../assets/badges/images/10000StepsLevelable/10000stepslevel8.png")}
               style={{
-                width: (params.size / 2) * 3.5,
-                height: (params.size / 2) * 3.5,
+                width: params.size,
+                height: params.size,
+                resizeMode: "contain",
               }}
             />
           ),
-          colour: "#193797",
         };
       },
       (params: IconFuncParams) => {
@@ -449,12 +450,12 @@ export const levelableAchievementIcons: {
             <Image
               source={require("../assets/badges/images/10000StepsLevelable/10000stepslevel9.png")}
               style={{
-                width: (params.size / 2) * 3.5,
-                height: (params.size / 2) * 3.5,
+                width: params.size,
+                height: params.size,
+                resizeMode: "contain",
               }}
             />
           ),
-          colour: "#193797",
         };
       },
       (params: IconFuncParams) => {
@@ -463,12 +464,12 @@ export const levelableAchievementIcons: {
             <Image
               source={require("../assets/badges/images/10000StepsLevelable/10000stepslevel10.png")}
               style={{
-                width: (params.size / 2) * 3.5,
-                height: (params.size / 2) * 3.5,
+                width: params.size,
+                height: params.size,
+                resizeMode: "contain",
               }}
             />
           ),
-          colour: "#193797",
         };
       },
       (params: IconFuncParams) => {
@@ -477,12 +478,12 @@ export const levelableAchievementIcons: {
             <Image
               source={require("../assets/badges/images/10000StepsLevelable/10000stepslevel11.png")}
               style={{
-                width: (params.size / 2) * 3.5,
-                height: (params.size / 2) * 3.5,
+                width: params.size,
+                height: params.size,
+                resizeMode: "contain",
               }}
             />
           ),
-          colour: "#193797",
         };
       },
       (params: IconFuncParams) => {
@@ -491,12 +492,12 @@ export const levelableAchievementIcons: {
             <Image
               source={require("../assets/badges/images/10000StepsLevelable/10000stepslevel12.png")}
               style={{
-                width: (params.size / 2) * 3.5,
-                height: (params.size / 2) * 3.5,
+                width: params.size,
+                height: params.size,
+                resizeMode: "contain",
               }}
             />
           ),
-          colour: "#193797",
         };
       },
       (params: IconFuncParams) => {
@@ -505,12 +506,12 @@ export const levelableAchievementIcons: {
             <Image
               source={require("../assets/badges/images/10000StepsLevelable/10000stepslevel13.png")}
               style={{
-                width: (params.size / 2) * 3.5,
-                height: (params.size / 2) * 3.5,
+                width: params.size,
+                height: params.size,
+                resizeMode: "contain",
               }}
             />
           ),
-          colour: "#193797",
         };
       },
       (params: IconFuncParams) => {
@@ -519,12 +520,12 @@ export const levelableAchievementIcons: {
             <Image
               source={require("../assets/badges/images/10000StepsLevelable/10000stepslevel14.png")}
               style={{
-                width: (params.size / 2) * 3.5,
-                height: (params.size / 2) * 3.5,
+                width: params.size,
+                height: params.size,
+                resizeMode: "contain",
               }}
             />
           ),
-          colour: "#193797",
         };
       },
       (params: IconFuncParams) => {
@@ -533,12 +534,12 @@ export const levelableAchievementIcons: {
             <Image
               source={require("../assets/badges/images/10000StepsLevelable/10000stepslevel15.png")}
               style={{
-                width: (params.size / 2) * 3.5,
-                height: (params.size / 2) * 3.5,
+                width: params.size,
+                height: params.size,
+                resizeMode: "contain",
               }}
             />
           ),
-          colour: "#193797",
         };
       },
     ];
@@ -551,12 +552,12 @@ export const levelableAchievementIcons: {
           <Image
             source={require("../assets/badges/images/15000stepssingle.png")}
             style={{
-              width: (params.size / 2) * 3.5,
-              height: (params.size / 2) * 3.5,
+              width: params.size,
+              height: params.size,
+              resizeMode: "contain",
             }}
           />
         ),
-        colour: "#193797",
       };
     };
   },
@@ -567,12 +568,12 @@ export const levelableAchievementIcons: {
           <Image
             source={require("../assets/badges/images/20000stepssingle.png")}
             style={{
-              width: (params.size / 2) * 3.5,
-              height: (params.size / 2) * 3.5,
+              width: params.size,
+              height: params.size,
+              resizeMode: "contain",
             }}
           />
         ),
-        colour: "#193797",
       };
     };
   },

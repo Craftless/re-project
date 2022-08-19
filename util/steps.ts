@@ -2,7 +2,7 @@ import { AnyAction, ThunkDispatch } from "@reduxjs/toolkit";
 import { Pedometer } from "expo-sensors";
 import { Dispatch } from "react";
 import { Platform } from "react-native";
-import googleFit from "react-native-google-fit";
+// import googleFit from "react-native-google-fit";
 import { useAppDispatch } from "../hooks/redux-hooks";
 import {
   addToTotalSteps,
@@ -47,17 +47,17 @@ export async function requestStepsToday(
       await dispatch(sendStepsData(resultFM.steps, true));
     }
     else if (Platform.OS == "android") {
-      const res = await googleFit.getDailySteps();
-      if (res.length !== 0) {
-        for (var i = 0; i < res.length; i++) {
-          if (res[i].source === 'com.google.android.gms:estimated_steps') {
-            const today = res[i].steps;
-            await dispatch(sendStepsData(today[0].value, true));
-          }
-        }
-      } else {
-        console.log('Not Found');
-      }
+      // const res = await googleFit.getDailySteps();
+      // if (res.length !== 0) {
+      //   for (var i = 0; i < res.length; i++) {
+      //     if (res[i].source === 'com.google.android.gms:estimated_steps') {
+      //       const today = res[i].steps;
+      //       await dispatch(sendStepsData(today[0].value, true));
+      //     }
+      //   }
+      // } else {
+      //   console.log('Not Found');
+      // }
     }
 
     const startDate7d = new Date();
