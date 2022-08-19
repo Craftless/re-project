@@ -52,7 +52,7 @@ function DefaultHomeScreen() {
         />
       }
     >
-      <CardWithTitleAndContent title="My progress today">
+      <CardWithTitleAndContent title="My progress in the last 7 days">
         <Progress.Bar
           progress={stepCount / 75000}
           width={null}

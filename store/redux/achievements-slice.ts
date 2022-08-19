@@ -5,6 +5,7 @@ import { Alert } from "react-native";
 import { achievementObjects } from "../../util/AchievementObjects";
 import type { LevelableAchievement } from "../../classes/LevelableAchievement";
 import EventEmitter from "../../util/EventEmitter";
+import { achievements } from "../../util/AchievementDatas";
 
 const achievementsSlice = createSlice({
   name: "achievements",
@@ -39,13 +40,19 @@ const achievementsSlice = createSlice({
       if (action.payload.extraData && action.payload.id && state.idExtraDataMap)
         state.idExtraDataMap[action.payload.id] = action.payload.extraData;
     },
-    replaceIdExtraDataMap: (state, action) => {
+    replaceIdExtraDataMap: (
+      state,
+      action: { payload: { idExtraDataMap: { [id: string]: any } } }
+    ) => {
       state.idExtraDataMap = action.payload.idExtraDataMap;
     },
     setAchievementIdLevel: (state, action) => {
       state.achievementIdToLevel[action.payload.id] = action.payload.level;
     },
-    setIdLevelMap: (state, action) => {
+    setIdLevelMap: (
+      state,
+      action: { payload: { map: { id: string; level: number }[] } }
+    ) => {
       state.achievementIdToLevel = action.payload.map;
     },
   },
@@ -60,14 +67,19 @@ const achievementsSlice = createSlice({
 
 export const saveExtraData = (payload: { id: string; extraData: any }) => {
   return async (dispatch: any, getState: any) => {
-    const idExtraDataMap = getState().achievements.idExtraDataMap;
+    Alert.alert(
+      `saving extra data, ${payload.extraData}, date: ${payload.extraData.newDate}`
+    );
+    const idExtraDataMap: { [id: string]: any } = {
+      ...getState().achievements.idExtraDataMap,
+    };
     idExtraDataMap[payload.id] = payload.extraData;
     try {
       await AsyncStorage.setItem(
         "idExtraDataMap",
         JSON.stringify(idExtraDataMap)
       );
-      dispatch(replaceIdExtraDataMap(idExtraDataMap));
+      dispatch(replaceIdExtraDataMap({idExtraDataMap}));
     } catch (e) {
       console.log(
         "Error saving idExtraDataMap from asyncstorage",
@@ -79,7 +91,9 @@ export const saveExtraData = (payload: { id: string; extraData: any }) => {
 
 export const loadExtraData = () => {
   return async (dispatch: any) => {
-    const idExtraDataMap = await AsyncStorage.getItem("idExtraDataMap");
+    const idExtraDataMapS = await AsyncStorage.getItem("idExtraDataMap");
+    if (!idExtraDataMapS) return;
+    const idExtraDataMap: { [id: string]: any } = JSON.parse(idExtraDataMapS);
     dispatch(replaceIdExtraDataMap({ idExtraDataMap }));
   };
 };
@@ -90,15 +104,25 @@ export const sendAchievementsUnlocked = (
 ) => {
   return async (dispatch: any) => {
     if (!auth.currentUser) return;
+    if (!achievementId) return;
     try {
       const obj = achievementObjects[achievementId] as LevelableAchievement;
       const level = obj?.level ?? null;
+      // const extraData = obj?.extraData ?? null;
+      // if (achievements[achievementId]?.levelable) {
+      if (level != null && level != undefined)
+        Alert.alert(`Sent level is ${level}, id is ${achievementId}.`);
+      //   // setTimeout(() => {
+      //   //   Alert.alert(`After level is ${obj?.level}`);
+      //   // }, 10);
+      // }
       await projectDatabase
         .ref(
           `userData/${auth.currentUser.uid}/achievementsCompletedId/${achievementId}`
         )
         .set({
           level: level ?? -1,
+          // extraData:
         });
       dispatch(addAchievement({ achievementId }));
     } catch (e) {
@@ -122,10 +146,13 @@ export const loadAchievementsUnlocked = (initialiseAchievements: any) => {
       console.log("SnapshotVal:", value);
       if (value != null) {
         const ids: string[] = [];
-        const levels: string[] = [];
+        const levels: { id: string; level: number }[] = [];
         for (const key in value) {
           ids.push(key);
-          levels.push(value[key]);
+          levels.push({
+            id: key,
+            level: value[key].level,
+          });
         }
         console.log("NewArr:", ids);
         await dispatch(setAchievements({ achievementsCompletedId: ids }));
@@ -135,18 +162,18 @@ export const loadAchievementsUnlocked = (initialiseAchievements: any) => {
           getState().achievements.achievementsCompletedId.length
         );
       }
+      console.log("Loaded");
+      initialiseAchievements(
+        getState().achievements.achievementsCompletedId,
+        getState().achievements.achievementIdToLevel,
+        getState().achievements.idExtraDataMap
+      );
     } catch (e) {
       Alert.alert(
         "Loading achievements failed! Please email us to fix.",
         (e as Error).message
       );
     }
-    console.log("Loaded");
-    initialiseAchievements(
-      getState().achievements.achievementsCompletedId,
-      getState().achievements.achievementIdToLevel,
-      getState().achievements.idExtraDataMap
-    );
   };
 };
 

@@ -43,11 +43,11 @@ export class LevelableAchievement extends Achievement {
       super.taskIsDirty(); // update completed status
     } else {
       if (complete && canLevelUp) {
+        this.level++;
         if (!this.achieved) {
           super.checkCompletedAndUpdate();
         }
         super.taskIsDirty();
-        this.level++;
         this.afterLevelUp();
       }
     }

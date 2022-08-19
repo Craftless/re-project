@@ -1,5 +1,6 @@
 // import testAchievement from "../assets/achievements/testAchievement.json";
 
+import { Alert } from "react-native";
 import {
   Achievement,
 } from "../classes/Achievement";
@@ -17,10 +18,29 @@ const lifetime_20000_steps = require("../constants/achievements/lifetime_20000_s
 const lifetime_30000_steps = require("../constants/achievements/lifetime_30000_steps.json");
 const lifetime_40000_steps = require("../constants/achievements/lifetime_40000_steps.json");
 const lifetime_50000_steps = require("../constants/achievements/lifetime_50000_steps.json");
+const lifetime_75000_steps = require("../constants/achievements/lifetime_75000_steps.json");
+const lifetime_100000_steps = require("../constants/achievements/lifetime_100000_steps.json");
+const lifetime_125000_steps = require("../constants/achievements/lifetime_125000_steps.json");
+const lifetime_150000_steps = require("../constants/achievements/lifetime_150000_steps.json");
+const lifetime_175000_steps = require("../constants/achievements/lifetime_175000_steps.json");
+const lifetime_200000_steps = require("../constants/achievements/lifetime_200000_steps.json");
+const lifetime_250000_steps = require("../constants/achievements/lifetime_250000_steps.json");
+const lifetime_300000_steps = require("../constants/achievements/lifetime_300000_steps.json");
+const lifetime_350000_steps = require("../constants/achievements/lifetime_350000_steps.json");
+const lifetime_400000_steps = require("../constants/achievements/lifetime_400000_steps.json");
+const lifetime_450000_steps = require("../constants/achievements/lifetime_450000_steps.json");
+const lifetime_500000_steps = require("../constants/achievements/lifetime_500000_steps.json");
+const lifetime_550000_steps = require("../constants/achievements/lifetime_550000_steps.json");
+const lifetime_600000_steps = require("../constants/achievements/lifetime_600000_steps.json");
+const lifetime_700000_steps = require("../constants/achievements/lifetime_700000_steps.json");
+const lifetime_800000_steps = require("../constants/achievements/lifetime_800000_steps.json");
+const lifetime_900000_steps = require("../constants/achievements/lifetime_900000_steps.json");
+const lifetime_1000000_steps = require("../constants/achievements/lifetime_1000000_steps.json");
 const levelable_5000_steps_daily = require("../constants/achievements/levelable_5000_steps_daily.json");
 const levelable_10000_steps_daily = require("../constants/achievements/levelable_10000_steps_daily.json");
 const levelable_15000_steps_daily = require("../constants/achievements/levelable_15000_steps_daily.json");
 const levelable_20000_steps_daily = require("../constants/achievements/levelable_20000_steps_daily.json");
+
 
 // const achievements = new Map<string, AchievementDataWithType>();
 export const achievements: { [key: string]: AchievementDataWithType } = {
@@ -33,6 +53,24 @@ export const achievements: { [key: string]: AchievementDataWithType } = {
   lifetime_30000_steps,
   lifetime_40000_steps,
   lifetime_50000_steps,
+  lifetime_75000_steps,
+  lifetime_100000_steps,
+  lifetime_125000_steps,
+  lifetime_150000_steps,
+  lifetime_175000_steps,
+  lifetime_200000_steps,
+  lifetime_250000_steps,
+  lifetime_300000_steps,
+  lifetime_350000_steps,
+  lifetime_400000_steps,
+  lifetime_450000_steps,
+  lifetime_500000_steps,
+  lifetime_550000_steps,
+  lifetime_600000_steps,
+  lifetime_700000_steps,
+  lifetime_800000_steps,
+  lifetime_900000_steps,
+  lifetime_1000000_steps,
   levelable_5000_steps_daily,
   levelable_10000_steps_daily,
   levelable_15000_steps_daily,
@@ -47,6 +85,11 @@ export function initialiseAchievements(
   }[],
   idExtraDataMap: { [id: string]: any }
 ) {
+  let message = ""
+  for (const thing of levelMap) {
+    message += `id: ${thing.id}, level: ${thing.level}`;
+  }
+  Alert.alert(message);
   console.log("Initialised");
   for (const id in achievements) {
     let extraData;
@@ -57,7 +100,6 @@ export function initialiseAchievements(
     };
     if (!ids.includes(id)) {
       const achievement: AnyAchievementType = AchievementHelper.fromData(baseAchievementData);
-      achievement;
       achievementObjects[achievement.id] = achievement;
     } else if (achievements[id].levelable) {
       const indexOf = levelMap.findIndex(
@@ -69,7 +111,7 @@ export function initialiseAchievements(
         level: levelMap[indexOf].level,
       });
       achievementObjects[achievement.id] = achievement;
-      levelMap[indexOf].level;
+      Alert.alert(`Map says ${levelMap[indexOf].level}`);
     }
   }
   for (const achievement in achievementObjects) {

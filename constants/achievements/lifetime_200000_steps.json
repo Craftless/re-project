@@ -1,0 +1,18 @@
+{
+  "display": {
+    "title": "200000 Steps - Total",
+    "description": "Walk 200000 steps or more since using this app.",
+    "icon": {
+      "type": "component"
+    }
+  },
+  "id": "lifetime_200000_steps",
+  "requirementsData": [
+    {
+      "type": "ObtainNumberTask",
+      "args": { "eventName": "total_steps", "numberToObtain": 200000 }
+    }
+  ],
+  "requiredAchievements": null,
+  "type": "Achievement"
+}

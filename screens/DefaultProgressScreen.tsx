@@ -84,9 +84,9 @@ function DefaultProgressScreen() {
     // backgroundGradientTo: "#CECECE",
     // backgroundGradientToOpacity: 0.5,
     // color: (opacity = 1) => theme.dark ? hexToRGB(theme.colors.primary, opacity) : `rgba(50, 50, 82, ${opacity})`,
-    strokeWidth: 1, // optional, default 3
-    barPercentage: 0.8,
-    useShadowColorFromDataset: true, // optional
+  strokeWidth: 1, // optional, default 3
+    // barPercentage: 0.8,
+    useShadowColorFromDataset: false, // optional
     decimalPlaces: 0,
     ...colours,
   };

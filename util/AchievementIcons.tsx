@@ -109,6 +109,258 @@ export const achievementIcons: {
       ),
     };
   },
+  lifetime_75000_steps: (params: IconFuncParams) => {
+    return {
+      comp: (
+        <Image
+          source={require("../assets/badges/images/lifetime_75000_steps.png")}
+          style={{
+            width: params.size,
+            height: params.size,
+            resizeMode: "contain",
+          }}
+        />
+      ),
+    };
+  },
+  lifetime_100000_steps: (params: IconFuncParams) => {
+    return {
+      comp: (
+        <Image
+          source={require("../assets/badges/images/lifetime_100000_steps.png")}
+          style={{
+            width: params.size,
+            height: params.size,
+            resizeMode: "contain",
+          }}
+        />
+      ),
+    };
+  },
+  lifetime_125000_steps: (params: IconFuncParams) => {
+    return {
+      comp: (
+        <Image
+          source={require("../assets/badges/images/lifetime_125000_steps.png")}
+          style={{
+            width: params.size,
+            height: params.size,
+            resizeMode: "contain",
+          }}
+        />
+      ),
+    };
+  },
+  lifetime_150000_steps: (params: IconFuncParams) => {
+    return {
+      comp: (
+        <Image
+          source={require("../assets/badges/images/lifetime_150000_steps.png")}
+          style={{
+            width: params.size,
+            height: params.size,
+            resizeMode: "contain",
+          }}
+        />
+      ),
+    };
+  },
+  lifetime_175000_steps: (params: IconFuncParams) => {
+    return {
+      comp: (
+        <Image
+          source={require("../assets/badges/images/lifetime_175000_steps.png")}
+          style={{
+            width: params.size,
+            height: params.size,
+            resizeMode: "contain",
+          }}
+        />
+      ),
+    };
+  },
+  lifetime_200000_steps: (params: IconFuncParams) => {
+    return {
+      comp: (
+        <Image
+          source={require("../assets/badges/images/lifetime_200000_steps.png")}
+          style={{
+            width: params.size,
+            height: params.size,
+            resizeMode: "contain",
+          }}
+        />
+      ),
+    };
+  },
+  lifetime_250000_steps: (params: IconFuncParams) => {
+    return {
+      comp: (
+        <Image
+          source={require("../assets/badges/images/lifetime_250000_steps.png")}
+          style={{
+            width: params.size,
+            height: params.size,
+            resizeMode: "contain",
+          }}
+        />
+      ),
+    };
+  },
+  lifetime_300000_steps: (params: IconFuncParams) => {
+    return {
+      comp: (
+        <Image
+          source={require("../assets/badges/images/lifetime_300000_steps.png")}
+          style={{
+            width: params.size,
+            height: params.size,
+            resizeMode: "contain",
+          }}
+        />
+      ),
+    };
+  },
+  lifetime_350000_steps: (params: IconFuncParams) => {
+    return {
+      comp: (
+        <Image
+          source={require("../assets/badges/images/lifetime_350000_steps.png")}
+          style={{
+            width: params.size,
+            height: params.size,
+            resizeMode: "contain",
+          }}
+        />
+      ),
+    };
+  },
+  lifetime_400000_steps: (params: IconFuncParams) => {
+    return {
+      comp: (
+        <Image
+          source={require("../assets/badges/images/lifetime_400000_steps.png")}
+          style={{
+            width: params.size,
+            height: params.size,
+            resizeMode: "contain",
+          }}
+        />
+      ),
+    };
+  },
+  lifetime_450000_steps: (params: IconFuncParams) => {
+    return {
+      comp: (
+        <Image
+          source={require("../assets/badges/images/lifetime_450000_steps.png")}
+          style={{
+            width: params.size,
+            height: params.size,
+            resizeMode: "contain",
+          }}
+        />
+      ),
+    };
+  },
+  lifetime_500000_steps: (params: IconFuncParams) => {
+    return {
+      comp: (
+        <Image
+          source={require("../assets/badges/images/lifetime_500000_steps.png")}
+          style={{
+            width: params.size,
+            height: params.size,
+            resizeMode: "contain",
+          }}
+        />
+      ),
+    };
+  },
+  lifetime_550000_steps: (params: IconFuncParams) => {
+    return {
+      comp: (
+        <Image
+          source={require("../assets/badges/images/lifetime_550000_steps.png")}
+          style={{
+            width: params.size,
+            height: params.size,
+            resizeMode: "contain",
+          }}
+        />
+      ),
+    };
+  },
+  lifetime_600000_steps: (params: IconFuncParams) => {
+    return {
+      comp: (
+        <Image
+          source={require("../assets/badges/images/lifetime_600000_steps.png")}
+          style={{
+            width: params.size,
+            height: params.size,
+            resizeMode: "contain",
+          }}
+        />
+      ),
+    };
+  },
+  lifetime_700000_steps: (params: IconFuncParams) => {
+    return {
+      comp: (
+        <Image
+          source={require("../assets/badges/images/lifetime_700000_steps.png")}
+          style={{
+            width: params.size,
+            height: params.size,
+            resizeMode: "contain",
+          }}
+        />
+      ),
+    };
+  },
+  lifetime_800000_steps: (params: IconFuncParams) => {
+    return {
+      comp: (
+        <Image
+          source={require("../assets/badges/images/lifetime_800000_steps.png")}
+          style={{
+            width: params.size,
+            height: params.size,
+            resizeMode: "contain",
+          }}
+        />
+      ),
+    };
+  },
+  lifetime_900000_steps: (params: IconFuncParams) => {
+    return {
+      comp: (
+        <Image
+          source={require("../assets/badges/images/lifetime_900000_steps.png")}
+          style={{
+            width: params.size,
+            height: params.size,
+            resizeMode: "contain",
+          }}
+        />
+      ),
+    };
+  },
+  lifetime_1000000_steps: (params: IconFuncParams) => {
+    return {
+      comp: (
+        <Image
+          source={require("../assets/badges/images/lifetime_1000000_steps.png")}
+          style={{
+            width: params.size,
+            height: params.size,
+            resizeMode: "contain",
+          }}
+        />
+      ),
+    };
+  },
 };
 
 export const levelableAchievementIcons: {

@@ -21,7 +21,6 @@ import {
   verifyBGLocationPermissions,
   verifyFGLocationPermissions,
 } from "../util/location";
-import { updateLocation } from "../store/redux/location-slice";
 import BadgesScreen from "./BadgesScreen";
 import BadgeDetailsScreen from "./BadgeDetailsScreen";
 import MoreScreen from "./MoreStack";
@@ -145,8 +144,6 @@ function AuthenticatedTab() {
       await dispatch(loadStepsFromWatch());
       unsubscribe2 = Pedometer.watchStepCount((result) => {
         dispatch(sendStepsFromWatch(result.steps));
-        console.log(result.steps);
-        Alert.alert(result.steps.toString());
       });
     };
     hello();
