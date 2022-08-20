@@ -29,7 +29,7 @@ export const achievementIcons: {
     return {
       comp: (
         <Image
-          source={require("../assets/badges/images/lifetime_10000_steps.png")}
+          source={require("../assets/badges/images/LifetimeTotalSteps/lifetime_10000_steps.png")}
           style={{
             width: params.size,
             height: params.size,
@@ -43,7 +43,7 @@ export const achievementIcons: {
     return {
       comp: (
         <Image
-          source={require("../assets/badges/images/lifetime_15000_steps.png")}
+          source={require("../assets/badges/images/LifetimeTotalSteps/lifetime_15000_steps.png")}
           style={{
             width: params.size,
             height: params.size,
@@ -57,7 +57,7 @@ export const achievementIcons: {
     return {
       comp: (
         <Image
-          source={require("../assets/badges/images/lifetime_20000_steps.png")}
+          source={require("../assets/badges/images/LifetimeTotalSteps/lifetime_20000_steps.png")}
           style={{
             width: params.size,
             height: params.size,
@@ -71,7 +71,7 @@ export const achievementIcons: {
     return {
       comp: (
         <Image
-          source={require("../assets/badges/images/lifetime_30000_steps.png")}
+          source={require("../assets/badges/images/LifetimeTotalSteps/lifetime_30000_steps.png")}
           style={{
             width: params.size,
             height: params.size,
@@ -85,7 +85,7 @@ export const achievementIcons: {
     return {
       comp: (
         <Image
-          source={require("../assets/badges/images/lifetime_40000_steps.png")}
+          source={require("../assets/badges/images/LifetimeTotalSteps/lifetime_40000_steps.png")}
           style={{
             width: params.size,
             height: params.size,
@@ -99,7 +99,7 @@ export const achievementIcons: {
     return {
       comp: (
         <Image
-          source={require("../assets/badges/images/lifetime_50000_steps.png")}
+          source={require("../assets/badges/images/LifetimeTotalSteps/lifetime_50000_steps.png")}
           style={{
             width: params.size,
             height: params.size,
@@ -113,7 +113,7 @@ export const achievementIcons: {
     return {
       comp: (
         <Image
-          source={require("../assets/badges/images/lifetime_75000_steps.png")}
+          source={require("../assets/badges/images/LifetimeTotalSteps/lifetime_75000_steps.png")}
           style={{
             width: params.size,
             height: params.size,
@@ -127,7 +127,7 @@ export const achievementIcons: {
     return {
       comp: (
         <Image
-          source={require("../assets/badges/images/lifetime_100000_steps.png")}
+          source={require("../assets/badges/images/LifetimeTotalSteps/lifetime_100000_steps.png")}
           style={{
             width: params.size,
             height: params.size,
@@ -141,7 +141,7 @@ export const achievementIcons: {
     return {
       comp: (
         <Image
-          source={require("../assets/badges/images/lifetime_125000_steps.png")}
+          source={require("../assets/badges/images/LifetimeTotalSteps/lifetime_125000_steps.png")}
           style={{
             width: params.size,
             height: params.size,
@@ -155,7 +155,7 @@ export const achievementIcons: {
     return {
       comp: (
         <Image
-          source={require("../assets/badges/images/lifetime_150000_steps.png")}
+          source={require("../assets/badges/images/LifetimeTotalSteps/lifetime_150000_steps.png")}
           style={{
             width: params.size,
             height: params.size,
@@ -169,7 +169,7 @@ export const achievementIcons: {
     return {
       comp: (
         <Image
-          source={require("../assets/badges/images/lifetime_175000_steps.png")}
+          source={require("../assets/badges/images/LifetimeTotalSteps/lifetime_175000_steps.png")}
           style={{
             width: params.size,
             height: params.size,
@@ -183,7 +183,7 @@ export const achievementIcons: {
     return {
       comp: (
         <Image
-          source={require("../assets/badges/images/lifetime_200000_steps.png")}
+          source={require("../assets/badges/images/LifetimeTotalSteps/lifetime_200000_steps.png")}
           style={{
             width: params.size,
             height: params.size,
@@ -197,7 +197,7 @@ export const achievementIcons: {
     return {
       comp: (
         <Image
-          source={require("../assets/badges/images/lifetime_250000_steps.png")}
+          source={require("../assets/badges/images/LifetimeTotalSteps/lifetime_250000_steps.png")}
           style={{
             width: params.size,
             height: params.size,
@@ -211,7 +211,7 @@ export const achievementIcons: {
     return {
       comp: (
         <Image
-          source={require("../assets/badges/images/lifetime_300000_steps.png")}
+          source={require("../assets/badges/images/LifetimeTotalSteps/lifetime_300000_steps.png")}
           style={{
             width: params.size,
             height: params.size,
@@ -225,7 +225,7 @@ export const achievementIcons: {
     return {
       comp: (
         <Image
-          source={require("../assets/badges/images/lifetime_350000_steps.png")}
+          source={require("../assets/badges/images/LifetimeTotalSteps/lifetime_350000_steps.png")}
           style={{
             width: params.size,
             height: params.size,
@@ -239,7 +239,7 @@ export const achievementIcons: {
     return {
       comp: (
         <Image
-          source={require("../assets/badges/images/lifetime_400000_steps.png")}
+          source={require("../assets/badges/images/LifetimeTotalSteps/lifetime_400000_steps.png")}
           style={{
             width: params.size,
             height: params.size,
@@ -253,7 +253,7 @@ export const achievementIcons: {
     return {
       comp: (
         <Image
-          source={require("../assets/badges/images/lifetime_450000_steps.png")}
+          source={require("../assets/badges/images/LifetimeTotalSteps/lifetime_450000_steps.png")}
           style={{
             width: params.size,
             height: params.size,
@@ -267,7 +267,7 @@ export const achievementIcons: {
     return {
       comp: (
         <Image
-          source={require("../assets/badges/images/lifetime_500000_steps.png")}
+          source={require("../assets/badges/images/LifetimeTotalSteps/lifetime_500000_steps.png")}
           style={{
             width: params.size,
             height: params.size,
@@ -281,7 +281,7 @@ export const achievementIcons: {
     return {
       comp: (
         <Image
-          source={require("../assets/badges/images/lifetime_550000_steps.png")}
+          source={require("../assets/badges/images/LifetimeTotalSteps/lifetime_550000_steps.png")}
           style={{
             width: params.size,
             height: params.size,
@@ -295,7 +295,7 @@ export const achievementIcons: {
     return {
       comp: (
         <Image
-          source={require("../assets/badges/images/lifetime_600000_steps.png")}
+          source={require("../assets/badges/images/LifetimeTotalSteps/lifetime_600000_steps.png")}
           style={{
             width: params.size,
             height: params.size,
@@ -309,7 +309,7 @@ export const achievementIcons: {
     return {
       comp: (
         <Image
-          source={require("../assets/badges/images/lifetime_700000_steps.png")}
+          source={require("../assets/badges/images/LifetimeTotalSteps/lifetime_700000_steps.png")}
           style={{
             width: params.size,
             height: params.size,
@@ -323,7 +323,7 @@ export const achievementIcons: {
     return {
       comp: (
         <Image
-          source={require("../assets/badges/images/lifetime_800000_steps.png")}
+          source={require("../assets/badges/images/LifetimeTotalSteps/lifetime_800000_steps.png")}
           style={{
             width: params.size,
             height: params.size,
@@ -337,7 +337,7 @@ export const achievementIcons: {
     return {
       comp: (
         <Image
-          source={require("../assets/badges/images/lifetime_900000_steps.png")}
+          source={require("../assets/badges/images/LifetimeTotalSteps/lifetime_900000_steps.png")}
           style={{
             width: params.size,
             height: params.size,
@@ -351,7 +351,7 @@ export const achievementIcons: {
     return {
       comp: (
         <Image
-          source={require("../assets/badges/images/lifetime_1000000_steps.png")}
+          source={require("../assets/badges/images/LifetimeTotalSteps/lifetime_1000000_steps.png")}
           style={{
             width: params.size,
             height: params.size,

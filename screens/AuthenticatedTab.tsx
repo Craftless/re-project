@@ -1,8 +1,7 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { useContext, useEffect } from "react";
+import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks/redux-hooks";
-import { AuthContext } from "../store/auth-context";
 import HomeScreen from "./DefaultHomeScreen";
 import ProgressScreen from "./DefaultProgressScreen";
 import { Ionicons, MaterialIcons, Feather } from "@expo/vector-icons";
@@ -11,13 +10,9 @@ import { LeaderboardTab } from "./LeaderboardScreen";
 import { requestStepsToday } from "../util/steps";
 import {
   getBackgroundPermissionsAsync,
-  getForegroundPermissionsAsync,
-  LocationAccuracy,
-  requestBackgroundPermissionsAsync,
-  watchPositionAsync,
+  getForegroundPermissionsAsync
 } from "expo-location";
 import {
-  startForegroundTracking,
   verifyBGLocationPermissions,
   verifyFGLocationPermissions,
 } from "../util/location";
@@ -29,13 +24,10 @@ import {
   loadExtraData,
 } from "../store/redux/achievements-slice";
 import { initialiseAchievements } from "../util/AchievementDatas";
-import { loadTotalSteps } from "../util/leaderboard";
-import { Alert, Platform } from "react-native";
 import { Pedometer } from "expo-sensors";
 import {
   loadStepsFromWatch,
   sendStepsFromWatch,
-  setStepsFromWatch,
 } from "../store/redux/steps-slice";
 // import GoogleFit, { Scopes } from "react-native-google-fit";
 
@@ -60,12 +52,6 @@ const Tab = createBottomTabNavigator<RootTabParamList>();
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function AuthenticatedTab() {
-  const authCtx = useContext(AuthContext);
-
-  const stepCount = useAppSelector((state) => state.stepCount.stepsToday);
-  const foregroundSubscription = useAppSelector(
-    (state) => state.location.foregroundSub
-  );
 
   const dispatch = useAppDispatch();
 
@@ -73,71 +59,6 @@ function AuthenticatedTab() {
     (state) => state.achievements.idExtraDataMap
   );
   useEffect(() => {
-
-    async function perms() {
-      const res = await Pedometer.isAvailableAsync();
-      Alert.alert(`Availability: ${res}`);
-    }
-    perms();
-    
-    // const options = {
-    //   scopes: [
-    //     Scopes.FITNESS_ACTIVITY_READ,
-    //     Scopes.FITNESS_ACTIVITY_WRITE,
-    //     Scopes.FITNESS_BODY_READ,
-    //     Scopes.FITNESS_BODY_WRITE,
-    //   ],
-    // };
-
-
-    // GoogleFit.authorize(options)
-    //   .then((authResult) => {
-    //     if (authResult.success) {
-    //       console.log("AUTH_SUCCESS");
-
-    //       // if successfully authorized, fetch data
-    //     } else {
-    //       console.log("AUTH_DENIED " + authResult.message);
-    //     }
-    //   })
-    //   .catch((e) => {
-    //     Alert.alert(
-    //       "Was not authorised to fetch Google Fit data",
-    //       (e as Error).message
-    //     );
-    //   });
-
-    function googleFitAuthorisation() {
-      Alert.alert("attempting to authorise");
-
-      // GoogleFit.checkIsAuthorized().then(() => {
-      //   var authorized = GoogleFit.isAuthorized;
-      //   console.log(authorized);
-      //   if (authorized) {
-      //     Alert.alert("authorised");
-      //   } else {
-      //     Alert.alert("not authorised");
-      //     // Authentication if already not authorized for a particular device
-      //     GoogleFit.authorize(options)
-      //       .then((authResult) => {
-      //         if (authResult.success) {
-      //           console.log("AUTH_SUCCESS");
-
-      //           // if successfully authorized, fetch data
-      //         } else {
-      //           console.log("AUTH_DENIED " + authResult.message);
-      //         }
-      //       })
-      //       .catch((e) => {
-      //         Alert.alert(
-      //           "Was not authorised to fetch Google Fit data",
-      //           (e as Error).message
-      //         );
-      //       });
-      //   }
-      // });
-    }
-    googleFitAuthorisation();
 
     let unsubscribe2: Pedometer.Subscription;
     const hello = async () => {
@@ -184,7 +105,7 @@ function AuthenticatedTab() {
         // startForegroundTracking(dispatch, foregroundSubscription);
       }
     };
-    locationStuff();
+    // locationStuff();
 
     const interval = setInterval(() => {
       requestStepsToday(dispatch);

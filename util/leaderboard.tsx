@@ -42,11 +42,10 @@ export async function writeTotalSteps(
 
 export async function loadTotalSteps(dispatch: any) {
   if (!auth.currentUser) {
-    Alert.alert("No cur user");
+    Alert.alert("No current user");
     return;
   }
   else {
-    // Alert.alert("Hello");
 
     const snapshot = await projectDatabase
       .ref(`userData/${auth.currentUser.uid}/totalSteps`)

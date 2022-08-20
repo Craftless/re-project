@@ -19,8 +19,8 @@ function AboutScreen() {
       </AppText>
       <View style={{ padding: 8, margin: 8, borderColor: theme.colors.placeholder, borderWidth: 1 }}>
         <AppText>
-          Programmer and Main Designer: Javier{"\n"}Badge Designer: Jonathan
-          {"\n"}Home Screen Designer: Mattheaus
+          Programmer and Main Designer: Javier{"\n"}Badge and Splash Screen Designer: Jonathan
+          {"\n"}Home Screen Designer: Mattheaus{"\n"}App Icon Designer: Wesley
         </AppText>
       </View>
     </ScrollView>

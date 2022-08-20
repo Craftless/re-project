@@ -2,7 +2,11 @@ import { Alert } from "react-native";
 import React, { createContext, useEffect, useState } from "react";
 import firebase from "firebase/compat/app";
 import { projectStorage } from "../firebase/config";
-import { getCurrentUserDisplayNameFromUser, getCurrentUserProfilePictureFromUser, updateUserProfile } from "../util/auth";
+import {
+  getCurrentUserDisplayNameFromUser,
+  getCurrentUserProfilePictureFromUser,
+  updateUserProfile,
+} from "../util/auth";
 import { resetStepsSlice } from "./redux/steps-slice";
 import { resetAchievementsSlice } from "./redux/achievements-slice";
 
@@ -13,6 +17,7 @@ export interface IAuthContext {
   change: string;
   pfpCacheKey: string;
   updatePfp: (uri: string) => Promise<void>;
+  updatePfpAvatar: (avatarIndex: number, colour?: string) => Promise<void>;
   updateUserDisplayName: (newName: string) => Promise<void>;
   getCurrentPfp: () => string | undefined;
   getCurrentDisplayName: () => string | null;
@@ -67,11 +72,16 @@ function AuthContextProvider({ children }: { children: React.ReactNode }) {
     if (user) {
       const image = await uploadImageToCloud(uri, user);
       const downloadUrl = await image.ref.getDownloadURL();
-
       await updateUserProfile(user, { photoURL: downloadUrl });
       setPfpCacheKey(Math.random().toFixed(6).toString().replace(".", ""));
     }
   }
+  async function updateUserProfilePictureWithAvatar(avatarIndex: number, colour?: string) {
+    if (user) {
+      await updateUserProfile(user, { photoURL: `${colour ? `${colour}_End_` : "" }$Avatar${avatarIndex}` });
+    }
+  }
+  
 
   async function updateUserDisplayName(newName: string) {
     if (user) {
@@ -105,6 +115,7 @@ function AuthContextProvider({ children }: { children: React.ReactNode }) {
         isLoggedIn: !!token,
         pfpCacheKey,
         updatePfp: updateUserProfilePicture,
+        updatePfpAvatar: updateUserProfilePictureWithAvatar,
         updateUserDisplayName,
         getCurrentPfp: getCurrentUserProfilePicture,
         getCurrentDisplayName: getCurrentUserDisplayName,

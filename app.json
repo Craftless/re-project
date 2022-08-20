@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "re-project",
-    "slug": "re-project",
+    "name": "Vicious Fitness",
+    "slug": "ViciousFitness",
     "version": "0.1.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -18,12 +18,7 @@
     "ios": {
       "buildNumber": "0.1.0",
       "bundleIdentifier": "com.craftless.reproj",
-      "supportsTablet": true,
-      "infoPlist": {
-        "UIBackgroundModes": [
-          "location"
-        ]
-      }
+      "supportsTablet": true
     },
     "android": {
       "versionCode": 1,

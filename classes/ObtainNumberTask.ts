@@ -11,7 +11,7 @@ export class ObtainNumberTask extends Task {
     this.eventName = args.eventName;
     this.isComplete = false;
     const unsub = EventEmitter.addListener(args.eventName, (value: number) => {
-      console.log("VALUE: ", args.numberToObtain);
+      // console.log("VALUE: ", args.numberToObtain);
       if (value >= args.numberToObtain) {
         this.isComplete = true;
         this.isDirty();

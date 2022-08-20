@@ -85,11 +85,6 @@ export function initialiseAchievements(
   }[],
   idExtraDataMap: { [id: string]: any }
 ) {
-  let message = ""
-  for (const thing of levelMap) {
-    message += `id: ${thing.id}, level: ${thing.level}`;
-  }
-  Alert.alert(message);
   console.log("Initialised");
   for (const id in achievements) {
     let extraData;
@@ -111,7 +106,7 @@ export function initialiseAchievements(
         level: levelMap[indexOf].level,
       });
       achievementObjects[achievement.id] = achievement;
-      Alert.alert(`Map says ${levelMap[indexOf].level}`);
+      // Alert.alert(`Map says ${levelMap[indexOf].level}`);
     }
   }
   for (const achievement in achievementObjects) {

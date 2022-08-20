@@ -10,17 +10,13 @@ import CardWithTitleAndContent from "../components/ui/CardWithTitleAndContent";
 import { useAppDispatch, useAppSelector } from "../hooks/redux-hooks";
 import { requestStepsToday } from "../util/steps";
 import { Ionicons } from "@expo/vector-icons";
-import { Button, TouchableRipple, useTheme } from "react-native-paper";
-import React, { useReducer, useState } from "react";
-import { achievements } from "../util/AchievementDatas";
-import CircularBadgeDisplay from "../components/ui/CircularBadgeDisplay";
-import { Achievement } from "../classes/Achievement";
+import { Button, useTheme } from "react-native-paper";
+import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "./AuthenticatedTab";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { BarChart } from "react-native-chart-kit";
 import { hexToRGB, yyyymmddToString } from "../util/math";
-import { AchievementHelper } from "../classes/AchievementHelper";
 import BadgesPreview from "../components/badges/BadgesPreview";
 import { AbstractChartConfig } from "react-native-chart-kit/dist/AbstractChart";
 
@@ -39,7 +35,7 @@ function DefaultProgressScreen() {
   );
 
   const theme = useTheme();
-  const distWalked = useAppSelector((state) => state.location.distanceWalked);
+
 
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList, "Tabs">>();

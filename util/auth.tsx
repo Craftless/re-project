@@ -10,6 +10,7 @@ import { auth, projectDatabase } from "../firebase/config";
 
 import { useState } from "react";
 import { Button } from "react-native-paper";
+import { avatars } from "../constants/avatars";
 
 export async function createUser(
   email: string,
@@ -133,24 +134,33 @@ export async function updateUserProfile(
 export function ProfilePicture(props: any) {
   const { style } = props;
   const [isLoading, setIsLoading] = useState(true);
-  const uri =
+  const uri: string =
     props.self && auth.currentUser
       ? getCurrentUserProfilePictureNonNullFromUser(auth.currentUser)
       : props.uri;
   const uriValid = !!uri && uri !== "None";
+  const isAvatar = uri.includes(`$Avatar`);
+  const matchedCol = uri.match(/(.*?)(?=_End_)/g);
+  const colour = matchedCol ? matchedCol[0] : undefined;
+  let avatarIndex = 0;
+  if (isAvatar) avatarIndex = Number(uri[uri.length - 1]);
   const imgStyle = style || { width: 100, height: 100 };
+  let finalUriObj;
+  if (isAvatar) finalUriObj = avatars[avatarIndex];
+  else finalUriObj = { uri: uri };
+
   return (
     <>
       <Image
         {...props}
-        source={uriValid ? { uri: uri } : require("../assets/blankpfp.png")}
+        source={uriValid ? finalUriObj : require("../assets/blankpfp.png")}
         onLoadStart={() => {
           setIsLoading(true);
         }}
         onLoadEnd={() => {
           setIsLoading(false);
         }}
-        style={[imgStyle, isLoading && { opacity: 0 }]}
+        style={[imgStyle, isLoading && { opacity: 0 }, {backgroundColor: colour}]}
       />
       {isLoading && (
         <>

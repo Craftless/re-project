@@ -67,9 +67,9 @@ const achievementsSlice = createSlice({
 
 export const saveExtraData = (payload: { id: string; extraData: any }) => {
   return async (dispatch: any, getState: any) => {
-    Alert.alert(
-      `saving extra data, ${payload.extraData}, date: ${payload.extraData.newDate}`
-    );
+    // Alert.alert(
+    //   `saving extra data, ${payload.extraData}, date: ${payload.extraData.newDate}`
+    // );
     const idExtraDataMap: { [id: string]: any } = {
       ...getState().achievements.idExtraDataMap,
     };
@@ -108,21 +108,12 @@ export const sendAchievementsUnlocked = (
     try {
       const obj = achievementObjects[achievementId] as LevelableAchievement;
       const level = obj?.level ?? null;
-      // const extraData = obj?.extraData ?? null;
-      // if (achievements[achievementId]?.levelable) {
-      if (level != null && level != undefined)
-        Alert.alert(`Sent level is ${level}, id is ${achievementId}.`);
-      //   // setTimeout(() => {
-      //   //   Alert.alert(`After level is ${obj?.level}`);
-      //   // }, 10);
-      // }
       await projectDatabase
         .ref(
           `userData/${auth.currentUser.uid}/achievementsCompletedId/${achievementId}`
         )
         .set({
           level: level ?? -1,
-          // extraData:
         });
       dispatch(addAchievement({ achievementId }));
     } catch (e) {
