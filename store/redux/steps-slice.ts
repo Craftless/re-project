@@ -123,11 +123,12 @@ export const loadStepsFromWatch = () => {
 export const sendTotalSteps = (
   totalSteps: { date: string; steps: number }[]
 ) => {
-  return async (dispatch: any) => {
+  return async (dispatch: any, getState: any) => {
     try {
       await writeTotalSteps(totalSteps);
-      dispatch(addToTotalSteps({ result: totalSteps }));
-      const totalNum = getTotalStepsFromArr(totalSteps);
+      await dispatch(addToTotalSteps({ result: totalSteps }));
+
+      const totalNum = getTotalStepsFromArr(getState().stepCount.totalSteps);
 
       EventEmitter.emit("total_steps", totalNum);
       dispatch(setTotalNumSteps({ totalNumSteps: totalNum }));

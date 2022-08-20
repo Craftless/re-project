@@ -76,7 +76,7 @@ function DefaultHomeScreen() {
         }}
         achievementIds={achievementIds}
       />
-      {/* <CardWithTitleAndContent title="TEST">
+      <CardWithTitleAndContent title="TEST">
         <>
           {!!totalSteps &&
             totalSteps.map((val) => {
@@ -88,7 +88,7 @@ function DefaultHomeScreen() {
               );
             })}
         </>
-      </CardWithTitleAndContent> */}
+      </CardWithTitleAndContent>
       {/* <CardWithTitleAndContent title="Achievements">
         <>
           {achievementIds.map((val) => {

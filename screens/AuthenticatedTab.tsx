@@ -29,6 +29,7 @@ import {
   loadStepsFromWatch,
   sendStepsFromWatch,
 } from "../store/redux/steps-slice";
+import { loadTotalSteps } from "../util/leaderboard";
 // import GoogleFit, { Scopes } from "react-native-google-fit";
 
 export type RootTabParamList = {
@@ -81,7 +82,7 @@ function AuthenticatedTab() {
     //     pfpUrl: item.pfpUrl || "None",
     //   });
     // }, 6000);
-    // loadTotalSteps(dispatch);
+    loadTotalSteps(dispatch);
 
     const initAchievements = async () => {
       await dispatch(loadExtraData());
