@@ -5,7 +5,11 @@ import {
   getCurrentUserProfilePictureNonNullFromUser,
   updateUserProfile,
 } from "./auth";
-import { getTotalStepsFromArr, setTotalNumSteps, setTotalSteps } from "../store/redux/steps-slice";
+import {
+  getTotalStepsFromArr,
+  setTotalNumSteps,
+  setTotalSteps,
+} from "../store/redux/steps-slice";
 import EventEmitter from "./EventEmitter";
 
 export async function writeStepsData(
@@ -14,9 +18,11 @@ export async function writeStepsData(
 ) {
   if (!auth.currentUser) return;
 
+  const date = Date.now();
   if (fromMidnight) {
     await projectDatabase.ref("leaderboard/" + auth.currentUser.uid).update({
       stepsFromMidnight: steps,
+      timestamp: date,
     });
   } else {
     await projectDatabase.ref("leaderboard/" + auth.currentUser.uid).update({
@@ -44,9 +50,7 @@ export async function loadTotalSteps(dispatch: any) {
   if (!auth.currentUser) {
     Alert.alert("No current user");
     return;
-  }
-  else {
-
+  } else {
     const snapshot = await projectDatabase
       .ref(`userData/${auth.currentUser.uid}/totalSteps`)
       .get();
@@ -60,7 +64,7 @@ export async function loadTotalSteps(dispatch: any) {
     const totalNum = getTotalStepsFromArr(arr);
     EventEmitter.emit("total_steps", totalNum);
     dispatch(setTotalNumSteps({ totalNumSteps: totalNum }));
-    Alert.alert(`Total num is ${totalNum}`);
+    // Alert.alert(`Total num is ${totalNum}`);
     // for (const totalStep of totalSteps) {
     //   await projectDatabase
     //     .ref(`userData/${auth.currentUser.uid}/totalSteps/${totalStep.date}`)
@@ -80,7 +84,6 @@ export async function getCurrentLeaderboardData() {
   console.log(`.get() of reordered ref: ${gotten}`);
   return gotten;
 }
-
 
 export async function fetchDisplayNameAndPhotoURLFromUid(uid: string) {
   const userRef = projectDatabase.ref("userInfo").orderByKey().equalTo(uid);

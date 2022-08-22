@@ -11,12 +11,14 @@ import { Dimensions } from "react-native";
 import { AchievementHelper } from "../classes/AchievementHelper";
 import { achievementObjects } from "../util/AchievementObjects";
 import { LevelableAchievement } from "../classes/LevelableAchievement";
+import { useAppSelector } from "../hooks/redux-hooks";
 
 function BadgeDetailsScreen({
   navigation,
   route,
 }: NativeStackScreenProps<RootStackParamList, "BadgeDetails">) {
   const item = route.params.badgeId;
+  const dateMap = useAppSelector((state) => state.achievements.idDateMap);
   return (
     <Card>
       <View style={styles.detailsContainer}>
@@ -30,8 +32,15 @@ function BadgeDetailsScreen({
         <View style={styles.wordsContainer}>
           <AppText>{achievements[item].display.description}</AppText>
           {achievements[item].levelable && (
-            <AppText>Level {achievements[item].levelable ? (achievementObjects[item] as LevelableAchievement)?.level || "Error" : "None"}</AppText>
+            <AppText>
+              Level{" "}
+              {achievements[item].levelable
+                ? (achievementObjects[item] as LevelableAchievement)?.level ||
+                  "Error"
+                : "None"}
+            </AppText>
           )}
+          <AppText>{dateMap ? dateMap[item] : "No date"}</AppText>
         </View>
       </View>
     </Card>
@@ -59,7 +68,7 @@ const styles = StyleSheet.create({
     marginVertical: 16,
     marginHorizontal: 8,
     padding: 8,
-  }
+  },
 });
 
 export default BadgeDetailsScreen;

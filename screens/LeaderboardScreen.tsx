@@ -132,51 +132,72 @@ function LeaderboardScreen({
     setIsLeaderboardLoading(true);
 
     const dbName = getDbName(selectedItemType);
+    try {
+      const now = Date.now();
+      const cutoff = new Date();
+      cutoff.setHours(0, 0, 0, 0);
+      const cutoffNum = cutoff.getTime();
+      var old = projectDatabase
+        .ref("leaderboard")
+        .orderByChild("timestamp")
+        .endAt(cutoffNum)
 
-    const stepsRef = projectDatabase
-      .ref("leaderboard")
-      .orderByChild(dbName)
-      .limitToLast(5);
+      const got = await old.get();
+      got.forEach((val) => {
+        val.child("stepsFromMidnight").ref.remove();
+        val.child("timestamp").ref.remove();
+      });
 
-    const get = await stepsRef.get();
+      const stepsRef = projectDatabase
+        .ref("leaderboard")
+        .orderByChild(dbName)
+        .limitToLast(5);
 
-    let userStepsArr: UserSteps[] = [];
+      const get = await stepsRef.get();
 
-    console.log("get", get);
+      let userStepsArr: UserSteps[] = [];
 
-    get.forEach((item) => {
-      const val = item.val();
-      const uid = item.key;
-      if (uid) {
-        if (!!val[dbName]) {
-          userStepsArr.push({
-            uid,
-            steps: val[dbName],
-          });
+      console.log("get", get);
+
+      get.forEach((item) => {
+        const val = item.val();
+        const uid = item.key;
+        if (uid) {
+          if (!!val[dbName]) {
+            userStepsArr.push({
+              uid,
+              steps: val[dbName],
+            });
+          }
         }
+      });
+
+      userStepsArr.reverse();
+      let items: LeaderboardItem[] = [];
+
+      await Promise.all(
+        userStepsArr.map(async (item, index) => {
+          const userDetails = await fetchDisplayNameAndPhotoURLFromUid(
+            item.uid
+          );
+          if (userDetails)
+            items.push({ rank: index + 1, ...userDetails, steps: item.steps });
+        })
+      );
+
+      switch (selectedItemType) {
+        case "steps_from_midnight":
+          dispatch(setSFMLBData({ lb_steps_from_midnight: items }));
+          break;
+        case "steps_7d":
+          dispatch(set7dStepsLBData({ lb_steps_week: items }));
+          break;
       }
-    });
-
-    userStepsArr.reverse();
-    let items: LeaderboardItem[] = [];
-
-    await Promise.all(
-      userStepsArr.map(async (item, index) => {
-        const userDetails = await fetchDisplayNameAndPhotoURLFromUid(item.uid);
-        if (userDetails)
-          items.push({ rank: index + 1, ...userDetails, steps: item.steps });
-      })
-    );
-
-    switch (selectedItemType) {
-      case "steps_from_midnight":
-        dispatch(setSFMLBData({ lb_steps_from_midnight: items }));
-        break;
-      case "steps_7d":
-        dispatch(set7dStepsLBData({ lb_steps_week: items }));
-        break;
+    } catch (e) {
+      Alert.alert((e as Error).message);
+    } finally {
+      setIsLeaderboardLoading(false);
     }
-    setIsLeaderboardLoading(false);
   }
 
   useEffect(() => {

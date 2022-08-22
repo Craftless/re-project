@@ -77,6 +77,8 @@ function ChooseAvatarScreen({
   const [isTransparent, setIsTransparent] = React.useState(true);
   const [currentIndex, setCurrentIndex] = React.useState(0);
 
+  const finalColour = isTransparent ? null : currentColor;
+
   const theme = useTheme();
   const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
   async function chooseAvatarHandler(colour?: string) {
@@ -206,7 +208,7 @@ function ChooseAvatarScreen({
                 mode="contained"
                 onPress={async() => {
                   await delay(1500);
-                  chooseAvatarHandler(currentColor);
+                  chooseAvatarHandler(finalColour ?? undefined);
                 }}
                 style={{ marginVertical: 16, marginHorizontal: 8 }}
               >

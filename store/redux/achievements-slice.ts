@@ -5,7 +5,6 @@ import { Alert } from "react-native";
 import { achievementObjects } from "../../util/AchievementObjects";
 import type { LevelableAchievement } from "../../classes/LevelableAchievement";
 import EventEmitter from "../../util/EventEmitter";
-import { achievements } from "../../util/AchievementDatas";
 
 const achievementsSlice = createSlice({
   name: "achievements",
@@ -13,6 +12,7 @@ const achievementsSlice = createSlice({
     achievementsCompletedId: [] as string[],
     achievementIdToLevel: [] as { id: string; level: number }[],
     idExtraDataMap: {} as { [id: string]: any },
+    idDateMap: {} as { [id: string]: string },
   },
   reducers: {
     addAchievement: (state, action) => {
@@ -45,6 +45,12 @@ const achievementsSlice = createSlice({
       action: { payload: { idExtraDataMap: { [id: string]: any } } }
     ) => {
       state.idExtraDataMap = action.payload.idExtraDataMap;
+    },
+    replaceIdDateMap: (
+      state,
+      action: { payload: { idDateMap: { [id: string]: string } } }
+    ) => {
+      state.idDateMap = action.payload.idDateMap;
     },
     setAchievementIdLevel: (state, action) => {
       state.achievementIdToLevel[action.payload.id] = action.payload.level;
@@ -79,7 +85,7 @@ export const saveExtraData = (payload: { id: string; extraData: any }) => {
         "idExtraDataMap",
         JSON.stringify(idExtraDataMap)
       );
-      dispatch(replaceIdExtraDataMap({idExtraDataMap}));
+      dispatch(replaceIdExtraDataMap({ idExtraDataMap }));
     } catch (e) {
       console.log(
         "Error saving idExtraDataMap from asyncstorage",
@@ -102,20 +108,32 @@ export const sendAchievementsUnlocked = (
   achievementId: string,
   level?: number
 ) => {
-  return async (dispatch: any) => {
+  return async (dispatch: any, getState: any) => {
     if (!auth.currentUser) return;
     if (!achievementId) return;
+    if (getState().achievement.achievementsCompletedId.includes(achievementId)) {
+      if (level == null || level == undefined) return;
+      const find = (getState().achievements.achievementIdToLevel as { id: string; level: number }[]).find(val => val.id == achievementId);
+      if (find && find.level >= level) return;
+    }
     try {
       const obj = achievementObjects[achievementId] as LevelableAchievement;
       const level = obj?.level ?? null;
+      const date = new Date().toString();
+      const idDateMap: { [id: string]: string } = {
+        ...getState().achievements.idDateMap,
+      };
+      idDateMap[achievementId] = date;
       await projectDatabase
         .ref(
           `userData/${auth.currentUser.uid}/achievementsCompletedId/${achievementId}`
         )
         .set({
           level: level ?? -1,
+          date: date,
         });
       dispatch(addAchievement({ achievementId }));
+      dispatch(replaceIdDateMap({ idDateMap }));
     } catch (e) {
       Alert.alert(
         "Sending achievements failed! Please email us to fix.",
@@ -138,16 +156,19 @@ export const loadAchievementsUnlocked = (initialiseAchievements: any) => {
       if (value != null) {
         const ids: string[] = [];
         const levels: { id: string; level: number }[] = [];
+        const idDateMap: { [id: string]: string } = {};
         for (const key in value) {
           ids.push(key);
           levels.push({
             id: key,
             level: value[key].level,
           });
+          idDateMap[key] = value[key].date || "None";
         }
         console.log("NewArr:", ids);
         await dispatch(setAchievements({ achievementsCompletedId: ids }));
         await dispatch(setIdLevelMap({ map: levels }));
+        await dispatch(replaceIdDateMap({ idDateMap }));
         EventEmitter.emit(
           "number_of_achievements",
           getState().achievements.achievementsCompletedId.length
@@ -182,6 +203,7 @@ export const setAchievements = achievementsSlice.actions.setAchievements;
 export const setIdExtraDataMap = achievementsSlice.actions.setIdExtraDataMap;
 export const replaceIdExtraDataMap =
   achievementsSlice.actions.replaceIdExtraDataMap;
+export const replaceIdDateMap = achievementsSlice.actions.replaceIdDateMap;
 export const setAchievementIdLevel =
   achievementsSlice.actions.setAchievementIdLevel;
 export const setIdLevelMap = achievementsSlice.actions.setIdLevelMap;
