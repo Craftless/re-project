@@ -14,7 +14,7 @@ import {
 import { SettingsStackParamList } from "./SettingsStack";
 import { Button, Switch } from "react-native-paper";
 import * as MailComposer from 'expo-mail-composer';
-import { SUPPORT_EMAIL } from "../constants/email";
+import { SUPPORT_EMAIL } from "../constants/values";
 import { MailComposerStatus } from "expo-mail-composer";
 // import CachedImage from "expo-cached-image";
 // import { CachedProfilePicture } from "../util/auth";

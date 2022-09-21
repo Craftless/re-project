@@ -22,8 +22,8 @@ import { RouteProp } from "@react-navigation/native";
 import {
   set7dStepsLBData,
   setSFMLBData,
+  setTotalNumStepsData,
 } from "../store/redux/leaderboard-slice";
-import AppText from "../components/ui/AppText";
 
 export type LeaderboardTabParamList = {
   Today: {
@@ -81,6 +81,9 @@ function LeaderboardScreen({
   const lb_steps_from_midnight = useAppSelector(
     (state) => state.leaderboard.lb_steps_from_midnight
   );
+  const lb_steps_total = useAppSelector(
+    (state) => state.leaderboard.lb_totalNumSteps
+  );
   // switch (selectedItemType) {
   //   case "steps_7d":
   //     leaderboardData = useAppSelector(
@@ -110,6 +113,8 @@ function LeaderboardScreen({
         return "stepsFromMidnight";
       case "steps_7d":
         return "steps";
+      case "total_steps":
+        return "totalNumSteps";
     }
     return "steps";
   }
@@ -119,11 +124,11 @@ function LeaderboardScreen({
   ) {
     switch (selectedItemType) {
       case "steps_from_midnight":
-        console.log("mdnt", lb_steps_from_midnight);
         return lb_steps_from_midnight;
       case "steps_7d":
-        console.log("7d", lb_steps_week);
         return lb_steps_week;
+      case "total_steps":
+        return lb_steps_total;
     }
     return null;
   }
@@ -137,15 +142,14 @@ function LeaderboardScreen({
       const cutoff = new Date();
       cutoff.setHours(0, 0, 0, 0);
       const cutoffNum = cutoff.getTime();
-      var old = projectDatabase
+      const old = projectDatabase
         .ref("leaderboard")
-        .orderByChild("timestamp")
+        .orderByChild("sfm_timestamp")
         .endAt(cutoffNum)
 
       const got = await old.get();
       got.forEach((val) => {
         val.child("stepsFromMidnight").ref.remove();
-        val.child("timestamp").ref.remove();
       });
 
       const stepsRef = projectDatabase
@@ -191,6 +195,9 @@ function LeaderboardScreen({
           break;
         case "steps_7d":
           dispatch(set7dStepsLBData({ lb_steps_week: items }));
+          break;
+        case "total_steps":
+          dispatch(setTotalNumStepsData({ lb_totalNumSteps: items }));
           break;
       }
     } catch (e) {

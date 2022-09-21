@@ -3,7 +3,7 @@ import { Alert } from "react-native";
 import { State } from "react-native-gesture-handler";
 import { projectDatabase } from "../../firebase/config";
 import EventEmitter from "../../util/EventEmitter";
-import { writeStepsData, writeTotalSteps } from "../../util/leaderboard";
+import { writeStepsData, writeTotalNumStepsData, writeTotalSteps } from "../../util/leaderboard";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const stepsSlice = createSlice({
@@ -89,7 +89,8 @@ export const sendStepsData = (steps: number, fromMidnight: boolean = false) => {
         EventEmitter.emit("steps_7d", steps);
       }
     } catch (e) {
-      Alert.alert("Unable to send steps data.", (e as Error).message);
+      if ((e as Error).name != "PERMISSION_DENIED")
+        Alert.alert("Unable to send steps data.", (e as Error).message);
     }
   };
 };
@@ -132,6 +133,7 @@ export const sendTotalSteps = (
 
       EventEmitter.emit("total_steps", totalNum);
       dispatch(setTotalNumSteps({ totalNumSteps: totalNum }));
+      await writeTotalNumStepsData(totalNum);
     } catch (e) {
       console.log(e);
       Alert.alert("Could not send total steps", (e as Error).message);

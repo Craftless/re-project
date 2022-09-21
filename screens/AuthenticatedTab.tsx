@@ -30,6 +30,7 @@ import {
   sendStepsFromWatch,
 } from "../store/redux/steps-slice";
 import { loadTotalSteps } from "../util/leaderboard";
+import { Alert } from "react-native";
 // import GoogleFit, { Scopes } from "react-native-google-fit";
 
 export type RootTabParamList = {
@@ -88,6 +89,7 @@ function AuthenticatedTab() {
       await dispatch(loadExtraData());
       console.log("MAP IS", extraDataMap);
       await dispatch(loadAchievementsUnlocked(initialiseAchievements));
+      Alert.alert("Initialised Achievements");
     };
 
     initAchievements();

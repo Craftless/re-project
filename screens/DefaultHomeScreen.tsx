@@ -1,14 +1,9 @@
-import {
-  RefreshControl,
-  ScrollView,
-  StyleSheet,
-  View,
-} from "react-native";
+import { RefreshControl, ScrollView, StyleSheet, View } from "react-native";
 import * as Progress from "react-native-progress";
 import CardWithTitleAndContent from "../components/ui/CardWithTitleAndContent";
 import AppText from "../components/ui/AppText";
 import { useAppSelector } from "../hooks/redux-hooks";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "./AuthenticatedTab";
@@ -16,29 +11,35 @@ import { useTheme } from "react-native-paper";
 import { achievementObjects } from "../util/AchievementObjects";
 import { LevelableAchievement } from "../classes/LevelableAchievement";
 import BadgesPreview from "../components/badges/BadgesPreview";
+import { totalNumStepsGoals } from "../constants/values";
 // import GoogleFit from "react-native-google-fit";
 
 function DefaultHomeScreen() {
   const stepCount = useAppSelector((state) => state.stepCount.stepsToday);
   const totalSteps = useAppSelector((state) => state.stepCount.totalSteps);
+  const extraDataMap: { [id: string]: any } = useAppSelector(
+    (state) => state.achievements.idExtraDataMap
+  );
   const [refreshing, setRefreshing] = useState(false);
-  console.log("TOTALSTEPS GOOSE", totalSteps);
   const totalNumSteps = useAppSelector(
     (state) => state.stepCount.totalNumSteps
-  );
-  const watchedSteps = useAppSelector(
-    (state) => state.stepCount.stepsFromWatch
-  );
-  const baseWatchedSteps = useAppSelector(
-    (state) => state.stepCount.baseStepsFromWatch
   );
   const achievementIds = useAppSelector(
     (state) => state.achievements.achievementsCompletedId
   );
+
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList, "Tabs">>();
 
   const theme = useTheme();
+
+  const currentGoalIndex = totalNumStepsGoals.reduce((prev, cur, curIndex, arr) => {
+    if (totalNumSteps < arr[curIndex]) return prev;
+    else return curIndex;
+  }, 0);
+  let currentGoal;
+  if (totalNumStepsGoals.length <= currentGoalIndex + 1) currentGoal = totalNumStepsGoals[totalNumStepsGoals.length - 1];
+  else currentGoal = totalNumStepsGoals[currentGoalIndex + 1];
 
   return (
     <ScrollView
@@ -52,21 +53,46 @@ function DefaultHomeScreen() {
         />
       }
     >
-      <CardWithTitleAndContent title="My progress in the last 7 days">
+      <CardWithTitleAndContent title="My Steps">
+        <AppText style={{ fontSize: 18, fontWeight: "500" }}>
+          Last 7 Days:
+        </AppText>
         <Progress.Bar
           progress={stepCount / 75000}
           width={null}
           height={20}
           style={styles.progressBar}
           color={theme.colors.primary}
+          borderColor={theme.colors.backdrop}
         />
         <View style={styles.progressDataContainer}>
           <AppText style={styles.progressDataText}>{stepCount} steps</AppText>
-          <AppText style={styles.progressDataBadgeText}>Goal: 75000 </AppText>
+          <AppText style={styles.progressDataBadgeText}>Goal: 70000 </AppText>
         </View>
+        <View
+          style={{
+            height: 2,
+            backgroundColor: theme.colors.disabled,
+            borderRadius: 1,
+          }}
+        />
         <View>
-          <AppText>Total steps: {totalNumSteps}</AppText>
-          <AppText>Watched: {watchedSteps + baseWatchedSteps}</AppText>
+          <AppText style={{ marginTop: 10, fontSize: 18, fontWeight: "500" }}>
+            Total steps:
+          </AppText>
+          <Progress.Bar
+            progress={totalNumSteps / currentGoal}
+            width={null}
+            height={20}
+            style={styles.progressBar}
+            color={theme.colors.primary}
+            borderColor={theme.colors.backdrop}
+          />
+          <View style={styles.progressDataContainer}>
+            <AppText style={styles.progressDataText}>{totalNumSteps} total steps</AppText>
+            <AppText style={styles.progressDataBadgeText}>Goal: {currentGoal} </AppText>
+          </View>
+          {/* <AppText>{totalNumSteps}</AppText> */}
           {/* <AppText>Google Fit Authorised Status: {String(GoogleFit.isAuthorized)}</AppText> */}
         </View>
       </CardWithTitleAndContent>
@@ -89,6 +115,19 @@ function DefaultHomeScreen() {
             })}
         </>
       </CardWithTitleAndContent>
+      {/* <CardWithTitleAndContent title="EXTRA DATA">
+        <>
+          {!!extraDataMap &&
+            extraDataMap.map((val) => {
+              return (
+                <React.Fragment key={val.}>
+                  <AppText>Date: {val.date}</AppText>
+                  <AppText>Steps: {val.steps}</AppText>
+                </React.Fragment>
+              );
+            })}
+        </>
+      </CardWithTitleAndContent> */}
       {/* <CardWithTitleAndContent title="Achievements">
         <>
           {achievementIds.map((val) => {
@@ -123,6 +162,7 @@ const styles = StyleSheet.create({
   progressDataContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
+    marginBottom: 10,
   },
   progressDataText: {
     fontSize: 16,

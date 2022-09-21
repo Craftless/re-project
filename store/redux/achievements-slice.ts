@@ -111,18 +111,26 @@ export const sendAchievementsUnlocked = (
   return async (dispatch: any, getState: any) => {
     if (!auth.currentUser) return;
     if (!achievementId) return;
-    if (getState().achievement.achievementsCompletedId.includes(achievementId)) {
-      if (level == null || level == undefined) return;
-      const find = (getState().achievements.achievementIdToLevel as { id: string; level: number }[]).find(val => val.id == achievementId);
-      if (find && find.level >= level) return;
-    }
+    // if (getState().achievements.achievementsCompletedId.includes(achievementId)) {
+    //   if (level == null || level == undefined) return;
+    //   const find = (getState().achievements.achievementIdToLevel as { id: string; level: number }[]).find(val => val.id == achievementId);
+    //   if (find && find.level >= level) return;
+    // }
     try {
       const obj = achievementObjects[achievementId] as LevelableAchievement;
       const level = obj?.level ?? null;
-      const date = new Date().toString();
       const idDateMap: { [id: string]: string } = {
         ...getState().achievements.idDateMap,
       };
+      let date = idDateMap[achievementId];
+      if (!date) date = new Date().toString();
+
+      
+      const find = (getState().achievements.achievementIdToLevel as { id: string; level: number }[]).find(val => val.id == achievementId);
+      if (find && find.level < level){
+        date = new Date().toString();
+      }
+      console.log("IDDATEMAP:", idDateMap);
       idDateMap[achievementId] = date;
       await projectDatabase
         .ref(

@@ -27,8 +27,8 @@ function DefaultProgressScreen() {
   const stepsFM = useAppSelector((state) => state.stepCount.stepsFromMidnight);
   const totalStepsSel = useAppSelector((state) => state.stepCount.totalSteps);
   const totalSteps = totalStepsSel ? [...totalStepsSel]
-    .sort((a, b) => Number(a.date) - Number(b.date))
-    .slice(0, 5) : undefined;
+    .sort((a, b) => Number(b.date) - Number(a.date))
+    .slice(0, 5).reverse() : undefined;
   const [refreshing, setRefreshing] = useState(false);
   const achievementIds = useAppSelector(
     (state) => state.achievements.achievementsCompletedId

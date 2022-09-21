@@ -22,13 +22,21 @@ export async function writeStepsData(
   if (fromMidnight) {
     await projectDatabase.ref("leaderboard/" + auth.currentUser.uid).update({
       stepsFromMidnight: steps,
-      timestamp: date,
+      sfm_timestamp: date,
     });
   } else {
     await projectDatabase.ref("leaderboard/" + auth.currentUser.uid).update({
       steps,
     });
   }
+}
+
+export async function writeTotalNumStepsData(totalNumSteps: number) {
+  if (!auth.currentUser) return;
+
+  await projectDatabase.ref("leaderboard/" + auth.currentUser.uid).update({
+    totalNumSteps,
+  });
 }
 
 export async function writeTotalSteps(
