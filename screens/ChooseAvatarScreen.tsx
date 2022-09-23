@@ -59,6 +59,7 @@ import { SettingsStackParamList } from "./SettingsStack";
 import ColorPicker from "react-native-wheel-color-picker";
 import AppText from "../components/ui/AppText";
 import { CustomConfig } from "react-native-reanimated-carousel/lib/typescript/types";
+import AwesomeAlert from 'react-native-awesome-alerts';
 
 const BlurView = Animated.createAnimatedComponent(_BlurView);
 
@@ -76,6 +77,8 @@ function ChooseAvatarScreen({
   const [choosingColour, setChoosingColour] = React.useState(false);
   const [isTransparent, setIsTransparent] = React.useState(true);
   const [currentIndex, setCurrentIndex] = React.useState(0);
+  const [showAlert, setShowAlert] = React.useState(false);
+  const [progressing, setProgressing] = React.useState(false);
 
   const finalColour = isTransparent ? null : currentColor;
 
@@ -94,6 +97,10 @@ function ChooseAvatarScreen({
 
   function onColorChange(color: string) {
     setCurrentColor(color);
+  }
+
+  function hideAlert() {
+    setShowAlert(false);
   }
 
   React.useEffect(() => {}, [choosingColour]);
@@ -207,8 +214,10 @@ function ChooseAvatarScreen({
               <Button
                 mode="contained"
                 onPress={async() => {
+                  setShowAlert(true);
+                  setProgressing(true);
                   await delay(1500);
-                  chooseAvatarHandler(finalColour ?? undefined);
+                  setProgressing(false);
                 }}
                 style={{ marginVertical: 16, marginHorizontal: 8 }}
               >
@@ -216,6 +225,12 @@ function ChooseAvatarScreen({
               </Button>
             </>
           )}
+          <AwesomeAlert show={showAlert} title="Confirm avatar choice" message={progressing ? "Loading" : "Confirm your choice"} showProgress={progressing} showCancelButton={!progressing} showConfirmButton={!progressing} cancelText="No, cancel" confirmText="Yes, make this my avatar" confirmButtonColor="#DD6B55" closeOnTouchOutside onCancelPressed={() => {
+            hideAlert();
+          }} onConfirmPressed={() => {
+            hideAlert();
+            chooseAvatarHandler(finalColour ?? undefined);
+          }}/>
         </View>
       )}
     </>

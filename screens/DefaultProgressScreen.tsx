@@ -19,6 +19,7 @@ import { BarChart } from "react-native-chart-kit";
 import { hexToRGB, yyyymmddToString } from "../util/math";
 import BadgesPreview from "../components/badges/BadgesPreview";
 import { AbstractChartConfig } from "react-native-chart-kit/dist/AbstractChart";
+import RegularButton from "../components/ui/RegularButton";
 
 function DefaultProgressScreen() {
   const dispatch = useAppDispatch();
@@ -162,14 +163,14 @@ function DefaultProgressScreen() {
           >
             {stepsFM}
           </AppText>
-          <Button
+          {/* <Button
             onPress={() => {
               requestStepsToday(dispatch);
             }}
             mode="text"
           >
             <Ionicons name="refresh" size={24} color="gray" />
-          </Button>
+          </Button> */}
         </View>
       </CardWithTitleAndContent>
       <CardWithTitleAndContent title="Steps (Last 7 Days)">
@@ -179,22 +180,22 @@ function DefaultProgressScreen() {
           >
             {steps24h}
           </AppText>
-          <Button
+          {/* <Button
             onPress={() => {
               requestStepsToday(dispatch);
             }}
             mode="text"
           >
             <Ionicons name="refresh" size={24} color="gray" />
-          </Button>
+          </Button> */}
         </View>
       </CardWithTitleAndContent>
       <BadgesPreview onPress={() => {
         navigation.navigate("Badges");
       }} achievementIds={achievementIds} />
-      {/* <CardWithTitleAndContent title="Distance Walked">
-        <AppText>{distWalked}</AppText>
-      </CardWithTitleAndContent> */}
+      <Button onPress={() => {
+        navigation.navigate("TotalSteps");
+      }} mode="text" style={{margin: 8, padding: 4}}>View Total Steps</Button>
     </ScrollView>
   );
 }

@@ -31,6 +31,7 @@ import {
 } from "../store/redux/steps-slice";
 import { loadTotalSteps } from "../util/leaderboard";
 import { Alert } from "react-native";
+import TotalStepsScreen from "./TotalStepsScreen";
 // import GoogleFit, { Scopes } from "react-native-google-fit";
 
 export type RootTabParamList = {
@@ -48,6 +49,7 @@ export type RootStackParamList = {
   BadgeDetails: {
     badgeId: string;
   };
+  TotalSteps: undefined;
 };
 
 const Tab = createBottomTabNavigator<RootTabParamList>();
@@ -89,7 +91,6 @@ function AuthenticatedTab() {
       await dispatch(loadExtraData());
       console.log("MAP IS", extraDataMap);
       await dispatch(loadAchievementsUnlocked(initialiseAchievements));
-      Alert.alert("Initialised Achievements");
     };
 
     initAchievements();
@@ -133,6 +134,7 @@ function AuthenticatedTab() {
       />
       <Stack.Screen name="Badges" component={BadgesScreen} />
       <Stack.Screen name="BadgeDetails" component={BadgeDetailsScreen} />
+      <Stack.Screen name="TotalSteps" component={TotalStepsScreen} />
     </Stack.Navigator>
   );
 }
@@ -179,7 +181,7 @@ function Tabs() {
           headerShown: false,
         }}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name="More"
         component={MoreScreen}
         options={{
@@ -188,7 +190,7 @@ function Tabs() {
           },
           headerShown: false,
         }}
-      />
+      /> */}
     </Tab.Navigator>
   );
 }
