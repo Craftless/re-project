@@ -10,7 +10,7 @@ import { LeaderboardTab } from "./LeaderboardScreen";
 import { requestStepsToday } from "../util/steps";
 import {
   getBackgroundPermissionsAsync,
-  getForegroundPermissionsAsync
+  getForegroundPermissionsAsync,
 } from "expo-location";
 import {
   verifyBGLocationPermissions,
@@ -32,6 +32,8 @@ import {
 import { loadTotalSteps } from "../util/leaderboard";
 import { Alert } from "react-native";
 import TotalStepsScreen from "./TotalStepsScreen";
+import LeaderboardUserInfo from "./LeaderboardUserInfo";
+import { LeaderboardItem } from "../types/leaderboard";
 // import GoogleFit, { Scopes } from "react-native-google-fit";
 
 export type RootTabParamList = {
@@ -49,21 +51,28 @@ export type RootStackParamList = {
   BadgeDetails: {
     badgeId: string;
   };
-  TotalSteps: undefined;
+  TotalSteps: {
+    totalStepsArr: {
+      date: string;
+      steps: number;
+    }[] | undefined;
+  };
+  LeaderboardUserInfo: {
+    userId: string;
+    leaderboardItem: LeaderboardItem;
+  };
 };
 
 const Tab = createBottomTabNavigator<RootTabParamList>();
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function AuthenticatedTab() {
-
   const dispatch = useAppDispatch();
 
   const extraDataMap = useAppSelector(
     (state) => state.achievements.idExtraDataMap
   );
   useEffect(() => {
-
     let unsubscribe2: Pedometer.Subscription;
     const hello = async () => {
       await dispatch(loadStepsFromWatch());
@@ -94,22 +103,6 @@ function AuthenticatedTab() {
     };
 
     initAchievements();
-    const locationStuff = async () => {
-      const permissionInfo = await getForegroundPermissionsAsync();
-      const foregroundGranted = await verifyFGLocationPermissions(
-        permissionInfo
-      );
-      if (foregroundGranted) {
-        await verifyBGLocationPermissions(
-          await getBackgroundPermissionsAsync()
-        );
-        // foregroundSubscription = await watchPositionAsync({
-        //   accuracy: LocationAccuracy.High,
-        // });
-        // startForegroundTracking(dispatch, foregroundSubscription);
-      }
-    };
-    // locationStuff();
 
     const interval = setInterval(() => {
       requestStepsToday(dispatch);
@@ -133,8 +126,27 @@ function AuthenticatedTab() {
         }}
       />
       <Stack.Screen name="Badges" component={BadgesScreen} />
-      <Stack.Screen name="BadgeDetails" component={BadgeDetailsScreen} />
-      <Stack.Screen name="TotalSteps" component={TotalStepsScreen} />
+      <Stack.Screen
+        name="BadgeDetails"
+        component={BadgeDetailsScreen}
+        options={{
+          title: "Badge Details",
+        }}
+      />
+      <Stack.Screen
+        name="TotalSteps"
+        component={TotalStepsScreen}
+        options={{
+          title: "Total Steps",
+        }}
+      />
+      <Stack.Screen
+        name="LeaderboardUserInfo"
+        component={LeaderboardUserInfo}
+        options={{
+          title: "User Information",
+        }}
+      />
     </Stack.Navigator>
   );
 }

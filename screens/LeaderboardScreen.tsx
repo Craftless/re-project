@@ -2,7 +2,7 @@ import {
   createMaterialTopTabNavigator,
   MaterialTopTabNavigationProp,
 } from "@react-navigation/material-top-tabs";
-import { ActivityIndicator, Button, Card } from "react-native-paper";
+import { ActivityIndicator, Button, Card, useTheme } from "react-native-paper";
 import {
   Alert,
   FlatList,
@@ -18,22 +18,28 @@ import { LeaderboardItem, UserSteps } from "../types/leaderboard";
 import LeaderboardItemComponent from "../components/functionality/LeaderboardItem";
 import { Ionicons } from "@expo/vector-icons";
 import { AuthContext } from "../store/auth-context";
-import { RouteProp } from "@react-navigation/native";
+import { RouteProp, useNavigation } from "@react-navigation/native";
 import {
   set7dStepsLBData,
   setSFMLBData,
   setTotalNumStepsData,
 } from "../store/redux/leaderboard-slice";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "./AuthenticatedTab";
+import AppText from "../components/ui/AppText";
 
 export type LeaderboardTabParamList = {
   Today: {
     type: string;
+    msg: string;
   };
   Week: {
     type: string;
+    msg: string;
   };
   Total: {
     type: string;
+    msg: string;
   };
 };
 
@@ -45,17 +51,17 @@ export function LeaderboardTab() {
       <Tab.Screen
         name="Today"
         component={LeaderboardScreen}
-        initialParams={{ type: "steps_from_midnight" }}
+        initialParams={{ type: "steps_from_midnight", msg: "Resets daily" }}
       />
       <Tab.Screen
         name="Week"
         component={LeaderboardScreen}
-        initialParams={{ type: "steps_7d" }}
+        initialParams={{ type: "steps_7d", msg: "Lifetime" }}
       />
       <Tab.Screen
         name="Total"
         component={LeaderboardScreen}
-        initialParams={{ type: "total_steps" }}
+        initialParams={{ type: "total_steps", msg: "Lifetime" }}
       />
     </Tab.Navigator>
   );
@@ -73,7 +79,14 @@ function LeaderboardScreen({
     route.params.type as "steps_from_midnight" | "steps_7d" | "total_steps"
   );
   const [refreshing, setRefreshing] = useState(false);
-  const authCtxx = useContext(AuthContext);
+
+  const bottomMessage = route.params.msg;
+
+  const theme = useTheme();
+
+  const stackNavigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
   const dispatch = useAppDispatch();
   const lb_steps_week = useAppSelector(
     (state) => state.leaderboard.lb_steps_week
@@ -145,7 +158,7 @@ function LeaderboardScreen({
       const old = projectDatabase
         .ref("leaderboard")
         .orderByChild("sfm_timestamp")
-        .endAt(cutoffNum)
+        .endAt(cutoffNum);
 
       const got = await old.get();
       got.forEach((val) => {
@@ -185,7 +198,12 @@ function LeaderboardScreen({
             item.uid
           );
           if (userDetails)
-            items.push({ rank: index + 1, ...userDetails, steps: item.steps });
+            items.push({
+              rank: index + 1,
+              ...userDetails,
+              steps: item.steps,
+              userId: item.uid,
+            });
         })
       );
 
@@ -254,13 +272,24 @@ function LeaderboardScreen({
           />
         }
         renderItem={(itemData) => {
-          return <LeaderboardItemComponent item={itemData.item} />;
+          return (
+            <LeaderboardItemComponent
+              item={itemData.item}
+              onPress={() => {
+                stackNavigation.navigate("LeaderboardUserInfo", {
+                  userId: itemData.item.userId,
+                  leaderboardItem: itemData.item,
+                });
+              }}
+            />
+          );
         }}
         data={getData(selectedItemType)}
         keyExtractor={(item) => {
           return item.rank.toString();
         }}
       />
+      <AppText style={{ color: theme.colors.placeholder, textAlign: "center", marginVertical: 8 }}>{bottomMessage}</AppText>
       <Button
         onPress={() => {
           reloadLeaderboard();

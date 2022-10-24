@@ -52,8 +52,9 @@ const stepsSlice = createSlice({
           (val) => val.date == result[i].date
         );
         if (index != -1) {
-          if (result[i] > state.totalSteps[index])
+          if (result[i].steps > state.totalSteps[index].steps) {
             state.totalSteps[index] = result[i];
+          }
         } else {
           state.totalSteps.push(result[i]);
         }
@@ -136,7 +137,7 @@ export const sendTotalSteps = (
       await writeTotalNumStepsData(totalNum);
     } catch (e) {
       console.log(e);
-      Alert.alert("Could not send total steps", (e as Error).message);
+      // Alert.alert("Could not send total steps", (e as Error).message);
     }
   };
 };

@@ -118,3 +118,10 @@ export async function fetchDisplayNameAndPhotoURLFromUid(uid: string) {
     pfpUrl,
   };
 }
+
+export async function fetchStepsFromUid(uid: string) {
+  const userRef = projectDatabase.ref("leaderboard").orderByKey().equalTo(uid);
+  const get = await userRef.get();
+  const val = await (await userRef.get()).val();
+  return val;
+}

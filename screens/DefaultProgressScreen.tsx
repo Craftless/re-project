@@ -27,31 +27,23 @@ function DefaultProgressScreen() {
   const steps24h = useAppSelector((state) => state.stepCount.stepsToday);
   const stepsFM = useAppSelector((state) => state.stepCount.stepsFromMidnight);
   const totalStepsSel = useAppSelector((state) => state.stepCount.totalSteps);
-  const totalSteps = totalStepsSel ? [...totalStepsSel]
-    .sort((a, b) => Number(b.date) - Number(a.date))
-    .slice(0, 5).reverse() : undefined;
+  const totalSteps = totalStepsSel
+    ? [...totalStepsSel]
+        .sort((a, b) => Number(b.date) - Number(a.date))
+        .slice(0, 5)
+        .reverse()
+    : undefined;
   const [refreshing, setRefreshing] = useState(false);
   const achievementIds = useAppSelector(
     (state) => state.achievements.achievementsCompletedId
   );
 
-  const theme = useTheme();
+  const totalStepsArr = [...totalStepsSel].reverse();
 
+  const theme = useTheme();
 
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList, "Tabs">>();
-
-  // const chartConfig = {
-  //   backgroundGradientFrom: "#1E2923",
-  //   backgroundGradientFromOpacity:2 0,
-  //   backgroundGradientTo: "#08130D",
-  //   backgroundGradientToOpacity: 0.5,
-  //   color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
-  //   strokeWidth: 2, // optional, default 3
-  //   barPercentage: 0.5,
-  //   useShadowColorFromDataset: false, // optional
-  //   decimalPlaces: 0,
-  // };
 
   let colours;
 
@@ -81,7 +73,7 @@ function DefaultProgressScreen() {
     // backgroundGradientTo: "#CECECE",
     // backgroundGradientToOpacity: 0.5,
     // color: (opacity = 1) => theme.dark ? hexToRGB(theme.colors.primary, opacity) : `rgba(50, 50, 82, ${opacity})`,
-  strokeWidth: 1, // optional, default 3
+    strokeWidth: 1, // optional, default 3
     // barPercentage: 0.8,
     useShadowColorFromDataset: false, // optional
     decimalPlaces: 0,
@@ -153,7 +145,6 @@ function DefaultProgressScreen() {
             borderRadius: 16,
           }}
           // segments={5}
-          
         />
       )}
       <CardWithTitleAndContent title="Steps Today">
@@ -190,12 +181,23 @@ function DefaultProgressScreen() {
           </Button> */}
         </View>
       </CardWithTitleAndContent>
-      <BadgesPreview onPress={() => {
-        navigation.navigate("Badges");
-      }} achievementIds={achievementIds} />
-      <Button onPress={() => {
-        navigation.navigate("TotalSteps");
-      }} mode="text" style={{margin: 8, padding: 4}}>View Total Steps</Button>
+      <BadgesPreview
+        onPress={() => {
+          navigation.navigate("Badges");
+        }}
+        achievementIds={achievementIds}
+      />
+      <Button
+        onPress={() => {
+          navigation.navigate("TotalSteps", {
+            totalStepsArr: undefined,
+          });
+        }}
+        mode="text"
+        style={{ margin: 8, padding: 4 }}
+      >
+        View Total Steps
+      </Button>
     </ScrollView>
   );
 }

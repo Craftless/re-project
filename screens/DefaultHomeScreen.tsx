@@ -1,4 +1,4 @@
-import { RefreshControl, ScrollView, StyleSheet, View } from "react-native";
+import { Dimensions, RefreshControl, ScrollView, StyleSheet, View } from "react-native";
 import * as Progress from "react-native-progress";
 import CardWithTitleAndContent from "../components/ui/CardWithTitleAndContent";
 import AppText from "../components/ui/AppText";
@@ -12,11 +12,25 @@ import { achievementObjects } from "../util/AchievementObjects";
 import { LevelableAchievement } from "../classes/LevelableAchievement";
 import BadgesPreview from "../components/badges/BadgesPreview";
 import { totalNumStepsGoals } from "../constants/values";
+import { ProgressChart } from "react-native-chart-kit";
 // import GoogleFit from "react-native-google-fit";
 
 function DefaultHomeScreen() {
   const stepCount = useAppSelector((state) => state.stepCount.stepsToday);
   const totalSteps = useAppSelector((state) => state.stepCount.totalSteps);
+  const screenWidth = Dimensions.get("window").width;
+
+  // const chartConfig = {
+  //   backgroundGradientFromOpacity: 0,
+  //   backgroundGradientToOpacity: 0,
+    
+  //   color: (opacity = 1) => `rgba(250, 90, 56, ${opacity})`,
+  //   strokeWidth: 2, // optional, default 3
+  //   barPercentage: 0.5,
+  //   useShadowColorFromDataset: false // optional
+  // };
+  
+
   const extraDataMap: { [id: string]: any } = useAppSelector(
     (state) => state.achievements.idExtraDataMap
   );
@@ -33,12 +47,16 @@ function DefaultHomeScreen() {
 
   const theme = useTheme();
 
-  const currentGoalIndex = totalNumStepsGoals.reduce((prev, cur, curIndex, arr) => {
-    if (totalNumSteps < arr[curIndex]) return prev;
-    else return curIndex;
-  }, 0);
+  const currentGoalIndex = totalNumStepsGoals.reduce(
+    (prev, cur, curIndex, arr) => {
+      if (totalNumSteps < arr[curIndex]) return prev;
+      else return curIndex;
+    },
+    0
+  );
   let currentGoal;
-  if (totalNumStepsGoals.length <= currentGoalIndex + 1) currentGoal = totalNumStepsGoals[totalNumStepsGoals.length - 1];
+  if (totalNumStepsGoals.length <= currentGoalIndex + 1)
+    currentGoal = totalNumStepsGoals[totalNumStepsGoals.length - 1];
   else currentGoal = totalNumStepsGoals[currentGoalIndex + 1];
 
   return (
@@ -63,8 +81,17 @@ function DefaultHomeScreen() {
           height={20}
           style={styles.progressBar}
           color={theme.colors.primary}
-          borderColor={theme.colors.backdrop}
+          borderColor={theme.colors.onSurface}
         />
+        {/* <ProgressChart
+          data={[stepCount / 75000]}
+          width={300}
+          height={100}
+          strokeWidth={16}
+          radius={32}
+          chartConfig={chartConfig}
+          hideLegend={false}
+        /> */}
         <View style={styles.progressDataContainer}>
           <AppText style={styles.progressDataText}>{stepCount} steps</AppText>
           <AppText style={styles.progressDataBadgeText}>Goal: 70000 </AppText>
@@ -86,11 +113,15 @@ function DefaultHomeScreen() {
             height={20}
             style={styles.progressBar}
             color={theme.colors.primary}
-            borderColor={theme.colors.backdrop}
+            borderColor={theme.colors.onSurface}
           />
           <View style={styles.progressDataContainer}>
-            <AppText style={styles.progressDataText}>{totalNumSteps} total steps</AppText>
-            <AppText style={styles.progressDataBadgeText}>Goal: {currentGoal} </AppText>
+            <AppText style={styles.progressDataText}>
+              {totalNumSteps} total steps
+            </AppText>
+            <AppText style={styles.progressDataBadgeText}>
+              Goal: {currentGoal}{" "}
+            </AppText>
           </View>
           {/* <AppText>{totalNumSteps}</AppText> */}
           {/* <AppText>Google Fit Authorised Status: {String(GoogleFit.isAuthorized)}</AppText> */}

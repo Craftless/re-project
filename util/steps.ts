@@ -90,7 +90,7 @@ export async function requestStepsToday(
         steps: resultRange.steps,
       });
     }
-    dispatch(sendTotalSteps(totalSteps));
+    await dispatch(sendTotalSteps(totalSteps));
     // dispatch(
     //   addToTotalSteps({
     //     result: totalSteps,

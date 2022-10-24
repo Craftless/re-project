@@ -1,6 +1,7 @@
 import { StatusBar } from "expo-status-bar";
+import NetInfo from "@react-native-community/netinfo";
 
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import AuthContextProvider, { AuthContext } from "./store/auth-context";
 
 import { Provider } from "react-redux";
@@ -16,6 +17,7 @@ import {
   DefaultTheme as NavigationDefaultTheme,
 } from "@react-navigation/native";
 import {
+  Button,
   DarkTheme as PaperDarkTheme,
   DefaultTheme as PaperDefaultTheme,
   Provider as PaperProvider,
@@ -26,6 +28,7 @@ import {
   AppStateStatus,
   ColorSchemeName,
   useColorScheme,
+  View,
 } from "react-native";
 import * as TaskManager from "expo-task-manager";
 import { LocationObject } from "expo-location";
@@ -36,6 +39,10 @@ import {
   stopForegroundTracking,
 } from "./util/location";
 import { useAppDispatch, useAppSelector } from "./hooks/redux-hooks";
+import AppText from "./components/ui/AppText";
+import * as SplashScreen from "expo-splash-screen";
+
+// SplashScreen.preventAutoHideAsync();
 
 export function getTheme(colorScheme: ColorSchemeName) {
   const CombinedDefaultTheme = merge(NavigationDefaultTheme, PaperDefaultTheme);
@@ -45,38 +52,48 @@ export function getTheme(colorScheme: ColorSchemeName) {
   return theme;
 }
 
-const LOCATION_TASK_NAME = "BACKGROUND_LOCATION_TASK";
-let foregroundSubscription = null;
-
-TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }) => {
-  if (error) {
-    console.error(error);
-    return;
-  }
-  if (data) {
-    // Extract location coordinates from data
-    const { locations } = data as { locations: LocationObject[] };
-    const location = locations[0];
-    if (location) {
-      console.log("Location in background", location.coords);
-    }
-  }
-});
-
 export default function App() {
   const colorScheme = useColorScheme();
   const theme = getTheme(colorScheme);
+  const [isConnected, setIsConnected] = useState(null as boolean | null);
+
+  function checkIsConnected() {
+    NetInfo.fetch().then((state) => {
+      const ic = state.isConnected;
+      setIsConnected(ic ?? false);
+    });
+  }
+
+  useEffect(() => {
+    checkIsConnected();
+  }, []);
+
+  // const onLayoutRootView = useCallback(async () => {
+  //   if (appIsReady) {
+  //     await SplashScreen.hideAsync();
+  //   }
+  // }, [appIsReady]);
 
   return (
     <>
       <StatusBar style="auto" />
-      <Provider store={store}>
-        <AuthContextProvider>
-          <PaperProvider theme={theme}>
-            <Root />
-          </PaperProvider>
-        </AuthContextProvider>
-      </Provider>
+      {!isConnected && (
+        <View style={{ justifyContent: "center", alignItems: "center" }}>
+          <AppText>You are not connected to the internet.</AppText>
+          <Button mode="outlined" onPress={checkIsConnected}>
+            Try Again
+          </Button>
+        </View>
+      )}
+      {isConnected && (
+        <Provider store={store}>
+          <AuthContextProvider>
+            <PaperProvider theme={theme}>
+              <Root />
+            </PaperProvider>
+          </AuthContextProvider>
+        </Provider>
+      )}
     </>
   );
 }
@@ -101,26 +118,10 @@ function Root() {
         setWaitingForEvent(false);
       }
     });
-    AppState.addEventListener("change", onAppStateChanged);
     return () => {
       unsubscribe();
-      AppState.removeEventListener("change", onAppStateChanged);
     };
   }, []);
-
-  function onAppStateChanged(newState: AppStateStatus) {
-    try {
-      if (newState.match(/inactive|background/)) {
-        stopForegroundTracking(foregroundSub);
-        startBackgroundTracking(LOCATION_TASK_NAME);
-      } else {
-        stopBackgroundUpdate(LOCATION_TASK_NAME);
-        startForegroundTracking(dispatch, foregroundSub);
-      }
-    } catch (e) {
-      console.log("Location Error", (e as Error).message);
-    }
-  }
 
   return waitingForEvent ? <AppLoading /> : <Navigation />;
 }

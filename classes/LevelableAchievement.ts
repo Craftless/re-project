@@ -30,6 +30,7 @@ export class LevelableAchievement extends Achievement {
     this.canLevelUp = true;
     this.isMaxLevel = false;
     this.achieved = false;
+    this.checkAndSetisMaxLevel();
     this.taskIsDirty();
   }
 
@@ -54,6 +55,10 @@ export class LevelableAchievement extends Achievement {
   }
 
   afterLevelUp() {
+    this.checkAndSetisMaxLevel();
+  }
+
+  checkAndSetisMaxLevel() {
     this.isMaxLevel = this.level >= this.maxLevel;
   }
 

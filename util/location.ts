@@ -19,6 +19,9 @@ import { Dispatch } from "react";
 import { Alert, AppState, AppStateStatus } from "react-native";
 import { updateLocation } from "../store/redux/location-slice";
 
+
+// Location no longer used
+
 export function getLocation() {}
 
 export async function verifyFGLocationPermissions(

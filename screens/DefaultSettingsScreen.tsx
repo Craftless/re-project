@@ -48,8 +48,7 @@ function DefaultSettingsScreen({
       recipients: [SUPPORT_EMAIL],
       subject: `Support: ${name}`,
     });
-    if (result.status == MailComposerStatus.SENT) Alert.alert("Sent!");
-    else Alert.alert("Did not send");
+    if (result.status == MailComposerStatus.SENT) Alert.alert("The email was sent!");
   }
 
   return (

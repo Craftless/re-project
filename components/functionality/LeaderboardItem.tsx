@@ -1,12 +1,12 @@
 import AppText from "../ui/AppText";
-import { StyleProp, TextStyle, View } from "react-native";
+import { StyleProp, TextStyle, TouchableOpacity, View } from "react-native";
 import { LeaderboardItem as LeaderboardItemType } from "../../types/leaderboard";
 import { auth } from "../../firebase/config";
 import { StyleSheet } from "react-native";
 import { ProfilePicture } from "../../util/auth";
 import { Card, useTheme } from "react-native-paper";
 
-function LeaderboardItem({ item }: { item: LeaderboardItemType | null }) {
+function LeaderboardItem({ item, onPress }: { item: LeaderboardItemType | null, onPress?: () => void }) {
   const theme = useTheme();
 
   if (!item) {
@@ -52,31 +52,33 @@ function LeaderboardItem({ item }: { item: LeaderboardItemType | null }) {
 
   return (
     <Card style={styles.card}>
-      <View style={styles.innerContainer}>
-        <View style={styles.rankingContainer}>
-          <AppText style={rankStyle}>
-            {/* <AppText adjustsFontSizeToFit={true} numberOfLines={1} > */}
-            {item.rank}
-          </AppText>
-        </View>
-        <View style={styles.detailsContainer}>
-          <View style={styles.nameContainer}>
-            <ProfilePicture style={styles.images} uri={item.pfpUrl} />
-            <AppText
-              allowFontScaling
-              ellipsizeMode="tail"
-              numberOfLines={1}
-              style={styles.nameText}
-            >
-              {item.displayName}
-              {/*adjustsFontSizeToFit={true}*/}
+      <TouchableOpacity onPress={onPress}>
+        <View style={styles.innerContainer}>
+          <View style={styles.rankingContainer}>
+            <AppText style={rankStyle}>
+              {/* <AppText adjustsFontSizeToFit={true} numberOfLines={1} > */}
+              {item.rank}
             </AppText>
           </View>
-          <View style={styles.itemContainer}>
-            <AppText>{item.steps}</AppText>
+          <View style={styles.detailsContainer}>
+            <View style={styles.nameContainer}>
+              <ProfilePicture style={styles.images} uri={item.pfpUrl} />
+              <AppText
+                allowFontScaling
+                ellipsizeMode="tail"
+                numberOfLines={1}
+                style={styles.nameText}
+              >
+                {item.displayName}
+                {/*adjustsFontSizeToFit={true}*/}
+              </AppText>
+            </View>
+            <View style={styles.itemContainer}>
+              <AppText>{item.steps}</AppText>
+            </View>
           </View>
         </View>
-      </View>
+      </TouchableOpacity>
     </Card>
   );
 }
